@@ -51,7 +51,7 @@ public class CharacterControlls : MonoBehaviour
             verticalVelocity = 0f;
         }
 
-        p_PlayerController.transform.rotation = p_Camera.transform.rotation;
+        p_PlayerController.transform.rotation = p_Camera.transform.localRotation;
 
         Vector3 move = p_PlayerController.transform.forward * direction.y;
         move.y += verticalVelocity;
