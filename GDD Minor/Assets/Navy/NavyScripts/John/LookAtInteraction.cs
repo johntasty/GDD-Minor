@@ -10,15 +10,15 @@ public class LookAtInteraction : MonoBehaviour
     [Space]
     [Tooltip("In the Camera Prefab set the look at target, place the camera where you want.")]
     [SerializeField]
-    CinemachineVirtualCamera m_CameraVirtual;
+    CinemachineVirtualCamera p_CameraVirtual;
 
     private void OnTriggerEnter(Collider other)
     {
-        m_CameraVirtual.enabled = true;
+        p_CameraVirtual.enabled = true;
     }
     private void OnTriggerExit(Collider other)
     {
-        m_CameraVirtual.enabled = false;
+        p_CameraVirtual.enabled = false;
     }
     
 }
