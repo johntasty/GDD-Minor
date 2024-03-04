@@ -57,7 +57,7 @@ A scene that you are using to test features should be named like this {name}-tes
 <b>Scripts</b><br>
 We will follow the official C# naming conventions as stated [here](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/identifier-names#naming-conventions)
 
-A script should be named with a one or two word description of the feature followed by -script so for a movement controller it should be movement-controller-script.cs , this way anyone will understand what it does without having to look into the code itself.
+A script should be named with a one or two word description of the feature followed by -script so for a movement controller it should be movement_controller_script.cs , this way anyone will understand what it does without having to look into the code itself.
 
 <b>Prefabs</b><br>
 Prefabs should be named the same way as scrips, make it easy to understand with as few words as possible. 
