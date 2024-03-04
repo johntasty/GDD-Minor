@@ -6,12 +6,12 @@ using UnityEngine.InputSystem;
 
 public class CharacterControlls : MonoBehaviour
 {
-    CharacterController m_Player;
+    CharacterController p_PlayerController;
     [SerializeField]
-    CinemachineVirtualCamera m_Camera;
+    CinemachineVirtualCamera p_Camera;
     //player variables
     [SerializeField]
-    float m_Speed = 5f;
+    float p_Speed = 5f;
 
     private bool groundedPlayer;
     private float gravityValue = -9.81f;
@@ -33,7 +33,7 @@ public class CharacterControlls : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_Player = GetComponent<CharacterController>();
+        p_PlayerController = GetComponent<CharacterController>();
     }
 
     // Update is called once per frame
@@ -43,7 +43,7 @@ public class CharacterControlls : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        groundedPlayer = m_Player.isGrounded;
+        groundedPlayer = p_PlayerController.isGrounded;
         verticalVelocity += gravityValue * Time.deltaTime;
 
         if (groundedPlayer && verticalVelocity < 0f)
@@ -51,11 +51,11 @@ public class CharacterControlls : MonoBehaviour
             verticalVelocity = 0f;
         }
 
-        m_Player.transform.rotation = m_Camera.transform.rotation;
+        p_PlayerController.transform.rotation = p_Camera.transform.rotation;
 
-        Vector3 move = m_Player.transform.forward * direction.y;
+        Vector3 move = p_PlayerController.transform.forward * direction.y;
         move.y += verticalVelocity;
-        m_Player.Move(move * Time.deltaTime * m_Speed);
+        p_PlayerController.Move(move * Time.deltaTime * p_Speed);
                
     }
 }
