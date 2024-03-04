@@ -46,4 +46,8 @@ To make sure your codebase/project is up to date always make sure to click fetch
 
 ## Preventing issues
 ### :warning: Working within unity
-This will be worked on I will still have to figure out how exactly this is done for unity. 
+Setting up file system to avoid conflicts.
+-Only work within your team file.
+-Anything you want to add to the project, create a file with your name under the respective file in your team and only work within that file.
+-Scenes that are not under your name in your team file should not be touched on.
+Naming convention TODO.
