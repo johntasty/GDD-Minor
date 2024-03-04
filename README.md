@@ -55,9 +55,9 @@ All names if they are made up from multiple words will be seperated with a - ins
 A scene that you are using to test features should be named like this {name}-testing-{feature-name}. For main scenes (scenes that are going to be in the game) it should be {name}-main and for name you will fill in a description that makes the scene easily recognizable. 
 
 <b>Scripts</b><br>
-A script should be named with a one or two word description of the feature followed by -script so for a movement controller it should be movement-controller-script.cs , this way anyone will understand what it does without having to look into the code itself.
+We will follow the official C# naming conventions as stated [here](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/identifier-names#naming-conventions)
 
-Naming conventions within the codebase: For functions try to keep words to a minimum use abbreviations only for technical stuff like an integer is an int etc, do not make up your own abbreviations, and use camelCase. For variables, if your variable is public it should start with an p_ to the name of your variable, so for example movement speed integer if private would be _movementSpeedInt and if it was public it would be p_movementSpeedInt, 
+A script should be named with a one or two word description of the feature followed by -script so for a movement controller it should be movement_controller_script.cs , this way anyone will understand what it does without having to look into the code itself.
 
 <b>Prefabs</b><br>
 Prefabs should be named the same way as scrips, make it easy to understand with as few words as possible. 
