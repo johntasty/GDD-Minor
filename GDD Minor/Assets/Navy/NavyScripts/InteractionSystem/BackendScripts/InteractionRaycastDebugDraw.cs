@@ -2,10 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 
-[ExecuteAlways]
+[ExecuteInEditMode]
 public class InteractionRaycastDebugDraw : MonoBehaviour
 {
     [Header("This debug line will not be drawn during runtime.\nIt's just to indicate how far the player can interact with things.")]
@@ -14,13 +13,13 @@ public class InteractionRaycastDebugDraw : MonoBehaviour
     public Color DrawColor = Color.red;
     
     private Transform _target;
-
-    // Start is called before the first frame update
-    void Start()
+    
+    void Awake()
     {
-        _target = gameObject.transform.GetChild(0);
-        if (EditorApplication.isPlaying)
+        if (Application.isPlaying)
             Destroy(this);
+        
+        _target = gameObject.transform.GetChild(0);
     }
 
     private void FixedUpdate()

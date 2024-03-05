@@ -7,14 +7,9 @@ using UnityEngine.Serialization;
 
 public class Interactable : MonoBehaviour, IInteractable
 {
-
-    [Header("Called when the player presses the interact button")]
+    [Header("Interactable Settings")]
     public UnityEvent OnInteractEvent;
-
-    [Header("Called when the player looks at or gets near this object")]
     public UnityEvent OnHover;
-    
-    [Header("Called when the player stops looking at at or gets too far from this object")]
     public UnityEvent OnUnHover;
 
     private bool _isObjectHovered = false;
