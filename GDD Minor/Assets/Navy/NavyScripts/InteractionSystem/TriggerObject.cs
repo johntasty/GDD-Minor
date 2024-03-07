@@ -6,9 +6,12 @@ using UnityEngine.Events;
 
 public class TriggerObject : MonoBehaviour
 {
-    public UnityEvent<Collider> OnEnterTrigger;
-    public UnityEvent<Collider> WhileInsideTrigger;
-    public UnityEvent<Collider> OnExitTrigger;
+    [SerializeField]
+    private UnityEvent<Collider> OnEnterTrigger;
+    [SerializeField]
+    private UnityEvent<Collider> WhileInsideTrigger;
+    [SerializeField]
+    private UnityEvent<Collider> OnExitTrigger;
 
     private void Start()
     {

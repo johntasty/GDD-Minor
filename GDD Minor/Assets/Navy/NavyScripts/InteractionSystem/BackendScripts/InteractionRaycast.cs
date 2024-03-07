@@ -5,11 +5,14 @@ using UnityEngine;
 
 public class InteractionRaycast : MonoBehaviour
 {
-    public Camera playerCamera;
-    [Min(0)]
-    public float MaxInteractionDistance = 1f;
+    [SerializeField]
+    private Camera playerCamera;
+    [SerializeField] [Min(0)]
+    private float maxInteractionDistance = 1f;
+    [SerializeField] 
+    private Color debugDrawColor = Color.red;
 
-    private IInteractable _lastHover;
+    private IObjectInteractable _lastHover;
 
     private void Update()
     {
@@ -21,7 +24,7 @@ public class InteractionRaycast : MonoBehaviour
     {
         Ray ray = playerCamera.ViewportPointToRay(new Vector3 (0.5f, 0.5f, 0));
 
-        bool isHit = Physics.Raycast(ray, out var hitInfo, MaxInteractionDistance);
+        bool isHit = Physics.Raycast(ray, out var hitInfo, maxInteractionDistance);
 
         if (!isHit)
         {
@@ -29,7 +32,7 @@ public class InteractionRaycast : MonoBehaviour
             return;
         }
         
-        bool isInteractable = hitInfo.collider.TryGetComponent(out IInteractable interactableObject);
+        bool isInteractable = hitInfo.collider.TryGetComponent(out IObjectInteractable interactableObject);
 
         if (!isInteractable)
         {
@@ -50,5 +53,11 @@ public class InteractionRaycast : MonoBehaviour
             
         _lastHover.UnHover();
         _lastHover = null;
+    }
+    
+    void OnDrawGizmos()
+    {
+        Gizmos.color = debugDrawColor;
+        Gizmos.DrawLine(gameObject.transform.position, transform.TransformPoint(Vector3.forward * maxInteractionDistance));
     }
 }

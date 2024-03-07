@@ -14,83 +14,103 @@ public enum EasingType
 public class ProceduralDoor : Interactable
 {
     [Header("Procedural Door Settings")]
+    
     [Tooltip("The object the door will use as its pivot point.\n" +
              "Leave empty if you want to use the pivot of the object that has this script attached.")]
-    public Transform DoorPivotObject;
+    [SerializeField]
+    private Transform doorPivotObject;
+    
     [Tooltip("The amount of time it will take for the door to animate")]
     [Min(0)]
-    public float DurationSeconds = 1.0f;
-    [Tooltip("The amount of degrees the door will rotate.")]
-    [Range(-359, 359)]
-    public int RotationDegrees = 90;
-    [Tooltip("The easing method used.")]
-    public EasingType RotationEasingType = EasingType.Linear;
+    [SerializeField]
+    private float durationSeconds = 1.0f;
 
-    public bool IsOpened = false;
+    [SerializeField]
+    private bool animatePosition = true;
+
+    [SerializeField]
+    private bool animateRotation = true;
+
+    [SerializeField]
+    [Tooltip("The position the object will end up in after the animation is done.")]
+    private Vector3 targetPosition = new Vector3();
+    [SerializeField]
+    [Tooltip("The rotation the object will end up in after the animation is done.")]
+    private Vector3 targetRotation = new Vector3();
     
+    [SerializeField]
+    [Tooltip("This curve controls the speed of the animation throughout.")]
+    private AnimationCurve animationCurve = new AnimationCurve();
+    
+    [SerializeField]
+    [Tooltip("The easing method used.")]
+    private EasingType rotationEasingType = EasingType.Linear;
+
     private bool _isMoving = false;
-    private Quaternion _closedRotation;
-    private Quaternion _openRotation;
+    private Vector3 _originalPosition;
+    private Vector3 _originalRotation;
+    private Coroutine _animationRoutine;
+    private bool _interruptAnimation;
 
     private void Start()
     {
-        if (DoorPivotObject == null)
-            DoorPivotObject = transform;
-
-        if (IsOpened)
-        {
-            _openRotation = DoorPivotObject.rotation;
-            _closedRotation = Quaternion.Euler(DoorPivotObject.eulerAngles + Vector3.up * RotationDegrees);
-        }
-        else
-        {
-            _closedRotation = DoorPivotObject.rotation;
-            _openRotation = Quaternion.Euler(DoorPivotObject.eulerAngles + Vector3.up * RotationDegrees);
-        }
+        if (doorPivotObject == null)
+            doorPivotObject = transform;
     }
 
     public void AnimateDoor()
     {
-        if (_isMoving)
-            return;
-
-        Quaternion targetRotation = IsOpened ? _closedRotation : _openRotation;
-        StartCoroutine(RotateDoor(targetRotation));
+        // if (_isMoving)
+            
+        // Quaternion targetRotation = IsOpened ? _closedRotation : _openRotation;
+        // StartCoroutine(RotateDoor(targetRotation));
+        _animationRoutine = StartCoroutine(RotateDoor());
     }
 
-    private IEnumerator RotateDoor(Quaternion targetRotation)
+    private IEnumerator RotateDoor()
     {
         _isMoving = true;
 
-        Quaternion startRotation = DoorPivotObject.rotation;
         float elapsedTime = 0f;
-
-        while (elapsedTime < DurationSeconds)
+        
+        while (elapsedTime < durationSeconds)
         {
-            float t = Mathf.Clamp01(elapsedTime / DurationSeconds);
-            
-            switch (RotationEasingType)
+            float percentDone = elapsedTime / durationSeconds;
+            float t = animationCurve.Evaluate(percentDone);
+            print(percentDone);
+            print(t);
+
+            if (animatePosition)
             {
-                case EasingType.Linear:
-                    break;
-                case EasingType.EaseIn:
-                    t = Mathf.Pow(t, 2);
-                    break;
-                case EasingType.EaseOut:
-                    t = 1 - Mathf.Pow(1 - t, 2);
-                    break;
-                case EasingType.EaseInOut:
-                    t = t < 0.5f ? Mathf.Pow(t * 2, 2) * 0.5f : 1 - Mathf.Pow(2 - t * 2, 2) * 0.5f;
-                    break;
+                Vector3 slerpedPosition = Vector3.Slerp(_originalPosition, targetPosition, t);
+                doorPivotObject.position = slerpedPosition;
+            }
+
+            if (animateRotation)
+            {
+                Vector3 slerpedRotation = Vector3.Slerp(_originalRotation, targetRotation, t);
+                Quaternion newRotation = Quaternion.Euler(slerpedRotation);
+                doorPivotObject.rotation = newRotation;
             }
             
-            DoorPivotObject.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        DoorPivotObject.rotation = targetRotation;
-        IsOpened = !IsOpened;
+        if (animateRotation)
+        {
+            doorPivotObject.rotation = Quaternion.Euler(targetRotation);
+            (_originalRotation, targetRotation) = (targetRotation, _originalRotation);
+        }
+
+        if (animatePosition)
+        {
+            doorPivotObject.position = targetPosition;
+            (_originalPosition, targetPosition) = (targetPosition, _originalPosition);
+        }
+
+        
+        
         _isMoving = false;
     }
 }

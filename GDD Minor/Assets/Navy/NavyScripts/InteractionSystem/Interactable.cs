@@ -1,34 +1,35 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
 
-public class Interactable : MonoBehaviour, IInteractable
+public class Interactable : MonoBehaviour, IObjectInteractable
 {
+    [FormerlySerializedAs("OnInteractEvent")]
     [Header("Interactable Settings")]
-    public UnityEvent OnInteractEvent;
-    public UnityEvent OnHover;
-    public UnityEvent OnUnHover;
+    [SerializeField]
+    private UnityEvent onInteractEvent;
+    [SerializeField]
+    private UnityEvent onHover;
+    [SerializeField]
+    private UnityEvent onUnHover;
 
     private bool _isObjectHovered = false;
     
     public void Interact()
     {
-        OnInteractEvent.Invoke();
+        onInteractEvent.Invoke();
     }
 
     public void Hover()
     {
         _isObjectHovered = true;
-        OnHover.Invoke();
+        onHover.Invoke();
     }
 
     public void UnHover()
     {
         _isObjectHovered = false;
-        OnUnHover.Invoke();
+        onUnHover.Invoke();
     }
 
     public bool IsObjectHovered()
