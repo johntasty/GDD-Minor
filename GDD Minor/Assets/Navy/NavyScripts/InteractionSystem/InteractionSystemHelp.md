@@ -86,7 +86,7 @@ Let's make a simple door that opens when the player interacts with it. Start by 
 
 Next, we will be adding the `Interactable` script as a component, as well as the `ProcedurallyAnimatableObject` script. If you don't want the player to be able to directly interact with it, but rather trigger the animation via different means (such as another script) do not add the `Interactable script`.
 
-If you now rotate the `DoorObject` around the Y-Axis, you will see that the door rotates around the center of the object, which is not exactly how doors work! This means we will need to create a pivot point. Create a new empty object by right-clicking the scene tree, then pressing `Create Empty`. I have named mine `DoorPivot`. Next, we're going to add the `DoorObject` as a child of the `DoorPivot` by dragging the `DoorObject` onto the `DoorPivot`. It should look like this:
+If you now rotate the `DoorObject` around the Y-Axis, you will see that the door rotates around the center of the object, which is not exactly how doors work! This means we will need to create a pivot point. Create a new empty object by right-clicking the scene tree, then pressing `Create Empty`. I have named mine `DoorPivot`. Next, we're going to add the `DoorObject` as a child of the `DoorPivot` by dragging the `DoorObject` onto the `DoorPivot`. It should look like this:<br>
 ![Door Example 1](Documentation/doorExample1.png)
 
 Select the `DoorObject`. Reset the position and rotation of the `DoorObject` back to all zeros. Then, position your `DoorObject` so that the edge lines up with the position of the `DoorPivot` like this:
