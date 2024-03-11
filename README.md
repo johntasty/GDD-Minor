@@ -46,6 +46,37 @@ To make sure your codebase/project is up to date always make sure to click fetch
 
 ## Preventing issues
 ### :warning: Working within unity
-Setting up file system to avoid conflicts.
--Only work within your team file.
 
+### Naming conventions
+
+All names if they are made up from multiple words will be seperated with a - instead of a space. 
+
+<b>Scenes</b><br>
+A scene that you are using to test features should be named like this {name}-testing-{feature-name}. For main scenes (scenes that are going to be in the game) it should be {name}-main and for name you will fill in a description that makes the scene easily recognizable. 
+
+<b>Scripts</b><br>
+We will follow the official C# naming conventions as stated [here](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/identifier-names#naming-conventions)
+
+A script should be named with a one or two word description of the feature followed by -script so for a movement controller it should be movement_controller_script.cs , this way anyone will understand what it does without having to look into the code itself.
+
+<b>Prefabs</b><br>
+Prefabs should be named the same way as scrips, make it easy to understand with as few words as possible. 
+
+### File structure: 
+
+<b>Scenes</b><br>
+Within each team folder, when you are testing/making new features. Please create your own scene. Name this for example "Iwan test scene". This is to let everyone know this is your scene and you can do whatever you want with this scene without causing conflicts elsewhere. 
+
+For the main scene, changes should be made by one person at a time. Only one team should be able to work on the main scene at a time.
+
+For main scenes these will be placed outside of the team folders, keep in mind only one person/team can work on these scenes at once. 
+
+<b>Scripts</b><br>
+For the scripts for each team they will have a scripts folder, in this folder you can create new folders based on the functionality of the group of scripts. For example, Movement functionality should be in scripts/movement/movement-script.cs this way each person can work on their own functionality without running into merge conflicts. If multiple people need to work within the same script, make sure you only add new code and try to avoid changing existing code at all cost or make sure to keep in close touch with the other person who will be working within the same file. 
+
+<b>Prefabs</b><br>
+Everything you make should be turned into a prefab. For example, if you make a character and it has character controllers on him you will be able to drag and drop this character prefab in the scene without hindering the people who are changing the character prefab itself. In essense it is a reference to this prefab instead of the actual character itself. 
+
+Prefabs should be in each of the teams their prefabs folder. Complying with the naming conventions mentioned above. 
+
+If you have any other ideas of what should be here you can @Iwan in the discord. 
