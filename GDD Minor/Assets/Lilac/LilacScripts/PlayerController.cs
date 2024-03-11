@@ -1,17 +1,18 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 5.0f;
+    [SerializeField] private float moveSpeed = 10.0f;
     [SerializeField] private float jumpForce = 5.0f;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Camera playerCamera;
     [SerializeField] private float lookSpeed = 2.0f;
-    [SerializeField] private float groundDeceleration = 0.9f; // How quickly velocity decreases on ground
-    [SerializeField] private float airDeceleration = 0.99f; // How quickly velocity decreases in the air
-    [SerializeField] private float airControl = 0.5f; // Degree of control in the air, 0 to 1
+    [FormerlySerializedAs("groundDeceleration")] [SerializeField] private float groundDrag = 12.0f; // How quickly velocity decreases on ground
+    [FormerlySerializedAs("airDeceleration")] [SerializeField] private float airDrag = 0.98f; // How quickly velocity decreases in the air
+    [SerializeField] private float airControl = 200f;
 
     private Rigidbody rb;
     private Vector2 movementInput;
@@ -69,8 +70,8 @@ public class PlayerController : MonoBehaviour
             Vector3 velocityChange = targetVelocity - new Vector3(rb.velocity.x, 0, rb.velocity.z);
         
             // Apply ground deceleration
-            velocityChange.x *= groundDeceleration * Time.deltaTime;
-            velocityChange.z *= groundDeceleration * Time.deltaTime;
+            velocityChange.x *= groundDrag * Time.deltaTime;
+            velocityChange.z *= groundDrag * Time.deltaTime;
 
             rb.AddForce(velocityChange, ForceMode.VelocityChange);
         }
@@ -86,7 +87,7 @@ public class PlayerController : MonoBehaviour
 
             // Apply air deceleration to gradually reduce horizontal speed
             velocityChange = velocityChange - currentHorizontalVelocity;
-            velocityChange *= airDeceleration * Time.deltaTime;
+            velocityChange *= airDrag * Time.deltaTime;
 
             rb.velocity = new Vector3(rb.velocity.x + velocityChange.x, rb.velocity.y, rb.velocity.z + velocityChange.z);
         }
