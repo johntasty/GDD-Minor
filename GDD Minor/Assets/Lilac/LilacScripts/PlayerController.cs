@@ -39,11 +39,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        HandleRotation();
-    }
-
     public void OnLook(InputValue value)
     {
         lookInput = value.Get<Vector2>();
@@ -59,8 +54,10 @@ public class PlayerController : MonoBehaviour
         playerCamera.transform.localEulerAngles = new Vector3(cameraPitch, 0, 0);
     }
 
-    void FixedUpdate()
+    void Update()
     {
+        HandleRotation();
+        
         CheckGrounded();
         Vector3 movementDirection = transform.right * movementInput.x + transform.forward * movementInput.y;
         movementDirection.Normalize();
@@ -71,28 +68,32 @@ public class PlayerController : MonoBehaviour
             Vector3 targetVelocity = movementDirection * moveSpeed;
             Vector3 velocityChange = targetVelocity - new Vector3(rb.velocity.x, 0, rb.velocity.z);
         
-            velocityChange.x *= groundDeceleration;
-            velocityChange.z *= groundDeceleration;
+            // Apply ground deceleration
+            velocityChange.x *= groundDeceleration * Time.deltaTime;
+            velocityChange.z *= groundDeceleration * Time.deltaTime;
 
             rb.AddForce(velocityChange, ForceMode.VelocityChange);
         }
         else
         {
-            // While in the air, the player's existing horizontal velocity is slightly adjusted towards the target velocity based on airControl, but deceleration is applied
+            // In the air, modify existing horizontal velocity based on air control
             Vector3 currentHorizontalVelocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-            Vector3 targetVelocity = movementDirection * moveSpeed * airControl;
-            Vector3 adjustedVelocity = Vector3.Lerp(currentHorizontalVelocity, targetVelocity, airControl * Time.fixedDeltaTime);
+            Vector3 targetVelocity = movementDirection * moveSpeed;
+            Vector3 velocityChange = Vector3.zero;
 
-            // Apply air deceleration to the adjusted velocity
-            adjustedVelocity = adjustedVelocity * airDeceleration;
+            // The influence of air control on the current direction
+            velocityChange = Vector3.Lerp(currentHorizontalVelocity, targetVelocity, airControl * Time.deltaTime);
 
-            // Update the Rigidbody's velocity, preserving vertical velocity for gravity
-            rb.velocity = new Vector3(adjustedVelocity.x, rb.velocity.y, adjustedVelocity.z);
+            // Apply air deceleration to gradually reduce horizontal speed
+            velocityChange = velocityChange - currentHorizontalVelocity;
+            velocityChange *= airDeceleration * Time.deltaTime;
+
+            rb.velocity = new Vector3(rb.velocity.x + velocityChange.x, rb.velocity.y, rb.velocity.z + velocityChange.z);
         }
     }
 
     private void CheckGrounded()
     {
-        isGrounded = Physics.CheckSphere(transform.position, 0.1f, groundLayer, QueryTriggerInteraction.Ignore);
+        isGrounded = Physics.CheckSphere(transform.position, 0.20f, groundLayer, QueryTriggerInteraction.Ignore);
     }
 }
