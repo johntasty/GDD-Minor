@@ -5,8 +5,11 @@ This file should help get you started when using the interaction system.
 There are currently three scripts in this folder you can use to help make life a little easier:
 
 1. [Interactable](#interactable)
-2. [TriggerObject](#triggerobject)
-3. [ProcedurallyAnimatableObject](#procedurallyanimatableobject)
+    - [Using the Interactable script](#using-the-interactable-script)
+3. [TriggerObject](#triggerobject)
+    - [Using the TriggerObject script](#using-the-triggerobject-script)
+5. [ProcedurallyAnimatableObject](#procedurallyanimatableobject)
+    - [Using the ProcedurallyAnimatableObject script](#using-the-procedurallyanimatableobject-script)
 
 ---
 
