@@ -6,10 +6,12 @@ There are currently three scripts in this folder you can use to help make life a
 
 1. [Interactable](#interactable)
     - [Using the Interactable script](#using-the-interactable-script)
-3. [TriggerObject](#triggerobject)
+2. [TriggerObject](#triggerobject)
     - [Using the TriggerObject script](#using-the-triggerobject-script)
-5. [ProcedurallyAnimatableObject](#procedurallyanimatableobject)
+3. [ProcedurallyAnimatableObject](#procedurallyanimatableobject)
     - [Using the ProcedurallyAnimatableObject script](#using-the-procedurallyanimatableobject-script)
+4. [InteractionRaycast](#interactionraycast)
+    - [Using the InteractionRaycast class](#using-the-interactionraycast-class)
 
 ---
 
@@ -101,3 +103,50 @@ Now your door should rotate when the player interacts with it!
 
 The inspector should look something like this:<br>
 ![Door Example 2](Documentation/doorExample2.png)
+
+---
+
+## InteractionRaycast
+
+The `InteractionRaycast` class can be instantiated in the player. It's sole purpose is to detect whether the player is looking at interactable objects.
+
+---
+
+### Using the InteractionRaycast class
+
+To get started, navigate to the main player script. In this script we only need to add a couple of lines:
+
+```C#
+public class PlayerController : MonoBehaviour
+{
+    // Make sure there is access to the camera
+    public Camera playerCamera;
+
+    // Next, we'll define the maximum distance the player can interact.
+    public float maxInteractionDistance = 3f;
+
+    // Last new field will be the InteractionRaycast itself.
+    private InteractionRaycast _interactionRaycast;
+
+    void Start()
+    {
+        // In the start method, we'll initalize the raycast.
+        _interactionRaycast = new(playerCamera, maxInteractionDistance);
+    }
+
+    void Update()
+    {
+        // In the Update (or FixedUpdate) we check if we're interacting with something
+        // First we call the Cast method on the raycast.
+        // Using the cast method also manages the hovering of objects. This is why we don't
+        // first check if the player is pressing the interact action.
+        IObjectInteractable interactable = _interactionRaycast.Cast();
+        // Then, we check if the raycast found an object we can interact with. If the player
+        // is also pressing the interact button (in this case the 'E' button) we will call the `Interact()` method.
+        if (interactable != null && Input.GetKeyDown(KeyCode.E))
+            interactable.Interact();
+    }
+}
+```
+
+Now, the player can interact with any object using the [Interactable](#interactable) component script!
