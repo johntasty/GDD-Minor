@@ -17,6 +17,7 @@ public class SC_FPSController : MonoBehaviour
     CharacterController characterController;
     Vector3 moveDirection = Vector3.zero;
     float rotationX = 0;
+    InteractionRaycast _interactionRaycast;
 
     [HideInInspector]
     public bool canMove = true;
@@ -28,6 +29,8 @@ public class SC_FPSController : MonoBehaviour
         // Lock cursor
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        _interactionRaycast = new(playerCamera, 3f);
     }
 
     void Update()
@@ -70,5 +73,9 @@ public class SC_FPSController : MonoBehaviour
             playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
             transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
         }
+
+        IObjectInteractable interactable = _interactionRaycast.Cast();
+        if (interactable != null && Input.GetKeyDown(KeyCode.E))
+            interactable.Interact();
     }
 }
