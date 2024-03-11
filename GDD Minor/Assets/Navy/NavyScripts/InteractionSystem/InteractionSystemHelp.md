@@ -20,6 +20,8 @@ The `Interactable` script can be attached to a game object when you want to make
 
 These events are [UnityEvents](https://docs.unity3d.com/Manual/UnityEvents.html). These events can trigger essentially anything on a Unity game object, or even call *public* methods & fields on a script attached to a game object.
 
+---
+
 ### Using the Interactable script
 
 Let's make a cube that disappears when you interact with it. It will also show an outline when the player looks at it.
@@ -31,7 +33,7 @@ To make the object disappear when the player interacts with it, click the plus i
 
 For the hover/unhover outline, I have imported an asset called [Quick Outline](https://assetstore.unity.com/packages/tools/particles-effects/quick-outline-115488), and attached that to the same cube to which we added the `Interactable` script. I've also set the script to disabled so that the outline does not show by default. Now we can simply do the same thing we did for the `On Interact Event`. Click the plus. Drag the cube (or the script component) into the object container. Then select `Outline -> bool enabled` in the dropdown. For the Hover event, we will check the box to enable it. For the UnHover event, we will leave it unchecked.
 
-If everything went correctly, it should look something like this:
+If everything went correctly, it should look something like this: <br>
 ![Interactable Example](Documentation/interactableExample.png)
 
 ---
@@ -46,9 +48,12 @@ The `TriggerObject` can trigger events when a player walks through a certain are
 
 These events are also [UnityEvents](https://docs.unity3d.com/Manual/UnityEvents.html).
 
+---
+
 ### Using the TriggerObject script
 
-Begin by creating an empty game object by right-clicking in the scene tree, then hit `Create Empty`. Name your object accordingly, then add a collider component (any shape should work). Place the collider in the correct spot and shape it as need be. You can check the option `Is Trigger`, but if you forget, the `TriggerObject` script will enable it for you.
+Begin by creating an empty game object by right-clicking in the scene tree, then hit `Create Empty`. Name your object accordingly, then add a collider component (any shape should work).
+Place the collider in the correct spot and shape it as need be. You can check the option `Is Trigger`, but if you forget, the `TriggerObject` script will enable it for you.
 Next, add the `TriggerObject` script as a component. You should now see the three events mentioned earlier.
 
 On how to use these events, please refer to [Using the Interactable script](#using-the-interactable-script).
@@ -70,6 +75,8 @@ The `ProcedurallyAnimatableObject` class should help with moving and rotating ob
 
 ***NOTE:*** The pivot object is the object that will actually have its transform modified. This means that if the script is attached to ObjectA, but ObjectB is set as the pivot point, it is ObjectB that will be moved/rotated.
 
+---
+
 ### Using the ProcedurallyAnimatableObject script
 
 Let's make a simple door that opens when the player interacts with it. Start by adding a cube by right-clicking the scene tree, and clicking `3D Object -> Cube`. I have named mine `DoorObject`. Now, shape the cube by modifying the scale to `X: 0.1, Y: 2, Z: 1`.
@@ -89,5 +96,5 @@ Lastly, head to the `Interactable` component. Add an event to the `On Interact E
 
 Now your door should rotate when the player interacts with it!
 
-The inspector should look something like this:
+The inspector should look something like this:<br>
 ![Door Example 2](Documentation/doorExample2.png)
