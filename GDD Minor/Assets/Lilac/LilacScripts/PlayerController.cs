@@ -52,18 +52,6 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
     }
 
-    void Update()
-    {
-        if(pauseMenu.isPaused == false)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            HandleRotation();
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.Confined;
-        }
-    }
 
     public void OnLook(InputValue value)
     {
@@ -82,7 +70,15 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        HandleRotation();
+
+        if(pauseMenu.isPaused == false)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            HandleRotation();
+        } else
+        {
+            Cursor.lockState = CursorLockMode.Confined;
+        }
         
         CheckGrounded();
         Vector3 movementDirection = transform.right * movementInput.x + transform.forward * movementInput.y;
