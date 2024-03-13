@@ -12,13 +12,13 @@ public class Look_Target_script : MonoBehaviour
     [SerializeField]
     CinemachineVirtualCamera CameraVirtual;
 
-    public void EnableViewing(Collider other)
+    public void EnableViewing()
     {
         CameraVirtual.enabled = true;
     }
-    public void DisableViewing(Collider other)
+    public void DisableViewing()
     {
         CameraVirtual.enabled = false;
     }
-    
+       
 }
