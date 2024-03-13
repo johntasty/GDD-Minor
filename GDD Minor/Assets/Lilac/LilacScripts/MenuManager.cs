@@ -1,18 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
 
-    [SerializeField] private GameObject mainMenu;
+    [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private string sceneName;
 
     public bool isPaused;
 
     private void Start()
     {
-        mainMenu.SetActive(false); 
+        pauseMenu.SetActive(false); 
     }
 
     private void Update()
@@ -35,22 +36,28 @@ public class MenuManager : MonoBehaviour
     {
         isPaused = true;
         Time.timeScale = 0f;
-        OpenMainMenu();
+        OpenPauseMenu();
     }
 
     public void Unpause()
     {
         isPaused = false;
         Time.timeScale = 1f;
-        CloseMainMenu(); 
+        ClosePauseMenu(); 
     }
 
-    private void OpenMainMenu()
+    private void OpenPauseMenu()
     {
-        mainMenu.SetActive(true);
+        pauseMenu.SetActive(true);
     }
-    private void CloseMainMenu()
+
+    private void ClosePauseMenu()
     {
-        mainMenu.SetActive(false);
+        pauseMenu.SetActive(false);
+    }
+
+    public void changeScene()
+    {
+        SceneManager.LoadScene(sceneName);
     }
 }
