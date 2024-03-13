@@ -12,12 +12,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float groundDeceleration = 0.9f; // How quickly velocity decreases on ground
     [SerializeField] private float airDeceleration = 0.99f; // How quickly velocity decreases in the air
     [SerializeField] private float airControl = 0.5f; // Degree of control in the air, 0 to 1
-
+    [SerializeField] private MenuManager pauseMenu;
+    
     private Rigidbody rb;
     private Vector2 movementInput;
     private Vector2 lookInput;
     private float cameraPitch = 0.0f;
     private bool isGrounded;
+    private bool hasDoubleJumped = false;
 
     void Awake()
     {
@@ -35,13 +37,31 @@ public class PlayerController : MonoBehaviour
     {
         if (isGrounded)
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
+            Jump();
         }
+        else if (!hasDoubleJumped)
+        {
+            Jump();
+            hasDoubleJumped = true;
+        }
+    }
+
+    private void Jump()
+    {
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
     }
 
     void Update()
     {
-        HandleRotation();
+        if(pauseMenu.isPaused == false)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            HandleRotation();
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Confined;
+        }
     }
 
     public void OnLook(InputValue value)
@@ -75,6 +95,7 @@ public class PlayerController : MonoBehaviour
             velocityChange.z *= groundDeceleration;
 
             rb.AddForce(velocityChange, ForceMode.VelocityChange);
+            hasDoubleJumped = false;
         }
         else
         {
@@ -93,6 +114,7 @@ public class PlayerController : MonoBehaviour
 
     private void CheckGrounded()
     {
+        //jumpAmounts = 0;
         isGrounded = Physics.CheckSphere(transform.position, 0.1f, groundLayer, QueryTriggerInteraction.Ignore);
     }
 }
