@@ -14,6 +14,7 @@ public class Look_Target_script : MonoBehaviour
 
     public void EnableViewing()
     {
+        
         CameraVirtual.enabled = true;
     }
     public void DisableViewing()
