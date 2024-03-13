@@ -74,14 +74,14 @@ public class PlayerController : MonoBehaviour
         if(pauseMenu.isPaused == false)
         {
             Cursor.lockState = CursorLockMode.Locked;
-            HandleRotation();
+            //HandleRotation();
         } else
         {
             Cursor.lockState = CursorLockMode.Confined;
         }
         
         CheckGrounded();
-        Vector3 movementDirection = transform.right * movementInput.x + transform.forward * movementInput.y;
+        Vector3 movementDirection = playerCamera.transform.right * movementInput.x + playerCamera.transform.forward * movementInput.y;
         movementDirection.Normalize();
 
         if (isGrounded)
