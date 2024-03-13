@@ -25,7 +25,8 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = false;
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
     }
 
@@ -71,13 +72,14 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
 
-        if(pauseMenu.isPaused == false)
+        if(pauseMenu.isPaused == true)
         {
-            Cursor.lockState = CursorLockMode.Locked;
+                        
             //HandleRotation();
         } else
         {
-            Cursor.lockState = CursorLockMode.Confined;
+            
+            //Cursor.lockState = CursorLockMode.Confined;
         }
         
         CheckGrounded();
