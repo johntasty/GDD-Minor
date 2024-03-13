@@ -13,8 +13,7 @@ public class Look_Target_script : MonoBehaviour
     CinemachineVirtualCamera CameraVirtual;
 
     public void EnableViewing()
-    {
-        
+    {        
         CameraVirtual.enabled = true;
     }
     public void DisableViewing()

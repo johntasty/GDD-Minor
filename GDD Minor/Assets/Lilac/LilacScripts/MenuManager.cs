@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,21 +16,21 @@ public class MenuManager : MonoBehaviour
     {
         pauseMenu.SetActive(false); 
     }
-
-    private void Update()
-    {
-        if (PauseManager.instance.pauseMenuInput)
-        {
-            if(!isPaused)
-            {
-                Pause();
-            }
-            else
-            {
-                Unpause();
-            }
-        }
-    }
+    //dont need this
+    //private void Update()
+    //{
+    //    if (PauseManager.instance.pauseMenuInput)
+    //    {
+    //        if(!isPaused)
+    //        {
+    //            Pause();
+    //        }
+    //        else
+    //        {
+    //            Unpause();
+    //        }
+    //    }
+    //}
 
 
     public void Pause()
@@ -42,6 +43,7 @@ public class MenuManager : MonoBehaviour
     public void Unpause()
     {
         isPaused = false;
+        Cursor.visible = isPaused;
         Time.timeScale = 1f;
         ClosePauseMenu(); 
     }
