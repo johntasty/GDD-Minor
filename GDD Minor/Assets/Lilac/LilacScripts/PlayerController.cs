@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Camera playerCamera;
     [SerializeField] private float lookSpeed = 2.0f;
-    [FormerlySerializedAs("groundDeceleration")] [SerializeField] private float groundDrag = 12.0f; // How quickly velocity decreases on ground
+    [FormerlySerializedAs("groundDeceleration")] [SerializeField] private float groundDrag = 13.0f; // How quickly velocity decreases on ground
     [FormerlySerializedAs("airDeceleration")] [SerializeField] private float airDrag = 0.98f; // How quickly velocity decreases in the air
     [SerializeField] private float airControl = 200f;
 
@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour
             velocityChange.x *= groundDrag * Time.deltaTime;
             velocityChange.z *= groundDrag * Time.deltaTime;
 
-            rb.AddForce(velocityChange, ForceMode.VelocityChange);
+            rb.velocity = new Vector3(rb.velocity.x + velocityChange.x, rb.velocity.y, rb.velocity.z + velocityChange.z);
         }
         else
         {
