@@ -118,6 +118,6 @@ public class PlayerController : MonoBehaviour
     private void CheckGrounded()
     {
         //jumpAmounts = 0;
-        isGrounded = Physics.CheckSphere(transform.position, 0.1f, groundLayer, QueryTriggerInteraction.Ignore);
+        isGrounded = Physics.CheckSphere(transform.position, 0.2f, groundLayer, QueryTriggerInteraction.Ignore);
     }
 }

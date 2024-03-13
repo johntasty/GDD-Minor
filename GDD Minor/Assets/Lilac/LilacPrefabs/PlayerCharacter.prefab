@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1666784457443817327}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5650002, z: 0.374}
+  m_LocalPosition: {x: 0, y: 1.565, z: 0.374}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -80,7 +80,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9180303517301953443}
-  - component: {fileID: 1380791138966845409}
   - component: {fileID: 1095511076744642793}
   - component: {fileID: 5135963606353381138}
   - component: {fileID: 5055908681147574066}
@@ -112,21 +111,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1380791138966845409
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5559671784366546931}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e02ca676fdedb0469c8a4c2c7cf8f57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  upwardForce: 3
-  movementZ: 3
-  movementX: 3
 --- !u!136 &1095511076744642793
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -493,7 +477,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9187714978949425976}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.997706, y: -0.837001, z: -7.905533}
+  m_LocalPosition: {x: 0, y: 1.565, z: 0.374}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
