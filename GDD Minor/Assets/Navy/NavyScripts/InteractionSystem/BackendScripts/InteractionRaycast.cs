@@ -4,8 +4,11 @@ public class InteractionRaycast
 {
     private Camera _playerCamera;
     private float _maxInteractionDistance;
+    private LayerMask _interactionLayers;
 
     private IObjectInteractable _lastHover;
+
+    public LayerMask InteractionLayers {  get { return _interactionLayers; } }
 
     public float MaxInteractionDistance
     {
@@ -18,10 +21,11 @@ public class InteractionRaycast
         set { _playerCamera = value; }
     }
 
-    public InteractionRaycast(Camera playerCamera, float maxInteractionDistance)
+    public InteractionRaycast(Camera playerCamera, float maxInteractionDistance, LayerMask interaclayers)
     {
         _playerCamera = playerCamera;
         _maxInteractionDistance = maxInteractionDistance;
+        _interactionLayers = interaclayers;
     }
 
     /// <summary>
@@ -32,8 +36,7 @@ public class InteractionRaycast
     {
         Ray ray = _playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         
-        bool isHit = Physics.Raycast(ray, out var hitInfo, _maxInteractionDistance);
-
+        bool isHit = Physics.Raycast(ray, out var hitInfo, _maxInteractionDistance, _interactionLayers);       
         if (!isHit)
         {
             UnHoverLastObject();
@@ -41,20 +44,19 @@ public class InteractionRaycast
         }
 
         bool isInteractable = hitInfo.collider.TryGetComponent(out IObjectInteractable interactableObject);
-
         if (!isInteractable)
         {
             UnHoverLastObject();
             return null;
         }
-
+        
         if (!interactableObject.IsObjectHovered())
         {
             interactableObject.Hover();
             _lastHover = interactableObject;
         }
 
-        return isHit? interactableObject : null;
+        return interactableObject;
     }
 
     private void UnHoverLastObject()
