@@ -53,22 +53,6 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
     }
 
-
-    public void OnLook(InputValue value)
-    {
-        lookInput = value.Get<Vector2>();
-    }
-
-    private void HandleRotation()
-    {
-        var horizontalRotation = lookInput.x * lookSpeed / 10;
-        transform.Rotate(0, horizontalRotation, 0);
-
-        cameraPitch -= lookInput.y * lookSpeed / 10;
-        cameraPitch = Mathf.Clamp(cameraPitch, -90f, 90f);
-        playerCamera.transform.localEulerAngles = new Vector3(cameraPitch, 0, 0);
-    }
-
     void Update()
     {
 
@@ -120,6 +104,7 @@ public class PlayerController : MonoBehaviour
     private void CheckGrounded()
     {
         //jumpAmounts = 0;
-        isGrounded = Physics.CheckSphere(transform.position, 0.2f, groundLayer, QueryTriggerInteraction.Ignore);
+        isGrounded = Physics.CheckBox(transform.position, new Vector3(0.5f, 0.1f, 0.5f), Quaternion.identity, groundLayer, QueryTriggerInteraction.Ignore);
+
     }
 }
