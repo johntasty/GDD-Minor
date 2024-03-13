@@ -13,7 +13,7 @@ public class Input_Interaction : MonoBehaviour
 
     private InteractionRaycast _interactionRaycast;
     private IObjectInteractable interactable = null;
-    public Camera playerCamera;
+    private Camera playerCamera;
 
     public void OnInteract(InputValue value)
     {
