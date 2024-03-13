@@ -13,12 +13,14 @@ public class PlayerController : MonoBehaviour
     [FormerlySerializedAs("groundDeceleration")] [SerializeField] private float groundDrag = 13.0f; // How quickly velocity decreases on ground
     [FormerlySerializedAs("airDeceleration")] [SerializeField] private float airDrag = 0.98f; // How quickly velocity decreases in the air
     [SerializeField] private float airControl = 200f;
+    [SerializeField] private MenuManager pauseMenu;
 
     private Rigidbody rb;
     private Vector2 movementInput;
     private Vector2 lookInput;
     private float cameraPitch = 0.0f;
     private bool isGrounded;
+    private bool hasDoubleJumped = false;
 
     void Awake()
     {
@@ -36,7 +38,30 @@ public class PlayerController : MonoBehaviour
     {
         if (isGrounded)
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
+            Jump();
+        }
+        else if (!hasDoubleJumped)
+        {
+            Jump();
+            hasDoubleJumped = true;
+        }
+    }
+
+    private void Jump()
+    {
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
+    }
+
+    void Update()
+    {
+        if(pauseMenu.isPaused == false)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            HandleRotation();
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Confined;
         }
     }
 
@@ -74,6 +99,7 @@ public class PlayerController : MonoBehaviour
             velocityChange.z *= groundDrag * Time.deltaTime;
 
             rb.velocity = new Vector3(rb.velocity.x + velocityChange.x, rb.velocity.y, rb.velocity.z + velocityChange.z);
+            hasDoubleJumped = false;
         }
         else
         {
@@ -95,6 +121,7 @@ public class PlayerController : MonoBehaviour
 
     private void CheckGrounded()
     {
-        isGrounded = Physics.CheckSphere(transform.position, 0.20f, groundLayer, QueryTriggerInteraction.Ignore);
+        //jumpAmounts = 0;
+        isGrounded = Physics.CheckSphere(transform.position, 0.1f, groundLayer, QueryTriggerInteraction.Ignore);
     }
 }
