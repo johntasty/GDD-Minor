@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEditor;
 
+[RequireComponent(typeof(Collider))]
 public class TriggerObject : MonoBehaviour
 {
     [Header("Select which Tags to interact with.")]
