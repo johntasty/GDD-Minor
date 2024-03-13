@@ -1,19 +1,20 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 5.0f;
+    [SerializeField] private float moveSpeed = 10.0f;
     [SerializeField] private float jumpForce = 5.0f;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Camera playerCamera;
     [SerializeField] private float lookSpeed = 2.0f;
-    [SerializeField] private float groundDeceleration = 0.9f; // How quickly velocity decreases on ground
-    [SerializeField] private float airDeceleration = 0.99f; // How quickly velocity decreases in the air
-    [SerializeField] private float airControl = 0.5f; // Degree of control in the air, 0 to 1
+    [FormerlySerializedAs("groundDeceleration")] [SerializeField] private float groundDrag = 13.0f; // How quickly velocity decreases on ground
+    [FormerlySerializedAs("airDeceleration")] [SerializeField] private float airDrag = 0.98f; // How quickly velocity decreases in the air
+    [SerializeField] private float airControl = 200f;
     [SerializeField] private MenuManager pauseMenu;
-    
+
     private Rigidbody rb;
     private Vector2 movementInput;
     private Vector2 lookInput;
@@ -51,18 +52,6 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
     }
 
-    void Update()
-    {
-        if(pauseMenu.isPaused == false)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            HandleRotation();
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.Confined;
-        }
-    }
 
     public void OnLook(InputValue value)
     {
@@ -79,8 +68,18 @@ public class PlayerController : MonoBehaviour
         playerCamera.transform.localEulerAngles = new Vector3(cameraPitch, 0, 0);
     }
 
-    void FixedUpdate()
+    void Update()
     {
+
+        if(pauseMenu.isPaused == false)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            HandleRotation();
+        } else
+        {
+            Cursor.lockState = CursorLockMode.Confined;
+        }
+        
         CheckGrounded();
         Vector3 movementDirection = transform.right * movementInput.x + transform.forward * movementInput.y;
         movementDirection.Normalize();
@@ -91,24 +90,28 @@ public class PlayerController : MonoBehaviour
             Vector3 targetVelocity = movementDirection * moveSpeed;
             Vector3 velocityChange = targetVelocity - new Vector3(rb.velocity.x, 0, rb.velocity.z);
         
-            velocityChange.x *= groundDeceleration;
-            velocityChange.z *= groundDeceleration;
+            // Apply ground deceleration
+            velocityChange.x *= groundDrag * Time.deltaTime;
+            velocityChange.z *= groundDrag * Time.deltaTime;
 
-            rb.AddForce(velocityChange, ForceMode.VelocityChange);
+            rb.velocity = new Vector3(rb.velocity.x + velocityChange.x, rb.velocity.y, rb.velocity.z + velocityChange.z);
             hasDoubleJumped = false;
         }
         else
         {
-            // While in the air, the player's existing horizontal velocity is slightly adjusted towards the target velocity based on airControl, but deceleration is applied
+            // In the air, modify existing horizontal velocity based on air control
             Vector3 currentHorizontalVelocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-            Vector3 targetVelocity = movementDirection * moveSpeed * airControl;
-            Vector3 adjustedVelocity = Vector3.Lerp(currentHorizontalVelocity, targetVelocity, airControl * Time.fixedDeltaTime);
+            Vector3 targetVelocity = movementDirection * moveSpeed;
+            Vector3 velocityChange = Vector3.zero;
 
-            // Apply air deceleration to the adjusted velocity
-            adjustedVelocity = adjustedVelocity * airDeceleration;
+            // The influence of air control on the current direction
+            velocityChange = Vector3.Lerp(currentHorizontalVelocity, targetVelocity, airControl * Time.deltaTime);
 
-            // Update the Rigidbody's velocity, preserving vertical velocity for gravity
-            rb.velocity = new Vector3(adjustedVelocity.x, rb.velocity.y, adjustedVelocity.z);
+            // Apply air deceleration to gradually reduce horizontal speed
+            velocityChange = velocityChange - currentHorizontalVelocity;
+            velocityChange *= airDrag * Time.deltaTime;
+
+            rb.velocity = new Vector3(rb.velocity.x + velocityChange.x, rb.velocity.y, rb.velocity.z + velocityChange.z);
         }
     }
 
