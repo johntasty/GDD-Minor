@@ -101,7 +101,7 @@ public class PlayerController : MonoBehaviour
 
     private void MovePlayer()
     {
-        Vector3 movementDirection = playerCamera.transform.right * movementInput.x + playerCamera.transform.forward * movementInput.y;
+        Vector3 movementDirection = playerCamera.transform.right * movementInput.x + new Vector3(playerCamera.transform.forward.x, 0, playerCamera.transform.forward.z ) * movementInput.y;
         movementDirection.Normalize();
         movementDirection.y = 0; // Ensure we're not adding vertical movement
 
