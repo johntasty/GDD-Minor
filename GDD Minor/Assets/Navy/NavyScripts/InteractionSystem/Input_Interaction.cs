@@ -28,5 +28,11 @@ public class Input_Interaction : MonoBehaviour
         playerCamera = Camera.main;
         _interactionRaycast = new(playerCamera, maxInteractionDistance, interactableLayers);
     }
+    private void FixedUpdate()
+    {
+        interactable = _interactionRaycast.Cast();
+        if (interactable == null) return;
+
+    }
 
 }

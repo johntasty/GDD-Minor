@@ -4,32 +4,38 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEditor;
+using UnityEditor.PackageManager.UI;
 
 [RequireComponent(typeof(Collider))]
 public class TriggerObject : MonoBehaviour
 {
+
+    [Serializable]
+    public class CollisionEvent : UnityEvent<Collider> { }
+    
+
     [Header("Select which Tags to interact with.")]
     [TagSelector]
     public string[] TagFilterArray = new string[] { };
 
-    [Header("Enable/Disable the Enter trigger")]
-    [SerializeField]
-    private bool EnterTrigger = false;
-    [SerializeField]
-    private UnityEvent<Collider> OnEnterTrigger;
+    [HideInInspector]
+    public bool EnterTrigger = false;
 
-    [Header("Enable/Disable the Stay trigger")]
-    [SerializeField]
-    bool StayTrigger = false;
-    [SerializeField]
-    private UnityEvent<Collider> WhileInsideTrigger;
+    [HideInInspector]
+    public CollisionEvent onTriggerEnter = new CollisionEvent();    
 
-    [Header("Enable/Disable the Exit trigger")]
-    [SerializeField]
-    bool ExitTrigger = false;
-    [SerializeField]
-    private UnityEvent<Collider> OnExitTrigger;
- 
+    [HideInInspector]
+    public bool StayTrigger = false;
+
+    [HideInInspector]
+    public CollisionEvent onTriggerStay = new CollisionEvent();
+
+    [HideInInspector]
+    public bool ExitTrigger = false;
+
+    [HideInInspector]
+    public CollisionEvent onTriggerExit = new CollisionEvent();
+
     private void Start()
     {
         Collider collider = gameObject.GetComponent<Collider>();
@@ -40,7 +46,7 @@ public class TriggerObject : MonoBehaviour
     {
         if (!EnterTrigger) return;
         if(!TagCheck(other.gameObject.tag))return;
-        OnEnterTrigger.Invoke(other);
+        onTriggerEnter.Invoke(other);
                 
     }
 
@@ -48,14 +54,14 @@ public class TriggerObject : MonoBehaviour
     {
         if (!StayTrigger) return;
         if (!TagCheck(other.gameObject.tag)) return;
-        WhileInsideTrigger.Invoke(other);
+        onTriggerStay.Invoke(other);
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (!ExitTrigger) return;
         if (!TagCheck(other.gameObject.tag)) return;
-        OnExitTrigger.Invoke(other);
+        onTriggerExit.Invoke(other);
     }
 
     bool TagCheck(string colliderTag)
@@ -68,6 +74,42 @@ public class TriggerObject : MonoBehaviour
     }
 }
 
+#if UNITY_EDITOR
+[CustomEditor(typeof(TriggerObject))]
+public class EventEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
 
+        var script = (TriggerObject)target;
+        GUILayout.Label("Trigger Settings\n Enable/Disable the triggers you need.", EditorStyles.boldLabel, GUILayout.Height(30));
+        script.EnterTrigger = GUILayout.Toggle(script.EnterTrigger, "Enable Enter Trigger");
+        script.StayTrigger = GUILayout.Toggle(script.StayTrigger, "Enable Stay Trigger");
+        script.ExitTrigger = GUILayout.Toggle(script.ExitTrigger, "Enable Exit Trigger");
 
+        if (script.EnterTrigger)
+        {
+            DrawGuiEvent("onTriggerEnter");           
+        }
 
+        if (script.StayTrigger)
+        {
+            DrawGuiEvent("onTriggerStay");           
+        }
+
+        if (script.ExitTrigger)
+        {
+            DrawGuiEvent("onTriggerExit");          
+        }
+
+    }
+
+    void DrawGuiEvent(string propertyName)
+    {
+        this.serializedObject.Update();
+        EditorGUILayout.PropertyField(this.serializedObject.FindProperty(propertyName), true);
+        this.serializedObject.ApplyModifiedProperties();
+    }
+}
+#endif
