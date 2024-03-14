@@ -102,7 +102,7 @@ Transform:
   m_GameObject: {fileID: 5559671784366546931}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.078, z: 0}
-  m_LocalScale: {x: 0.7, y: 1, z: 0.7}
+  m_LocalScale: {x: 0.5, y: 1, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3395345487680797060}
@@ -184,15 +184,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 10
-  jumpForce: 5
+  targetAirSpeed: 10
+  jumpForce: 12
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
   playerCamera: {fileID: 8978318141135702343}
   lookSpeed: 2
   groundDrag: 12
-  airDrag: 0.98
-  airControl: 200
+  airDrag: 1.2
+  airControl: 1
+  maxAirSpeed: 5
+  additionalGravityFactor: 2
   pauseMenu: {fileID: 1788304536391885970}
 --- !u!114 &-8017010648022930667
 MonoBehaviour:
