@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1666784457443817327}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5650002, z: 0.374}
+  m_LocalPosition: {x: 0, y: 1.5650002, z: 0.07699999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -80,7 +80,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9180303517301953443}
-  - component: {fileID: 1380791138966845409}
   - component: {fileID: 1095511076744642793}
   - component: {fileID: 5135963606353381138}
   - component: {fileID: 5055908681147574066}
@@ -103,7 +102,7 @@ Transform:
   m_GameObject: {fileID: 5559671784366546931}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.078, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 1, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3395345487680797060}
@@ -112,21 +111,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1380791138966845409
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5559671784366546931}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e02ca676fdedb0469c8a4c2c7cf8f57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  upwardForce: 3
-  movementZ: 3
-  movementX: 3
 --- !u!136 &1095511076744642793
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -200,15 +184,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 10
-  jumpForce: 5
+  targetAirSpeed: 10
+  jumpForce: 12
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
   playerCamera: {fileID: 8978318141135702343}
   lookSpeed: 2
   groundDrag: 12
-  airDrag: 0.98
-  airControl: 200
+  airDrag: 1.2
+  airControl: 1
+  maxAirSpeed: 5
+  additionalGravityFactor: 2
   pauseMenu: {fileID: 1788304536391885970}
 --- !u!114 &-8017010648022930667
 MonoBehaviour:
@@ -222,6 +209,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: feaf8ddd2d170cd43b91ceb88df73462, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvasUi: {fileID: 0}
 --- !u!114 &1788304536391885970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296,7 +284,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 1
-  m_FollowOffset: {x: 0, y: 1.5650002, z: 0.374}
+  m_FollowOffset: {x: 0, y: 1.5650002, z: 0.0539}
   m_XDamping: 0
   m_YDamping: 0
   m_ZDamping: 0
@@ -493,7 +481,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9187714978949425976}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.997706, y: -0.837001, z: -7.905533}
+  m_LocalPosition: {x: 0, y: 1.5650002, z: 0.07699999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
