@@ -22,17 +22,17 @@ public class PauseManager : MonoBehaviour
             instance = this;
         }
 
-        playerInput = GetComponent<PlayerInput>();
-        pauseAction = playerInput.actions["Pause"];
+        //playerInput = GetComponent<PlayerInput>();
+        //pauseAction = playerInput.actions["Pause"];
     }
-    public void OnPause(InputValue value)
-    {
+    //public void OnPause(InputValue value)
+    //{
         
-        paused = !canvasUi.activeInHierarchy;
-        canvasUi.SetActive(paused);
-        pauseMenuInput = paused;
-        Cursor.visible = paused;
-    }
+    //    paused = !canvasUi.activeInHierarchy;
+    //    canvasUi.SetActive(paused);
+    //    pauseMenuInput = paused;
+    //    Cursor.visible = paused;
+    //}
     
 }
 
