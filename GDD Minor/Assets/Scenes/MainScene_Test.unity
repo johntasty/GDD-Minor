@@ -27741,7 +27741,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TagFilterArray:
   - Player
-  EnterTrigger: 1
+  EnterTrigger: 0
   OnEnterTrigger:
     m_PersistentCalls:
       m_Calls:
@@ -28465,13 +28465,47 @@ GameObject:
   - component: {fileID: 6279244100165877894}
   - component: {fileID: 6279244100165877913}
   - component: {fileID: 2203249837688062677}
-  m_Layer: 0
+  - component: {fileID: 6279244100165877917}
+  m_Layer: 6
   m_Name: Look_Target
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &6279244100165877917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6279244100165877916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fa18600b3c18374c8229de716194d6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onInteractEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6279244100165877913}
+        m_TargetAssemblyTypeName: Look_Target_script, Assembly-CSharp
+        m_MethodName: EnableViewing
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onHoverEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  onUnHoverEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &6279244101027758097
 GameObject:
   m_ObjectHideFlags: 3
@@ -28631,7 +28665,7 @@ MonoBehaviour:
     GateFit: 2
     m_SensorSize: {x: 1, y: 1}
   m_Transitions:
-    m_BlendHint: 1
+    m_BlendHint: 3
     m_InheritPosition: 0
     m_OnCameraLive:
       m_PersistentCalls:
