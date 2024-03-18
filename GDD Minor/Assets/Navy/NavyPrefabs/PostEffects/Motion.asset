@@ -15,8 +15,8 @@ MonoBehaviour:
   debugShaders:
     debugReplacementPS: {fileID: 4800000, guid: cf852408f2e174538bcd9b7fda1c5ae7, type: 3}
   m_RendererFeatures:
-  - {fileID: 70189248559484443}
-  m_RendererFeatureMap: 1b8e70ebbf5cf900
+  - {fileID: 4970607639685915403}
+  m_RendererFeatureMap: 0b6352195025fb44
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -54,7 +54,7 @@ MonoBehaviour:
   m_ClusteredRendering: 0
   m_TileSize: 32
   m_IntermediateTextureMode: 1
---- !u!114 &70189248559484443
+--- !u!114 &4970607639685915403
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -63,17 +63,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e33c93caeab376f498fa6e6b1032d0d8, type: 3}
-  m_Name: MotionRender
+  m_Script: {fileID: 11500000, guid: 90aa328f2a9808245957c2ea076ee158, type: 3}
+  m_Name: CustomRenderFeature
   m_EditorClassIdentifier: 
   m_Active: 1
-  settings:
-    motionVector:
-      Event: 400
-      LayerMask:
-        serializedVersion: 2
-        m_Bits: 4294967295
-      shader: {fileID: 4800000, guid: cb835c4782beca64bb8181a34ddbcbb3, type: 3}
-    motionBlur:
-      Event: 550
-      shader: {fileID: 4800000, guid: 2c459b89a7c8b1a4fbefe0d81341651c, type: 3}
+  m_PassEvent: 550
+  m_Material: {fileID: 2100000, guid: 82868682f3a15644da094adec59f7dfa, type: 2}
+  m_MaterialBlurr: {fileID: 2100000, guid: 5dbcfc3b23f930540985ab7909f3b6b4, type: 2}
