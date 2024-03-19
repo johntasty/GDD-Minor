@@ -4,14 +4,13 @@ using UnityEngine.Serialization;
 
 public class Interactable : MonoBehaviour, IObjectInteractable
 {
-    [FormerlySerializedAs("OnInteractEvent")]
     [Header("Interactable Settings")]
     [SerializeField]
     private UnityEvent onInteractEvent;
     [SerializeField]
-    private UnityEvent onHover;
+    private UnityEvent onHoverEvent;
     [SerializeField]
-    private UnityEvent onUnHover;
+    private UnityEvent onUnHoverEvent;
 
     private bool _isObjectHovered = false;
     
@@ -23,13 +22,13 @@ public class Interactable : MonoBehaviour, IObjectInteractable
     public void Hover()
     {
         _isObjectHovered = true;
-        onHover.Invoke();
+        onHoverEvent.Invoke();
     }
 
     public void UnHover()
     {
         _isObjectHovered = false;
-        onUnHover.Invoke();
+        onUnHoverEvent.Invoke();
     }
 
     public bool IsObjectHovered()

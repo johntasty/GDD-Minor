@@ -1,63 +1,69 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class InteractionRaycast : MonoBehaviour
+public class InteractionRaycast
 {
-    [SerializeField]
-    private Camera playerCamera;
-    [SerializeField] [Min(0)]
-    private float maxInteractionDistance = 1f;
-    [SerializeField] 
-    private Color debugDrawColor = Color.red;
+    private Camera _playerCamera;
+    private float _maxInteractionDistance;
+    private LayerMask _interactionLayers;
 
     private IObjectInteractable _lastHover;
 
-    private void Update()
+    public LayerMask InteractionLayers {  get { return _interactionLayers; } }
+
+    public float MaxInteractionDistance
     {
-        if (_lastHover != null && Input.GetKeyDown(KeyCode.E))
-            _lastHover.Interact();
+        get { return _maxInteractionDistance; }
+        set { _maxInteractionDistance = value; }
+    }
+    public Camera PlayerCamera
+    {
+        get { return _playerCamera; }
+        set { _playerCamera = value; }
     }
 
-    private void FixedUpdate()
+    public InteractionRaycast(Camera playerCamera, float maxInteractionDistance, LayerMask interaclayers)
     {
-        Ray ray = playerCamera.ViewportPointToRay(new Vector3 (0.5f, 0.5f, 0));
+        _playerCamera = playerCamera;
+        _maxInteractionDistance = maxInteractionDistance;
+        _interactionLayers = interaclayers;
+    }
 
-        bool isHit = Physics.Raycast(ray, out var hitInfo, maxInteractionDistance);
-
+    /// <summary>
+    /// Will cast a ray from the playercamera to check for interactable objects that the player may be looking at
+    /// </summary>
+    /// <returns>The object the player can interact with, or null if nothing is found.</returns>
+    public IObjectInteractable Cast()
+    {
+        Ray ray = _playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        Debug.DrawRay(ray.origin, ray.direction * _maxInteractionDistance, Color.green);
+        bool isHit = Physics.Raycast(ray, out var hitInfo, _maxInteractionDistance, _interactionLayers);       
         if (!isHit)
         {
             UnHoverLastObject();
-            return;
+            return null;
         }
-        
-        bool isInteractable = hitInfo.collider.TryGetComponent(out IObjectInteractable interactableObject);
 
+        bool isInteractable = hitInfo.collider.TryGetComponent(out IObjectInteractable interactableObject);
         if (!isInteractable)
         {
             UnHoverLastObject();
-            return;
+            return null;
         }
-
+        
         if (!interactableObject.IsObjectHovered())
         {
             interactableObject.Hover();
             _lastHover = interactableObject;
         }
-    }
 
+        return interactableObject;
+    }
+   
     private void UnHoverLastObject()
     {
         if (_lastHover == null) return;
-            
+
         _lastHover.UnHover();
         _lastHover = null;
-    }
-    
-    void OnDrawGizmos()
-    {
-        Gizmos.color = debugDrawColor;
-        Gizmos.DrawLine(gameObject.transform.position, transform.TransformPoint(Vector3.forward * maxInteractionDistance));
     }
 }
