@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IDataPersistence
 {
     [SerializeField] private float moveSpeed = 10.0f;
     [SerializeField] private float targetAirSpeed = 10.0f;
@@ -22,6 +22,16 @@ public class PlayerController : MonoBehaviour
     private Vector2 movementInput;
     private bool isGrounded;
     private bool hasDoubleJumped = false;
+
+    public void LoadData(GameData data)
+    {
+        this.transform.position = data.playerPosition;
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        data.playerPosition = this.transform.position;
+    }
 
     void Awake()
     {
