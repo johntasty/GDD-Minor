@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 10.0f;
+    [SerializeField] private float moveSpeed = 5.0f;
     [SerializeField] private float targetAirSpeed = 10.0f;
     [SerializeField] private float jumpForce = 5.0f;
     [SerializeField] private LayerMask groundLayer;
@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float maxAirSpeed = 5.0f; // Max speed in air to prevent excessive acceleration
     [SerializeField] private float additionalGravityFactor = 2.0f; // Adjust this value to control the fall speed
     [SerializeField] private MenuManager pauseMenu;
+    [SerializeField] private float accelerationMultiplier = 10.0f; // Adjust the multiplier for faster acceleration
+    [SerializeField] private float decelerationMultiplier = 5.0f;
 
     private Rigidbody rb;
     private Vector2 movementInput;
@@ -108,19 +110,19 @@ public class PlayerController : MonoBehaviour
         if (isGrounded)
         {
             // Calculate the force for horizontal movement
-            Vector3 horizontalForce = new Vector3(movementDirection.x, 0, movementDirection.z) * moveSpeed;
+            Vector3 horizontalForce = movementDirection * moveSpeed;
 
-            // Apply the movement force in the horizontal direction
-            rb.AddForce(horizontalForce, ForceMode.Acceleration);
+            // Calculate the current horizontal velocity
+            Vector3 currentHorizontalVelocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
 
-            // Manual horizontal drag calculation
-            // Get the current horizontal velocity
-            Vector3 horizontalVelocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-            // Calculate the drag force based on the current horizontal velocity and the groundDrag factor
-            Vector3 dragForce = -groundDrag * horizontalVelocity * Time.fixedDeltaTime * 100;
+            // Calculate the difference between the current velocity and the target velocity
+            Vector3 velocityDifference = horizontalForce - currentHorizontalVelocity;
 
-            // Apply the drag force to simulate horizontal drag
-            rb.AddForce(dragForce, ForceMode.Acceleration);
+            // Apply acceleration based on the velocity difference, but with a multiplier for faster acceleration
+            rb.AddForce(velocityDifference * accelerationMultiplier, ForceMode.Acceleration);
+
+            // Apply drag to simulate deceleration, but with a multiplier for faster deceleration
+            rb.AddForce(-currentHorizontalVelocity.normalized * groundDrag * decelerationMultiplier, ForceMode.Acceleration);
         }
         else
         {

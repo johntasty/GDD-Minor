@@ -82,6 +82,7 @@ GameObject:
   - component: {fileID: 9180303517301953443}
   - component: {fileID: 1095511076744642793}
   - component: {fileID: 5135963606353381138}
+  - component: {fileID: 1869252202823967575}
   - component: {fileID: 5055908681147574066}
   - component: {fileID: 337742099214385475}
   - component: {fileID: -8017010648022930667}
@@ -141,6 +142,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1869252202823967575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5559671784366546931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aea4dd2808b37456b9409db0bccf9fc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5055908681147574066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -197,6 +210,8 @@ MonoBehaviour:
   maxAirSpeed: 5
   additionalGravityFactor: 2
   pauseMenu: {fileID: 1788304536391885970}
+  accelerationMultiplier: 10
+  decelerationMultiplier: 5
 --- !u!114 &-8017010648022930667
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,7 +239,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 188050, guid: b06f0e6c1dfa4356ac918da1bb32c603, type: 3}
   sceneName: 
+  actions: {fileID: 0}
   isPaused: 0
+  PlayerVirtualCamera: {fileID: 0}
 --- !u!1 &7590291362398698762
 GameObject:
   m_ObjectHideFlags: 0
