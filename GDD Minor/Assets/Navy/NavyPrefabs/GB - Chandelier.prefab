@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1486477959435595376}
   m_Layer: 0
-  m_Name: Chandelier
+  m_Name: GB - Chandelier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 5266333442285285511}
   - component: {fileID: 5266333442285285508}
   - component: {fileID: 5266333442285285509}
+  - component: {fileID: 1976768506373902475}
   m_Layer: 0
   m_Name: 'Chandelier Cable '
   m_TagString: Untagged
@@ -373,11 +374,24 @@ MeshCollider:
   m_GameObject: {fileID: 5266333442285285530}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!65 &1976768506373902475
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5266333442285285530}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.2500018, y: 5.25, z: 0.25000235}
+  m_Center: {x: 0.1250009, y: 2.625, z: 0.12500118}
 --- !u!1 &5266333442789328313
 GameObject:
   m_ObjectHideFlags: 0
@@ -392,6 +406,7 @@ GameObject:
   - component: {fileID: 5266333442789328314}
   - component: {fileID: 5266333442789328315}
   - component: {fileID: 5266333442789328312}
+  - component: {fileID: 6779420016879693799}
   m_Layer: 0
   m_Name: Chandelier Base
   m_TagString: Untagged
@@ -863,8 +878,21 @@ MeshCollider:
   m_GameObject: {fileID: 5266333442789328313}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!65 &6779420016879693799
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5266333442789328313}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.75, y: 0.25, z: 2.75}
+  m_Center: {x: 1.375, y: 0.12510014, z: -0.625}
