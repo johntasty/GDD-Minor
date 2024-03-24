@@ -27,6 +27,10 @@ public class Entity : MonoBehaviour
         Health = startingHealth;
     }
 
+    void TakeDamage(int damage) {
+        Health -= damage;
+    }
+
     // Update is called once per frame
     void Update()
     {
