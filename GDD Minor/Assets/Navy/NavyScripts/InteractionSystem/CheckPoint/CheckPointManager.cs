@@ -45,53 +45,61 @@ public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IS
 };
 
 
-public class CheckPointScript : MonoBehaviour {
+public class CheckPointManager : MonoBehaviour {
+
+    public static CheckPointManager Instance { get; private set; }
 
 
     [SerializeField] GameObject player;
     [SerializeField] public SerializableDictionary<string, CheckPoint> checkPointDictionary = new SerializableDictionary<string, CheckPoint>();
 
 
+    private void Awake() {
+        if(Instance==null) {
+            Instance=this;
+        }
+        else {
+            Destroy(gameObject); 
+            return;
+        }
+    }
 
     // Start is called before the first frame update
     void Start() {
-
+        LoadFromJson();
     }
 
-    void Update() {
+    //void Update() {
 
-        if(Input.GetKeyDown(KeyCode.S)) {
+    //    if(Input.GetKeyDown(KeyCode.S)) {
+    //        SaveToJson();
+    //    }
+
+    //    //if(Input.GetKeyDown(KeyCode.L)) {
+    //    //    LoadFromJson();
+    //    //}
+
+    //    if(Input.GetKeyDown(KeyCode.T)) {
+    //        //print dictionary to console
+    //        foreach(KeyValuePair<string, CheckPoint> entry in checkPointDictionary) {
+    //            Debug.Log("Key: "+entry.Key+" Value: "+entry.Value);
+    //        }
+    //    }
+
+
+    //}
+
+    public void LogCheckPoint(string name, Vector3 position) {
+
+        CheckPoint checkPoint = new CheckPoint(name, position);
+        if(!checkPointDictionary.ContainsKey(checkPoint.ID)) {
+
+            checkPointDictionary.Add(checkPoint.ID, checkPoint);
+            Debug.Log("Added CheckPoint: "+checkPoint.ID);
             SaveToJson();
-        }
-
-        if(Input.GetKeyDown(KeyCode.L)) {
-            LoadFromJson();
-        }
-
-        if(Input.GetKeyDown(KeyCode.T)) {
-            //print dictionary to console
-            foreach(KeyValuePair<string, CheckPoint> entry in checkPointDictionary) {
-                Debug.Log("Key: "+entry.Key+" Value: "+entry.Value);
-            }
-        }
-
-
-    }
-
-    public void OnTriggerEnter(Collider other) {
-
-        if(other.CompareTag("CheckPoint")) {
-
-            CheckPoint checkPoint = new CheckPoint(other.name, other.transform.position);
-
-            if(!checkPointDictionary.ContainsKey(checkPoint.ID)) {
-
-                checkPointDictionary.Add(checkPoint.ID, checkPoint);
-                Debug.Log("Added CheckPoint: "+checkPoint.ID);
-
-            }
 
         }
+
 
     }
 
