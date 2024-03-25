@@ -138,28 +138,24 @@ Shader "Unlit/FogVolumetric"
                
                 return r ;
             }
-            float hash(float n)
-            {
-                return frac(sin(n)*43758.5453);
+            float3 random2(float3 st){
+                st = float3( dot(st,float3(127.1,311.7, 269.5)), dot(st,float3(269.5,183.3, 311.7)), dot(st,float3(269.5,183.3, 127.1)));
+                return -1.0 + 2.0 * frac(sin(st) * 7.);
             }
-            
-            float noise(in float3 x, float aniS, float aniP)
-            {
-                float3 p = floor(x);
-                float3 f = frac(x);
-            
-                f = f * f * (3.0 - 2.0 * f);
-                const float txlDim = 1.0 / 128.;
+            float noiseRand(float3 st) {
+                float3 i = floor(st);
+                float3 f = frac(st);
 
-                float n = p.x + p.y * _Offsets.x + _Offsets.y * p.z;
-
-                float timer = sin(((Time * _Bounds.w) + aniS + f.y * (_Pi * 2.) + aniP));
-                float res = lerp(lerp(lerp( hash(n+  0.0), hash(n+  1.0),f.x),
-                                    lerp( hash(n+ 57.0), hash(n+ 58.0),timer),f.y),
-                                    lerp(lerp( hash(n+113.0), hash(n+114.0),f.x),
-                                    lerp( hash(n+170.0), hash(n+171.0),timer),f.y),f.z);
-                return res;
+                // smootstep
+                float3 u = f*f*(3.0-2.0*f);
+                //float n = p.x + p.y * _Offsets.x + _Offsets.y * p.z;
+                float xDot = lerp(dot( random2(i + float3(0.0, 0.0, 0) ), f - float3(0, 0.0, 0.0)),dot( random2(i + float3(1.0, 0.0, 0) ), f - float3(1.0, 0, 0) ), u.x);
+                float yDot = lerp(dot( random2(i + float3(0.0,1.0, 0.) ), f - float3(0.0,1.0, 0) ),dot( random2(i + float3(1.0,1.0, 0) ), f - float3(1.0,1.0,0) ), u.x);
+                float zDot = lerp(dot( random2(i + float3(0.0,0.0, 1.) ), f - float3(0.0,0, 1.0) ),dot( random2(i + float3(1.0,1.0, 1.0) ), f - float3(1.0,1.0, 1.0) ), u.x);
+               
+                return lerp(lerp(xDot, yDot, u.x), lerp(xDot, zDot, u.y), u.z);
             }
+
 
             float Fbm(float3 p, float3 off)
             {
@@ -177,7 +173,7 @@ Shader "Unlit/FogVolumetric"
                 for (int i = 0; i < count; ++i)
                 {
                     float v = Noise(p, aniS, aniP);
-                    
+                   
                     res += v * w;
                     
                     accu_w += w;
