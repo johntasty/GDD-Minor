@@ -1,6 +1,8 @@
 using System;
+using Cinemachine;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class LoreBookScript : MonoBehaviour
@@ -9,9 +11,17 @@ public class LoreBookScript : MonoBehaviour
     [SerializeField] private TMP_Text bookContent;
     [SerializeField] private Button prevPageButton;
     [SerializeField] private Button nextPageButton;
+    [SerializeField] private InputActionAsset inputManager;
 
+    private CinemachineVirtualCamera _playerCamera;
     private int _currentPage = 1;
     private int _pageCount;
+
+    private void Start()
+    {
+        var activeCam = CinemachineCore.Instance.GetActiveBrain(0).ActiveVirtualCamera;
+        _playerCamera = (CinemachineVirtualCamera) activeCam;
+    }
 
     public int CurrentPage
     {
@@ -39,8 +49,9 @@ public class LoreBookScript : MonoBehaviour
             prevPageButton.gameObject.SetActive(false);
             nextPageButton.gameObject.SetActive(false);
         }
-        
-        Time.timeScale = 0;
+
+        inputManager.Disable();
+        _playerCamera.gameObject.SetActive(false);
     }
 
     public void OnPreviousPageClicked()
@@ -58,7 +69,10 @@ public class LoreBookScript : MonoBehaviour
         bookUI.enabled = false;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        Time.timeScale = 1;
+        
+        inputManager.Enable();
+        _playerCamera.gameObject.SetActive(true);
+
     }
 
 }

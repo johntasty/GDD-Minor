@@ -13,7 +13,7 @@ public class Entity : MonoBehaviour
         }
         set {
             health = value;
-            // Debug.Log(health);
+            Debug.Log(health);
 
             if (health <= 0f) {
                 Destroy(gameObject);

@@ -21043,7 +21043,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2496442814053921084, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
       propertyPath: m_Lens.FieldOfView
-      value: 10
+      value: 2.3
       objectReference: {fileID: 0}
     - target: {fileID: 2496442814053921084, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
       propertyPath: m_Lens.FarClipPlane
@@ -21059,39 +21059,43 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2496442814053921091, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.027000131
+      value: 0.009999987
       objectReference: {fileID: 0}
     - target: {fileID: 2496442814053921091, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 7.098
+      value: 7.1699996
       objectReference: {fileID: 0}
     - target: {fileID: 2496442814053921091, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.09299979
+      value: 0.020000052
       objectReference: {fileID: 0}
     - target: {fileID: 2496442814053921091, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7061443
+      value: 0.16271327
       objectReference: {fileID: 0}
     - target: {fileID: 2496442814053921091, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.6939258
+      value: 0.16220662
       objectReference: {fileID: 0}
     - target: {fileID: 2496442814053921091, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.10043256
+      value: -0.6892632
       objectReference: {fileID: 0}
     - target: {fileID: 2496442814053921091, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.09869477
+      value: 0.687117
       objectReference: {fileID: 0}
     - target: {fileID: 2496442814053921091, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 85.3
+      value: 89.822
       objectReference: {fileID: 0}
     - target: {fileID: 2496442814053921091, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 16.189
+      value: -153.139
+      objectReference: {fileID: 0}
+    - target: {fileID: 2496442814053921091, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2496442814664216141, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
       propertyPath: m_LocalPosition.x
@@ -21167,11 +21171,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3237597063774616897, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
       propertyPath: onHoverEvent.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3237597063774616897, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
       propertyPath: onUnHoverEvent.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3237597063774616897, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
       propertyPath: onHoverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -21229,7 +21233,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: LoreBookInteractable
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2496442814389538505, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
 --- !u!43 &1520644627
 Mesh:
@@ -29171,8 +29176,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9187714978494767682}
-  m_LocalRotation: {x: -0.000002446043, y: 0.7132506, z: -0.7009092, w: -0.0000024891124}
-  m_LocalPosition: {x: -8.736572, y: 7.410407, z: -9.278652}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.565, z: 0.05400002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -29863,9 +29868,9 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 6
-  far clip plane: 10
-  field of view: 10
+  near clip plane: 0.1
+  far clip plane: 5000
+  field of view: 83
   orthographic: 0
   orthographic size: 10
   m_Depth: 0
