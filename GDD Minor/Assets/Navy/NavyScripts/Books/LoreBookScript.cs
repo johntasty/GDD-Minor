@@ -33,6 +33,13 @@ public class LoreBookScript : MonoBehaviour
         Cursor.visible = true;
         TMP_TextInfo textInfo = bookContent.GetTextInfo(bookContent.text);
         _pageCount = textInfo.pageCount;
+
+        if (_pageCount == 1)
+        {
+            prevPageButton.gameObject.SetActive(false);
+            nextPageButton.gameObject.SetActive(false);
+        }
+        
         Time.timeScale = 0;
     }
 
