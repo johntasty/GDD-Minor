@@ -682,7 +682,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1893589451}
   - component: {fileID: 1893589450}
-  - component: {fileID: 1893589452}
+  - component: {fileID: 1893589453}
   m_Layer: 0
   m_Name: CP00
   m_TagString: CheckPoint
@@ -711,14 +711,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1893589448}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.03, y: -0.4610538, z: 3.69}
+  m_LocalPosition: {x: -0.24000049, y: -0.4610538, z: 6.979999}
   m_LocalScale: {x: 5.6174, y: 5.6174, z: 5.6174}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 138279502}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1893589452
+--- !u!114 &1893589453
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -727,9 +727,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 1893589448}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ebfe2fe482ed2c4994b78dd4f6ae0c7, type: 3}
+  m_Script: {fileID: 11500000, guid: 7100976e1ec84ba4c9fa467f5d4d858b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TagFilterArray:
+  - Player
+  EnterTrigger: 1
+  onTriggerEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 138279503}
+        m_TargetAssemblyTypeName: CheckPointManager, Assembly-CSharp
+        m_MethodName: LogCheckPoint
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1893589448}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  StayTrigger: 0
+  onTriggerStay:
+    m_PersistentCalls:
+      m_Calls: []
+  ExitTrigger: 0
+  onTriggerExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1896764214
 GameObject:
   m_ObjectHideFlags: 0

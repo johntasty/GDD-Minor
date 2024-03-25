@@ -69,37 +69,16 @@ public class CheckPointManager : MonoBehaviour {
         LoadFromJson();
     }
 
-    //void Update() {
-
-    //    if(Input.GetKeyDown(KeyCode.S)) {
-    //        SaveToJson();
-    //    }
-
-    //    //if(Input.GetKeyDown(KeyCode.L)) {
-    //    //    LoadFromJson();
-    //    //}
-
-    //    if(Input.GetKeyDown(KeyCode.T)) {
-    //        //print dictionary to console
-    //        foreach(KeyValuePair<string, CheckPoint> entry in checkPointDictionary) {
-    //            Debug.Log("Key: "+entry.Key+" Value: "+entry.Value);
-    //        }
-    //    }
-
-
-    //}
-
-    public void LogCheckPoint(string name, Vector3 position) {
-
+    public void LogCheckPoint(GameObject gameObject) {
+        string name = gameObject.name;
+        Vector3 position = gameObject.transform.position;
         CheckPoint checkPoint = new CheckPoint(name, position);
         if(!checkPointDictionary.ContainsKey(checkPoint.ID)) {
 
             checkPointDictionary.Add(checkPoint.ID, checkPoint);
-            Debug.Log("Added CheckPoint: "+checkPoint.ID);
             SaveToJson();
 
         }
-
 
     }
 
@@ -108,7 +87,6 @@ public class CheckPointManager : MonoBehaviour {
         string Data = JsonUtility.ToJson(checkPointDictionary);
 
         string filePath = Application.persistentDataPath+"/CheckPointData.json";
-        Debug.Log("Saving to: "+filePath);
         System.IO.File.WriteAllText(filePath, Data);
     }
 
@@ -116,7 +94,6 @@ public class CheckPointManager : MonoBehaviour {
         string filePath = Application.persistentDataPath+"/CheckPointData.json";
         string Data = System.IO.File.ReadAllText(filePath);
         checkPointDictionary=JsonUtility.FromJson<SerializableDictionary<string, CheckPoint>>(Data);
-        Debug.Log("Loading");
 
 
     }
