@@ -117,7 +117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   components:
   - {fileID: -6468525771015821556}
-  - {fileID: 2322431172316751033}
+  - {fileID: 3859313712858473198}
 --- !u!114 &816164705145901460
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -180,3 +180,34 @@ MonoBehaviour:
   _MaskEdge:
     m_OverrideState: 1
     m_Value: 0.856
+--- !u!114 &3859313712858473198
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: CustomVolumeFeatureBlur
+  m_EditorClassIdentifier: Assembly-CSharp::CustomVolumeFeatureBlur
+  active: 1
+  intensity:
+    m_OverrideState: 1
+    m_Value: 1
+  _Samples:
+    m_OverrideState: 1
+    m_Value: 10
+  _Strenght:
+    m_OverrideState: 1
+    m_Value: 1
+  _Radius:
+    m_OverrideState: 1
+    m_Value: 1.05
+  _MaskCenterSize:
+    m_OverrideState: 1
+    m_Value: 0
+  _MaskEdge:
+    m_OverrideState: 1
+    m_Value: 0.961
