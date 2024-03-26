@@ -28254,7 +28254,6 @@ GameObject:
   - component: {fileID: 2114201559}
   - component: {fileID: 2114201558}
   - component: {fileID: 2114201557}
-  - component: {fileID: 2114201560}
   m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Untagged
@@ -28327,20 +28326,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2114201560
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2114201555}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5a01a6cff18caf44bc778dee033c308, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _PostEffect: {fileID: 11400000, guid: d7a7c19706cd2174f8828d7e2029d45e, type: 2}
-  _FeatureLines: {fileID: 0}
 --- !u!43 &2144949775
 Mesh:
   m_ObjectHideFlags: 0
@@ -29205,6 +29190,7 @@ GameObject:
   - component: {fileID: 5055908679526313544}
   - component: {fileID: 337742098759010361}
   - component: {fileID: 9180303516653771482}
+  - component: {fileID: 9180303516653771483}
   m_Layer: 3
   m_Name: PlayerCharacter
   m_TagString: Player
@@ -29942,6 +29928,20 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 72
   playerCamera: {fileID: 0}
+--- !u!114 &9180303516653771483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5559671785886684809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a01a6cff18caf44bc778dee033c308, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _PostEffect: {fileID: 11400000, guid: d7a7c19706cd2174f8828d7e2029d45e, type: 2}
+  speed: 0
 --- !u!1 &9187714978494767682
 GameObject:
   m_ObjectHideFlags: 0

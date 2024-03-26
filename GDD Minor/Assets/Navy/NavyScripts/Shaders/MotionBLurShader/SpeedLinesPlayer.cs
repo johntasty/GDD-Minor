@@ -13,6 +13,7 @@ public class SpeedLinesPlayer : MonoBehaviour
     CustomVolumeFeatureBlur  _FeatureBlur;
    
     Rigidbody _Rigidbody;
+    public float speed;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,7 +28,8 @@ public class SpeedLinesPlayer : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        _FeatureLines._LineDensity.value = _Rigidbody.velocity.magnitude;
-        _FeatureBlur.intensity.value = _Rigidbody.velocity.magnitude;
+        speed = _Rigidbody.velocity.magnitude / 6.5f;
+        _FeatureLines._LineDensity.value = speed;
+        _FeatureBlur.intensity.value = speed;
     }
 }
