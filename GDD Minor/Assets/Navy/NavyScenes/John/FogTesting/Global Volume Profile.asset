@@ -61,7 +61,7 @@ MonoBehaviour:
     m_Value: 0.782
   _LineDensity:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0.4
   _RotationSpeed:
     m_OverrideState: 1
     m_Value: 0.4
@@ -72,6 +72,37 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: {r: 0, g: 1, b: 0.78378844, a: 1}
     hdr: 0
+--- !u!114 &-2029919915679226374
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: CustomVolumeFeatureBlur
+  m_EditorClassIdentifier: Assembly-CSharp::CustomVolumeFeatureBlur
+  active: 1
+  intensity:
+    m_OverrideState: 1
+    m_Value: 1
+  _Samples:
+    m_OverrideState: 1
+    m_Value: 10
+  _Strenght:
+    m_OverrideState: 1
+    m_Value: 1
+  _Radius:
+    m_OverrideState: 1
+    m_Value: 1.17
+  _MaskCenterSize:
+    m_OverrideState: 1
+    m_Value: 0
+  _MaskEdge:
+    m_OverrideState: 1
+    m_Value: 0.918
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -86,4 +117,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   components:
   - {fileID: -4142148734073102374}
-  - {fileID: -8193414316810439896}
+  - {fileID: 7301943893372166259}
+--- !u!114 &7301943893372166259
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: CustomVolumeFeatureBlur
+  m_EditorClassIdentifier: Assembly-CSharp::CustomVolumeFeatureBlur
+  active: 1
+  intensity:
+    m_OverrideState: 1
+    m_Value: 0
+  _Samples:
+    m_OverrideState: 1
+    m_Value: 10
+  _Strenght:
+    m_OverrideState: 1
+    m_Value: 1
+  _Radius:
+    m_OverrideState: 1
+    m_Value: 4.63
+  _MaskCenterSize:
+    m_OverrideState: 1
+    m_Value: 0.095
+  _MaskEdge:
+    m_OverrideState: 1
+    m_Value: 0.862

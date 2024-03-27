@@ -14141,6 +14141,67 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1001 &600879401
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1461260917781679705, guid: ec8b6047536c5534fa97e04694fb515f, type: 3}
+      propertyPath: PlayerVirtualCamera
+      value: 
+      objectReference: {fileID: 304061103}
+    - target: {fileID: 1461260917781679710, guid: ec8b6047536c5534fa97e04694fb515f, type: 3}
+      propertyPath: m_RootOrder
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 1461260917781679710, guid: ec8b6047536c5534fa97e04694fb515f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1461260917781679710, guid: ec8b6047536c5534fa97e04694fb515f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1461260917781679710, guid: ec8b6047536c5534fa97e04694fb515f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1461260917781679710, guid: ec8b6047536c5534fa97e04694fb515f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1461260917781679710, guid: ec8b6047536c5534fa97e04694fb515f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1461260917781679710, guid: ec8b6047536c5534fa97e04694fb515f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1461260917781679710, guid: ec8b6047536c5534fa97e04694fb515f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1461260917781679710, guid: ec8b6047536c5534fa97e04694fb515f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1461260917781679710, guid: ec8b6047536c5534fa97e04694fb515f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1461260917781679710, guid: ec8b6047536c5534fa97e04694fb515f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1461260917781679711, guid: ec8b6047536c5534fa97e04694fb515f, type: 3}
+      propertyPath: m_Name
+      value: MainMenu (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ec8b6047536c5534fa97e04694fb515f, type: 3}
 --- !u!1 &608766804
 GameObject:
   m_ObjectHideFlags: 0
@@ -24063,7 +24124,7 @@ PrefabInstance:
     - target: {fileID: 4276558338990219587, guid: df7252a7f0f2a2f49a301769728a530c, type: 3}
       propertyPath: pauseMenu
       value: 
-      objectReference: {fileID: 1185479556}
+      objectReference: {fileID: 1228734130}
     - target: {fileID: 4652351353822917539, guid: df7252a7f0f2a2f49a301769728a530c, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -27873,7 +27934,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1185479555
 Transform:
   m_ObjectHideFlags: 0
@@ -27897,7 +27958,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1185479554}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d23da1a6e0e7d84ab31d571a7644212, type: 3}
   m_Name: 
@@ -28727,6 +28788,17 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!114 &1228734130 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1461260917781679705, guid: ec8b6047536c5534fa97e04694fb515f, type: 3}
+  m_PrefabInstance: {fileID: 600879401}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d23da1a6e0e7d84ab31d571a7644212, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &1244527031
 Mesh:
   m_ObjectHideFlags: 0
