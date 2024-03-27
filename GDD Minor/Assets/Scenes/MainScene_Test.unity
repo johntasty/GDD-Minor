@@ -28440,7 +28440,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 6
   sprintSpeed: 9
-  targetAirSpeed: 5
+  targetAirSpeed: 9
   jumpForce: 320
   groundLayer:
     serializedVersion: 2
@@ -28448,15 +28448,13 @@ MonoBehaviour:
   playerCamera: {fileID: 8978318141720444989}
   groundDrag: 7.5
   airDrag: 0.25
-  airControl: 0.25
+  airControl: 0.7
   pauseMenu: {fileID: 1185479556}
   Pvelocity: {x: 0, y: 0, z: 0}
-  lowGroundDrag: 0.1
-  highGroundDrag: 0.5
-  maxJumpForce: 450
-  maxJumpTime: 0.5
-  airJumpForce: 7
-  directionalJumpStrength: 2
+  lowGroundDrag: 0
+  highGroundDrag: 0
+  maxJumpForce: 400
+  maxJumpTime: 0.4
 --- !u!136 &1095511077396498835
 CapsuleCollider:
   m_ObjectHideFlags: 0
