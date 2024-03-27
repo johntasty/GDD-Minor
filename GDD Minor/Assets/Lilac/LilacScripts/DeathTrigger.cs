@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 
 public class DeathTrigger : MonoBehaviour
@@ -14,8 +11,7 @@ public class DeathTrigger : MonoBehaviour
 
     public void Die()
     {
-        gameOverScreen.GameOver();
-    }
+        gameOverScreen.GameOverScreen();
     }
 
     // Update is called once per frame
