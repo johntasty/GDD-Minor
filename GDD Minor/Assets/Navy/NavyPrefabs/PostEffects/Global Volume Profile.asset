@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7161300039031390543
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: CustomVolumeFeatureBlur
+  m_EditorClassIdentifier: Assembly-CSharp::CustomVolumeFeatureBlur
+  active: 1
+  intensity:
+    m_OverrideState: 1
+    m_Value: 1
+  _Samples:
+    m_OverrideState: 1
+    m_Value: 10
+  _Strenght:
+    m_OverrideState: 1
+    m_Value: 1
+  _Radius:
+    m_OverrideState: 1
+    m_Value: 2.03
+  _MaskCenterSize:
+    m_OverrideState: 1
+    m_Value: 0
+  _MaskEdge:
+    m_OverrideState: 1
+    m_Value: 0.928
 --- !u!114 &-7003894759977203603
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -117,7 +148,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   components:
   - {fileID: -6468525771015821556}
-  - {fileID: 3859313712858473198}
+  - {fileID: -7161300039031390543}
 --- !u!114 &816164705145901460
 MonoBehaviour:
   m_ObjectHideFlags: 3

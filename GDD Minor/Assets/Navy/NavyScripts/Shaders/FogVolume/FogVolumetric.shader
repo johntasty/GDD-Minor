@@ -126,20 +126,23 @@ Shader "Unlit/FogVolumetric"
                 float3 f = frac(x);
                 f = f * f * (3.0 - 2.0 * f);
 
-                float n = p.x + p.y * 57.0 + 93.0 * p.z;
+                float n = (p.x + p.y * 57.0 + 93.0 * p.z) ;
                 
-                float result = lerp(lerp(lerp(hashs(n),       hashs(n + 1.), f.x), 
-                                         lerp(hashs(n + 57.),  hashs(n + 58.), f.x), f.y),
-                                    lerp(lerp(hashs(n + 113.),  hashs(n + 114.), f.x), 
-                                         lerp(hashs(n + 170.),  hashs(n + 171.), f.x), f.y), f.z);
-                 return result;
+                // float result = lerp(lerp(lerp(hashs(n),       hashs(n + 1.), f.x), 
+                //                          lerp(hashs(n + 57.),  hashs(n + 58.), f.x), f.y),
+                //                     lerp(lerp(hashs(n + 113.),  hashs(n + 114.), f.x), 
+                //                          lerp(hashs(n + 170.),  hashs(n + 171.), f.x), f.y), f.z);
+                float2 uv = (p.xy+float2(37.0,239.0)*p.z) + f.xy;
+                float2 rg = SAMPLE_TEXTURE2D(_Noise, sampler_Noise, (uv + .5) / 128.).gr; 
+	            return lerp( rg.x, rg.y, f.z )*2.0-1.0;  
+                //return result;
             }
 
             float noiseRand(float3 p) {
                
                 float weight = _NoiseWeight;
                 float f = weight * NoiseHash(p);
-                for (int j = 0; j < 5; j ++) {                
+                for (int j = 0; j < 4; j ++) {                
                   p *= _NoiseTilling;
                   weight *= .5;
                   f += weight * NoiseHash(p);               
@@ -149,8 +152,7 @@ Shader "Unlit/FogVolumetric"
             float EvalNoise(float3 p, float distance)
             {
                 float density = 1.0;               
-               float n = noiseRand(p * _Tilling);
-               // n = SCurveC2(n);
+               float n = noiseRand(p * _Tilling);               
                 density = saturate(n - _NoiseStrength) * _DensityScale;
                 
                 return density * pow(distance, _Range);
@@ -207,15 +209,16 @@ Shader "Unlit/FogVolumetric"
             }
             half3 lights(float3 pos, float3 raydir, float scatter,out float attenuation)
             {
+                
                 Light _lights;
                 int _lightsCount = GetAdditionalLightsCount();
 
                 half3 totalColor = 0.0;
-                //totalColor += _lights.color;
                 attenuation = 1.;
                 for(int l = 0; l < _lightsCount; l++){
 
                     _lights = GetAdditionalLight(l , pos);
+                   
                     half3 color = _lights.color * sqrt(length(_lights.direction));
                     color *= _lights.distanceAttenuation;
                     color *= MieSc(dot(_lights.direction, raydir), scatter);
