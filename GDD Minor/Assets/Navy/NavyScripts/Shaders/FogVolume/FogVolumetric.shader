@@ -11,7 +11,8 @@ Shader "Unlit/FogVolumetric"
         _Distance("Draw Distance", float) = 0
 
         _Accuracy("Light Attentuation Initial", float) = 0
-        _NoiseStrength("Density Removal", float) = 0
+        _DensRemoval("Density Removal", float) = 0
+        _NoiseStrength("Noise Jitter", float) = 0
         _DensityScale("Density Scale", float) = 0
         _Scatter("Light Scatter", float) = 0      
         _LightScPower("Density Initial Power", float) = 0      
@@ -21,8 +22,9 @@ Shader "Unlit/FogVolumetric"
         _NoiseTilling("Noise Octave Tilling", float) = 0
         _NoiseWeight("Noise Octave Weight", float) = 0
         _NoiseMovement("Noise Move Speed", float) = 0
+        _MaxLights("Max Lights", int) = 0
         
-        _Range("Fog Range", Range(0.0001,10.)) = 0.
+        _Range("Fog Range", Range(0.0001,100.)) = 0.
 
         
     }
@@ -78,6 +80,7 @@ Shader "Unlit/FogVolumetric"
             float _Distance;
             float _Accuracy;
             float _NoiseStrength;
+            float _DensRemoval;
             float _Scatter;
 
             float _Intensity;
@@ -90,6 +93,7 @@ Shader "Unlit/FogVolumetric"
             float _NoiseTilling;
 
             float _DensityScale;
+            int _MaxLights;
 
          
             #define _Pi 3.14159265
@@ -124,11 +128,11 @@ Shader "Unlit/FogVolumetric"
                 x += noiseDisp;
                 float3 p = floor(x);
                 float3 f = frac(x);
-                //f = f * f * (3.0 - 2.0 * f);
+                f = f * f * (3.0 - 2.0 * f);
 
                 float2 uv = (p.xy+float2(37.0,17.0)*p.z) + f.xy;
-                float2 rg = SAMPLE_TEXTURE2D(_Noise, sampler_Noise, (uv ) / 128.).gr; 
-	            return 1.5*lerp( rg.x, rg.y, f.z );  
+                float2 rg = SAMPLE_TEXTURE2D(_Noise, sampler_Noise, (uv + 0.5)/256.0).gr; 
+	            return lerp( rg.x, rg.y, f.z );  
                
             }
 
@@ -140,7 +144,7 @@ Shader "Unlit/FogVolumetric"
                 float weight = _NoiseWeight;    
                 f =  weight * NoiseHash(q);
                 for (int j = 0; j < 4; j ++) {                
-                  q *= (_NoiseTilling + (j * .01));
+                  q *= (_NoiseTilling - (j * .1));
                   weight *= .5;
                   f += weight * NoiseHash(q);               
                 }
@@ -150,7 +154,7 @@ Shader "Unlit/FogVolumetric"
             {
                 float density = 1.0;               
                 float n = noiseRand(p * _Tilling);               
-                density = saturate(n - _NoiseStrength) * _DensityScale;
+                density = saturate((n ) - _DensRemoval) * _DensityScale;
                 
                 return density * step(_Range ,distance);//pow(distance, _Range);
             }
@@ -204,20 +208,35 @@ Shader "Unlit/FogVolumetric"
                 return (0.07957747154) * ((1 - gSqr) / (pow(abs((1 + gSqr) - (2 * str) * angle), 1.5)));
 
             }
+            float getCornetteShanks(float costh, float scatter)
+            {
+                float g2 = scatter * scatter;
+            			     
+                return (3.0 * (1.0 - g2) * (1.0 + costh * costh)) / (4.0 * PI * 2.0 * (2.0 + g2) * pow(1.0 + g2 - 2.0 * scatter * costh, 3.0/2.0));
+            }
+            
+            // Henyey-Greenstein Phase Function
+            float hg(float costh, float scatter)
+            {
+                //return getCornetteShanks(costh);
+                float g = scatter;
+                return (1.0 - g * g) / (4.0 * PI * pow(1.0 + g * g - 2.0 * g * costh, 3.0/2.0));
+            }
+
             half3 lights(float3 pos, float3 raydir, float scatter,out float attenuation)
             {
                 
                 Light _lights;
                 int _lightsCount = GetAdditionalLightsCount();
-
+                
                 half3 totalColor = 0.0;
                 attenuation = 1.;
-                for(int l = 0; l < _lightsCount; l++){
+                for(int l = 0; l < min(_lightsCount, _MaxLights); l++){
 
                     _lights = GetAdditionalLight(l , pos);
                    
                     half3 color = _lights.color * sqrt(length(_lights.direction));
-                    color *= _lights.distanceAttenuation;
+                    color *= _lights.shadowAttenuation * _lights.distanceAttenuation;
                     color *= MieSc(dot(_lights.direction, raydir), scatter);
 
                     totalColor += color;
@@ -233,7 +252,7 @@ Shader "Unlit/FogVolumetric"
                  float stepSize;
                  float sliceVolume = (boxIntersect.y - boxIntersect.x) / _MaxSteps;
                  float travelled = 0; 
-                 float o_max = _LightScPower;// maximal scattering coefficient
+                 float o_max = _LightScPower;
                  float oc = 0.0;
                  float result = 0.0;  
                  half3 sceneColor = 0.;
@@ -243,7 +262,7 @@ Shader "Unlit/FogVolumetric"
                      
                     if(travelled + boxIntersect.x > depth || travelled > depth || travelled > boxIntersect.y )break;
                     float3 pos = ro + rd * travelled;                   
-                    float denC = EvalNoise(pos, travelled);
+                    float denC = EvalNoise(pos, travelled + boxIntersect.y);
                     if(result > .99)break;
                     if(denC > 0.01){
                         
@@ -264,7 +283,7 @@ Shader "Unlit/FogVolumetric"
 
                         oc += o * stepSize;  
                     }
-                    stepSize = max(0.3, 0.03 * travelled);
+                    stepSize = max(0.2, 0.03 * travelled);
                     travelled += stepSize;
                  }
                  density = result;

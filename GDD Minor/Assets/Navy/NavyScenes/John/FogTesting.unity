@@ -44972,27 +44972,35 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8268996259343946839, guid: 928ce61cdeb13cd409f948ba98faf7cf, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8268996259343946859, guid: 928ce61cdeb13cd409f948ba98faf7cf, type: 3}
       propertyPath: m_RootOrder
       value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 8268996259343946859, guid: 928ce61cdeb13cd409f948ba98faf7cf, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 28.6356
+      objectReference: {fileID: 0}
+    - target: {fileID: 8268996259343946859, guid: 928ce61cdeb13cd409f948ba98faf7cf, type: 3}
       propertyPath: m_LocalScale.y
-      value: 40.184998
+      value: 29.793158
+      objectReference: {fileID: 0}
+    - target: {fileID: 8268996259343946859, guid: 928ce61cdeb13cd409f948ba98faf7cf, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 33.820255
       objectReference: {fileID: 0}
     - target: {fileID: 8268996259343946859, guid: 928ce61cdeb13cd409f948ba98faf7cf, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.3179
       objectReference: {fileID: 0}
     - target: {fileID: 8268996259343946859, guid: 928ce61cdeb13cd409f948ba98faf7cf, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 19.9024
+      value: 14.7059
       objectReference: {fileID: 0}
     - target: {fileID: 8268996259343946859, guid: 928ce61cdeb13cd409f948ba98faf7cf, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.99
+      value: 3.5643
       objectReference: {fileID: 0}
     - target: {fileID: 8268996259343946859, guid: 928ce61cdeb13cd409f948ba98faf7cf, type: 3}
       propertyPath: m_LocalRotation.w
@@ -45254,6 +45262,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Global Volume
       objectReference: {fileID: 0}
+    - target: {fileID: 6945746919717320223, guid: e909a7f420cd4da4a9ac43976e608ed9, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e909a7f420cd4da4a9ac43976e608ed9, type: 3}
 --- !u!20 &8978318141720444989
@@ -45364,7 +45376,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5a01a6cff18caf44bc778dee033c308, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _PostEffect: {fileID: 11400000, guid: d7a7c19706cd2174f8828d7e2029d45e, type: 2}
+  _PostEffect: {fileID: 11400000, guid: 57eee701fd7a9774eb9e413cc46f664d, type: 2}
   speed: 0
 --- !u!1 &9187714978494767682
 GameObject:
