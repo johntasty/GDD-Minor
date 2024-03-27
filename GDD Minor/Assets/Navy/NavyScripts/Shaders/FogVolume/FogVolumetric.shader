@@ -22,7 +22,7 @@ Shader "Unlit/FogVolumetric"
         _NoiseWeight("Noise Octave Weight", float) = 0
         _NoiseMovement("Noise Move Speed", float) = 0
         
-        _Range("Fog Range", Range(0.0001,1.)) = 0.
+        _Range("Fog Range", Range(0.0001,10.)) = 0.
 
         
     }
@@ -124,38 +124,35 @@ Shader "Unlit/FogVolumetric"
                 x += noiseDisp;
                 float3 p = floor(x);
                 float3 f = frac(x);
-                f = f * f * (3.0 - 2.0 * f);
+                //f = f * f * (3.0 - 2.0 * f);
 
-                float n = (p.x + p.y * 57.0 + 93.0 * p.z) ;
-                
-                // float result = lerp(lerp(lerp(hashs(n),       hashs(n + 1.), f.x), 
-                //                          lerp(hashs(n + 57.),  hashs(n + 58.), f.x), f.y),
-                //                     lerp(lerp(hashs(n + 113.),  hashs(n + 114.), f.x), 
-                //                          lerp(hashs(n + 170.),  hashs(n + 171.), f.x), f.y), f.z);
-                float2 uv = (p.xy+float2(37.0,239.0)*p.z) + f.xy;
-                float2 rg = SAMPLE_TEXTURE2D(_Noise, sampler_Noise, (uv + .5) / 128.).gr; 
-	            return lerp( rg.x, rg.y, f.z )*2.0-1.0;  
-                //return result;
+                float2 uv = (p.xy+float2(37.0,17.0)*p.z) + f.xy;
+                float2 rg = SAMPLE_TEXTURE2D(_Noise, sampler_Noise, (uv ) / 128.).gr; 
+	            return 1.5*lerp( rg.x, rg.y, f.z );  
+               
             }
 
             float noiseRand(float3 p) {
                
-                float weight = _NoiseWeight;
-                float f = weight * NoiseHash(p);
+                float3 q = p;
+                float f;
+               
+                float weight = _NoiseWeight;    
+                f =  weight * NoiseHash(q);
                 for (int j = 0; j < 4; j ++) {                
-                  p *= _NoiseTilling;
+                  q *= (_NoiseTilling + (j * .01));
                   weight *= .5;
-                  f += weight * NoiseHash(p);               
+                  f += weight * NoiseHash(q);               
                 }
-                return f;
+                return clamp(  .5 + 1.75 * f, 0.0, 1.0 );
             }
             float EvalNoise(float3 p, float distance)
             {
                 float density = 1.0;               
-               float n = noiseRand(p * _Tilling);               
+                float n = noiseRand(p * _Tilling);               
                 density = saturate(n - _NoiseStrength) * _DensityScale;
                 
-                return density * pow(distance, _Range);
+                return density * step(_Range ,distance);//pow(distance, _Range);
             }
 
             float boxIntersection( in float3 ro, in float3 rd, out float2 t) 
@@ -231,45 +228,49 @@ Shader "Unlit/FogVolumetric"
             }
             half4 MarchScene(float3 ro, float3 rd, float depth, float2 boxIntersect, float3 camera)
             {
-                 float startingDistance = length(camera - ro);
-               
+                
                  float density = 0.0;
-                 float stepSize = 1.0 / _MaxSteps;
+                 float stepSize;
                  float sliceVolume = (boxIntersect.y - boxIntersect.x) / _MaxSteps;
                  float travelled = 0; 
                  float o_max = _LightScPower;// maximal scattering coefficient
                  float oc = 0.0;
                  float result = 0.0;  
                  half3 sceneColor = 0.;
-                 
+                 half3 color = _Color.rgb;
                  [loop]
                  for(int j = 0; j < _MaxSteps; j++){
                      
                     if(travelled + boxIntersect.x > depth || travelled > depth || travelled > boxIntersect.y )break;
                     float3 pos = ro + rd * travelled;                   
                     float denC = EvalNoise(pos, travelled);
-                  
-                    float attenuation = _Accuracy;
-                    half3 color = _Color.rgb;
-                    //n = denC;
-                    float o = o_max;
-                    o *= denC;
-                    float influence = exp(-oc) - exp(-oc - o * sliceVolume);
-                    
-                    float lightAttenuation;
-		            half3 light = lights(pos, rd, _Scatter ,lightAttenuation) * _Intensity;
+                    if(result > .99)break;
+                    if(denC > 0.01){
+                        
+                        float o = o_max;
+                        o *= denC;
+                        float influence = exp(-oc) - exp(-oc - o * stepSize);
+                        
+                        float lightAttenuation;
+		                half3 light = lights(pos, rd, _Scatter ,lightAttenuation) * _Intensity;
+                        
+                        color += light;
 
-                    color += light;
-                    attenuation += lightAttenuation;
+                        float attenuation = _Accuracy;
+                        attenuation += lightAttenuation;
 
-                    result += attenuation * influence;                   
-                    sceneColor += color * influence;
+                        result += attenuation * influence;                   
+                        sceneColor += color * influence;
 
-                    oc += o * sliceVolume;  
-                    travelled += sliceVolume;
+                        oc += o * stepSize;  
+                    }
+                    stepSize = max(0.3, 0.03 * travelled);
+                    travelled += stepSize;
                  }
                  density = result;
                  density = clamp(density,0,1);
+                 sceneColor = clamp(sceneColor,0,1.5);
+
                  return half4(sceneColor, density);
             }
             half4 CalculateFog(float3 ro, float3 rd, float depth, float noise)
@@ -289,7 +290,7 @@ Shader "Unlit/FogVolumetric"
                 if (maxDepth < 0) return 0;
 
                 float3 rayStart = ro + rd * (near + noise * _NoiseStrength);
-                half4 density = MarchScene(rayStart, rd, min(maxDepth, 50.), boxIntesection, ro);
+                half4 density = MarchScene(rayStart, rd, min(maxDepth, 25.), boxIntesection, ro);
                 return density;
             }
             half4 frag (v2f i) : SV_Target
