@@ -21,7 +21,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 76fb42f43c2a7fc40a16c5f9ad2e687a, type: 3}
+        m_Texture: {fileID: 2800000, guid: 7ef05de05db3f144e967ef6c57b7d7b8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex2d:
@@ -41,27 +41,36 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NoiseTexture:
-        m_Texture: {fileID: 11700000, guid: 191e4cbd08c3817408540159f06d1e85, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Accuracy: 1.3
-    - _DensityScale: 16.3
-    - _Distance: 65
+    - _Accuracy: 1.04
+    - _DensRemoval: 0
+    - _DensityScale: 9
+    - _Distance: 10
     - _Extinction: 5.05
-    - _Intensity: 15
-    - _MaxSteps: 60
-    - _NoiseStrength: 0.05
-    - _Scatter: 0.5
+    - _Intensity: 7.72
+    - _LightScPower: 0.04
+    - _LightScatter: 0.14
+    - _MaxLights: 5
+    - _MaxSteps: 20
+    - _NoiseMovement: 0.35
+    - _NoiseStrength: 0.49
+    - _NoiseTilling: 2
+    - _NoiseWeight: 0.5
+    - _Offsets: 0
+    - _Range: 7.9
+    - _Scatter: 0.99
     - _Scattering: 2.61
-    - _Tilling: 0.99
+    - _Tilling: 4.2
     - _TimerRange: 0.37
     - _TimerRangeY: 1
     m_Colors:
-    - _Bounds: {r: 1.57, g: 0.81, b: 1.05, a: 19.29}
-    - _Color: {r: 0.49685526, g: 0.48279327, b: 0.48279327, a: 1}
+    - _Bounds: {r: 2.02, g: 0.26, b: 1.01, a: 0.3}
+    - _Color: {r: 0.5849056, g: 0.5545567, b: 0.5545567, a: 1}
     - _Edge: {r: 1, g: 1, b: 1.6, a: 0.3}
     - _Offsets: {r: 53, g: 113, b: 0, a: 0.02}
-    - _Range: {r: 100, g: 0, b: 0, a: 0}
+    - _Range: {r: -25.91, g: 20, b: 0, a: 0}
   m_BuildTextureStacks: []
