@@ -208,17 +208,10 @@ Shader "Unlit/FogVolumetric"
                 return (0.07957747154) * ((1 - gSqr) / (pow(abs((1 + gSqr) - (2 * str) * angle), 1.5)));
 
             }
-            float getCornetteShanks(float costh, float scatter)
-            {
-                float g2 = scatter * scatter;
-            			     
-                return (3.0 * (1.0 - g2) * (1.0 + costh * costh)) / (4.0 * PI * 2.0 * (2.0 + g2) * pow(1.0 + g2 - 2.0 * scatter * costh, 3.0/2.0));
-            }
-            
+       
             // Henyey-Greenstein Phase Function
             float hg(float costh, float scatter)
             {
-                //return getCornetteShanks(costh);
                 float g = scatter;
                 return (1.0 - g * g) / (4.0 * PI * pow(1.0 + g * g - 2.0 * g * costh, 3.0/2.0));
             }
