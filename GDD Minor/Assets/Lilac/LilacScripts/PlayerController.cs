@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     public void LoadData(GameData data)
     {
         this.transform.position = data.playerPosition;
+        rb.velocity = Vector3.zero;
     }
 
     public void SaveData(ref GameData data)
