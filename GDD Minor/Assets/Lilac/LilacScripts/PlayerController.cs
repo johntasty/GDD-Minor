@@ -6,18 +6,24 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour, IDataPersistence
 {
     [SerializeField] private float moveSpeed = 10.0f;
+    [SerializeField] private float sprintSpeed = 15.0f; // Adjust this value as needed
     [SerializeField] private float targetAirSpeed = 10.0f;
     [SerializeField] private float jumpForce = 5.0f;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Camera playerCamera;
-    [SerializeField] private float lookSpeed = 2.0f;
     [SerializeField] private float groundDrag = 6.0f; // Adjusted for more natural deceleration
     [SerializeField] private float airDrag = 0.4f; // Adjusted for more consistent air movement
     [SerializeField] private float airControl = 0.3f; // This is now a multiplier for how much control you have in the air
-    [SerializeField] private float maxAirSpeed = 5.0f; // Max speed in air to prevent excessive acceleration
-    [SerializeField] private float additionalGravityFactor = 2.0f; // Adjust this value to control the fall speed
     [SerializeField] private MenuManager pauseMenu;
+    [SerializeField] private Vector3 Pvelocity;
+    [SerializeField] private float lowGroundDrag;
+    [SerializeField] private float highGroundDrag;
+    [SerializeField] private float maxJumpForce = 10.0f; // The maximum force applied when holding the jump button
+    [SerializeField] private float maxJumpTime = 0.5f; // The maximum time the jump button can be held to increase jump height
 
+    private bool isSprinting = false;
+    private bool isJumping = false;
+    private float jumpTimeCounter;
     private Rigidbody rb;
     private Vector2 movementInput;
     private bool isGrounded;
@@ -26,6 +32,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     public void LoadData(GameData data)
     {
         this.transform.position = data.playerPosition;
+        rb.velocity = Vector3.zero;
     }
 
     public void SaveData(ref GameData data)
@@ -52,105 +59,150 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     {
         if (value.isPressed)
         {
-            if (isGrounded)
+            if (isGrounded || (!hasDoubleJumped && !isGrounded))
             {
                 Jump();
-            }
-            else if (!hasDoubleJumped)
-            {
-                Jump();
-                hasDoubleJumped = true;
             }
         }
+        else
+        {
+            isJumping = false; // Reset when the jump button is released
+        }
+    }
+    
+    public void OnSprint(InputValue value)
+    {
+        isSprinting = value.isPressed;
     }
 
     private void Jump()
     {
-        // Reset vertical momentum to 0 before applying jump force
-        Vector3 velocity = rb.velocity;
-        velocity.y = 0; // Reset only the vertical component of the velocity
-        rb.velocity = velocity; // Apply the reset velocity back to the Rigidbody
+        Vector3 jumpDirection = Vector3.up;
 
-        // Now apply the jump force
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-    }
-    
-    void FixedUpdate()
-    {
-        if (!pauseMenu.isPaused)
+        if (!isGrounded)
         {
-            MovePlayer();
+            // Calculate jump direction based on camera direction for mid-air jumps
+            Vector3 forward = playerCamera.transform.forward;
+            Vector3 right = playerCamera.transform.right;
+        
+            forward.y = 0; // Neutralize vertical component for forward direction
+            right.y = 0;  // Neutralize vertical component for right direction
+
+            forward.Normalize();
+            right.Normalize();
+
+            Vector3 intendedDirection = right * movementInput.x + forward * movementInput.y;
+            intendedDirection.Normalize();
+
+            jumpDirection += intendedDirection; // airControl is used to modulate the influence of camera direction
+        }
+
+        if (!isJumping)
+        {
+            rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z); // Reset vertical velocity
+            rb.AddForce(jumpDirection * jumpForce, ForceMode.Impulse);
+            isJumping = true;
+            jumpTimeCounter = maxJumpTime;
 
             if (!isGrounded)
             {
-                ApplyAirDrag(); // Apply custom air drag to horizontal movement
+                hasDoubleJumped = true; // Set hasDoubleJumped to true if performing a double jump
             }
+        }
+        else if (isJumping && jumpTimeCounter > 0)
+        {
+            rb.AddForce(jumpDirection * (maxJumpForce - jumpForce) * (Time.deltaTime / maxJumpTime), ForceMode.Impulse);
+            jumpTimeCounter -= Time.deltaTime;
+        }
+    }
+    
+    void FixedUpdate() {
+        if (!pauseMenu.isPaused) {
+            MovePlayer();
+
+            if (!isGrounded) {
+                ApplyAirDrag(); // Now also handles air movement direction change
+            }
+        }
+        if (isJumping && jumpTimeCounter > 0)
+        {
+            Jump(); // Continue applying jump force while the button is held
         }
     }
 
     private void Update() {
         CheckGrounded();
+        Pvelocity = rb.velocity;
+        AdjustGroundDrag();
     }
-
-    void ApplyAirDrag()
-    {
-        // Calculate the horizontal velocity
-        Vector3 horizontalVelocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-        // Calculate the difference between the current speed and the target speed
-        float speedDifference = horizontalVelocity.magnitude - targetAirSpeed;
-
-        // Apply air drag only if the current speed exceeds the target speed
-        if (speedDifference > 0)
-        {
-            // Calculate the drag force as a function of the speed difference
-            // The force increases as the speed difference increases
-            Vector3 airDragForce = -horizontalVelocity.normalized * Mathf.Clamp(speedDifference, 0, airDrag * rb.mass) * Time.fixedDeltaTime;
-            rb.AddForce(airDragForce, ForceMode.VelocityChange);
+    
+    private void AdjustGroundDrag() {
+        if (isGrounded) {
+            // Apply lower drag if moving, higher if stationary to allow for instant stopping
+            rb.drag = (movementInput.magnitude > 0) ? lowGroundDrag : highGroundDrag;
+        } else {
+            rb.drag = airDrag; // Use air drag when not grounded
         }
     }
 
-    private void MovePlayer()
-    {
-        Vector3 movementDirection = playerCamera.transform.right * movementInput.x + playerCamera.transform.forward * movementInput.y;
-        movementDirection.Normalize();
-        movementDirection.y = 0; // Ensure we're not adding vertical movement
+    private void MovePlayer() {
+        // Get the right and forward direction of the camera on the horizontal plane
+        Vector3 forward = playerCamera.transform.forward;
+        Vector3 right = playerCamera.transform.right;
+    
+        // Zero out the y component to keep movement on the horizontal plane
+        forward.y = 0;
+        right.y = 0;
+    
+        forward.Normalize();
+        right.Normalize();
 
-        if (isGrounded)
-        {
-            // Calculate the force for horizontal movement
-            Vector3 horizontalForce = new Vector3(movementDirection.x, 0, movementDirection.z) * moveSpeed;
-
-            // Apply the movement force in the horizontal direction
-            rb.AddForce(horizontalForce, ForceMode.Acceleration);
-
-            // Manual horizontal drag calculation
-            // Get the current horizontal velocity
-            Vector3 horizontalVelocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-            // Calculate the drag force based on the current horizontal velocity and the groundDrag factor
-            Vector3 dragForce = -groundDrag * horizontalVelocity * Time.fixedDeltaTime * 100;
-
-            // Apply the drag force to simulate horizontal drag
-            rb.AddForce(dragForce, ForceMode.Acceleration);
-        }
-        else
-        {
-            rb.drag = 0; // Disable Rigidbody's drag in the air to manually apply horizontal air drag.
-
-            Vector3 currentHorizontalVelocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-            float inputMagnitude = movementInput.magnitude;
+        // Calculate movement direction based on input and camera orientation
+        Vector3 movementDirection = right * movementInput.x + forward * movementInput.y;
         
-            // Scale the applied force by air control, allowing some influence over movement in the air.
-            Vector3 targetVelocity = movementDirection * moveSpeed * airControl * inputMagnitude;
-            Vector3 velocityChange = (targetVelocity - currentHorizontalVelocity) * airControl;
-        
-            // Apply the calculated force to adjust horizontal velocity based on air control.
-            rb.AddForce(new Vector3(velocityChange.x, 0, velocityChange.z), ForceMode.Acceleration);
+        float currentSpeed = isSprinting ? sprintSpeed : moveSpeed;
+
+        // Ground movement
+        if (isGrounded) {
+            Vector3 forceDirection = movementDirection * currentSpeed - rb.velocity;
+            forceDirection.y = 0; // Keep vertical velocity unaffected
+            rb.AddForce(forceDirection, ForceMode.VelocityChange);
         }
+    }
+
+    private void ApplyAirDrag() {
+        // Calculate the intended air movement direction
+        Vector3 airMovementDirection = playerCamera.transform.right * movementInput.x + playerCamera.transform.forward * movementInput.y;
+        airMovementDirection.Normalize();
+        airMovementDirection.y = 0; // Keep vertical movement out of our calculations
+
+        // Calculate target velocity in the air
+        Vector3 targetVelocity = airMovementDirection * targetAirSpeed;
+        // Calculate the difference between current and target velocity
+        Vector3 velocityDifference = targetVelocity - rb.velocity;
+        velocityDifference.y = 0; // Ignore vertical velocity
+
+        // Apply a force based on the difference, scaled by air control
+        // This allows for changing direction without increasing overall speed
+        rb.AddForce(velocityDifference * airControl, ForceMode.Acceleration);
     }
 
     private void CheckGrounded()
     {
-        isGrounded = Physics.CheckBox(transform.position - new Vector3(0, 0.1f, 0), new Vector3(0.10f, 0.1f, 0.10f), Quaternion.identity, groundLayer, QueryTriggerInteraction.Ignore);
+        isGrounded = Physics.CheckBox(transform.position - new Vector3(0, -0.04f, 0), new Vector3(0.1f, 0.1f, 0.1f), Quaternion.identity, groundLayer, QueryTriggerInteraction.Ignore);
         if (isGrounded) hasDoubleJumped = false; // Reset double jump if grounded
+    }
+    
+    void OnDrawGizmos() {
+        // Set the color of the Gizmo (optional)
+        Gizmos.color = Color.red;
+
+        // Draw a cube to visualize the ground check area
+        // Adjust the position and size according to your ground check logic
+        Vector3 boxCenter = transform.position - new Vector3(0, -0.04f, 0);
+        Vector3 boxSize = new Vector3(0.1f, 0.1f, 0.1f);
+
+        // Actually draw the cube
+        Gizmos.DrawWireCube(boxCenter, boxSize);
     }
 }
