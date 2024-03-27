@@ -18,7 +18,7 @@ public class DataPersistenceManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null)
+        /*if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
@@ -27,7 +27,7 @@ public class DataPersistenceManager : MonoBehaviour
         {
             Destroy(gameObject);
             return;
-        }
+        }*/
 
         this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();

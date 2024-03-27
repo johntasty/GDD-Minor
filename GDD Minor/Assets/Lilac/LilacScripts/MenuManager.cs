@@ -77,7 +77,7 @@ public class MenuManager : MonoBehaviour
     public void changeScene()
     {
 
-        DataPersistenceManager.instance.SetLoadSavedGame(false);
+        //DataPersistenceManager.instance.SetLoadSavedGame(false);
         
         SceneManager.LoadScene(sceneName);
     }
