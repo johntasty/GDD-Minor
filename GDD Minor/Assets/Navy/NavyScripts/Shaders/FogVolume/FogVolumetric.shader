@@ -7,16 +7,22 @@ Shader "Unlit/FogVolumetric"
         _NoiseTexture ("NoiseTexture",3D) = "white" {}
         _Color ("Color", Color) = (0,0,0,0)
         _MaxSteps("MaxSteps", Int) = 0
-        _Tilling("Tilling", float) = 0
-        _Distance("Distance", float) = 0
-        _Accuracy("Accuracy", float) = 0
-        _NoiseStrength("Noise Strength", float) = 0
+        _Offsets("Offsets Fog Height", float) = 0        
+        _Distance("Draw Distance", float) = 0
+
+        _Accuracy("Light Attentuation Initial", float) = 0
+        _NoiseStrength("Density Removal", float) = 0
         _DensityScale("Density Scale", float) = 0
         _Scatter("Light Scatter", float) = 0      
+        _LightScPower("Density Initial Power", float) = 0      
         _Intensity("Intensity", float) = 0
-        _Bounds("Bounds", Vector) = (0,0,0,0)
-        _Offsets("Offsets", Vector) = (0,0,0,0)
-        _Range("Range", Vector) = (0,0,0,0)
+       
+        _Tilling("Noise Tilling", float) = 0
+        _NoiseTilling("Noise Octave Tilling", float) = 0
+        _NoiseWeight("Noise Octave Weight", float) = 0
+        _NoiseMovement("Noise Move Speed", float) = 0
+        
+        _Range("Fog Range", Range(0.0001,1.)) = 0.
 
         
     }
@@ -75,10 +81,13 @@ Shader "Unlit/FogVolumetric"
             float _Scatter;
 
             float _Intensity;
+            float _LightScPower;
 
-            float4 _Bounds;
-            float4 _Offsets;
-            float3 _Range;
+            float _Offsets;
+            float _Range;
+            float _NoiseMovement;
+            float _NoiseWeight;
+            float _NoiseTilling;
 
             float _DensityScale;
 
@@ -103,113 +112,54 @@ Shader "Unlit/FogVolumetric"
             {
                 return ((x * 6.0 - 15.0) * x + 10.0) * x * x * x;
             }
-            float2 CmplxMul(float2 c0, float2 c1)
+         
+            float hashs (float p)
             {
-                return float2(c0.x * c1.x - c0.y * c1.y, c0.y * c1.x + c0.x * c1.y);
+              return frac(sin(p)*43758.5453);
             }
-           
-            float Noise(float3 pos, float4 aniS, float aniP)
+            
+            float NoiseHash (float3 x)
             {
-                float3 ip = floor(pos);
-                float3 fp = pos - ip;
-                
-                fp = fp * fp *(3.0-2.0 * fp);
-                pos = ip + fp;
-               
-                const float texDim = 64.0;
-                const float2 prime = _Offsets.xy; // primes < texDim
-                
-                const float txlDim = 1.0 / texDim;
-                const float2 pmul = prime * txlDim;
-                const float o0 = 0.5 * txlDim;
-                const float2 o1 = (prime + 0.5) * txlDim;
-            
-                float2 tex = pos.xz * txlDim + ip.y * pmul ;
-            
-                float4 n0 = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, tex + o0);   
-                float4 n1 = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, tex + o1);
-               
-                
-                float4 n = lerp(n0, n1, fp.y);
-                
-                float r = (n.z) ;    
-                float timer = sin(((Time * _Bounds.w) + aniS + n.y * (_Pi * 2.) + aniP)  * .5 + .5);
-                r *= timer;//lerp( n.z,n.w,timer);
-               
-                return r ;
-            }
-            float3 random2(float3 st){
-                st = float3( dot(st,float3(127.1,311.7, 269.5)), dot(st,float3(269.5,183.3, 311.7)), dot(st,float3(269.5,183.3, 127.1)));
-                return -1.0 + 2.0 * frac(sin(st) * 7.);
-            }
-            float noiseRand(float3 st) {
-                float3 i = floor(st);
-                float3 f = frac(st);
+                float3 noiseDisp = sin(_NoiseMovement * _Time.y * float3 (1., 0., 1.));
+                x += noiseDisp;
+                float3 p = floor(x);
+                float3 f = frac(x);
+                f = f * f * (3.0 - 2.0 * f);
 
-                // smootstep
-                float3 u = f*f*(3.0-2.0*f);
-                //float n = p.x + p.y * _Offsets.x + _Offsets.y * p.z;
-                float xDot = lerp(dot( random2(i + float3(0.0, 0.0, 0) ), f - float3(0, 0.0, 0.0)),dot( random2(i + float3(1.0, 0.0, 0) ), f - float3(1.0, 0, 0) ), u.x);
-                float yDot = lerp(dot( random2(i + float3(0.0,1.0, 0.) ), f - float3(0.0,1.0, 0) ),dot( random2(i + float3(1.0,1.0, 0) ), f - float3(1.0,1.0,0) ), u.x);
-                float zDot = lerp(dot( random2(i + float3(0.0,0.0, 1.) ), f - float3(0.0,0, 1.0) ),dot( random2(i + float3(1.0,1.0, 1.0) ), f - float3(1.0,1.0, 1.0) ), u.x);
-               
-                return lerp(lerp(xDot, yDot, u.x), lerp(xDot, zDot, u.y), u.z);
+                float n = p.x + p.y * 57.0 + 93.0 * p.z;
+                
+                float result = lerp(lerp(lerp(hashs(n),       hashs(n + 1.), f.x), 
+                                         lerp(hashs(n + 57.),  hashs(n + 58.), f.x), f.y),
+                                    lerp(lerp(hashs(n + 113.),  hashs(n + 114.), f.x), 
+                                         lerp(hashs(n + 170.),  hashs(n + 171.), f.x), f.y), f.z);
+                 return result;
             }
 
-
-            float Fbm(float3 p, float3 off)
-            {
-                const float count = 4.0;
-            
-                const float ang = _Pi * .65;
-                const float2 rot = float2(cos(ang), sin(ang));
-                
-                float res = 0.;
-                float accu_w = 0.0;
-                float w = 1.0;
-                float aniS = 0.8;
-                float aniP = 0.0;
-                
-                for (int i = 0; i < count; ++i)
-                {
-                    float v = Noise(p, aniS, aniP);
-                   
-                    res += v * w;
-                    
-                    accu_w += w;
-                    
-                    aniS *= _Bounds.z;
-                    aniP += ang;
-                    w *= _Bounds.y;
-                    p *= (_Bounds.x + (i * .05));
-                    p.xy = CmplxMul(p.xy, rot);
-                    p = p.yzx;
-                
+            float noiseRand(float3 p) {
+               
+                float weight = _NoiseWeight;
+                float f = weight * NoiseHash(p);
+                for (int j = 0; j < 5; j ++) {                
+                  p *= _NoiseTilling;
+                  weight *= .5;
+                  f += weight * NoiseHash(p);               
                 }
-                
-                res /= accu_w;
-                
-                return res;
+                return f;
             }
             float EvalNoise(float3 p, float distance)
             {
-                float density = 1.0;
-                float n = Fbm(p * _Tilling, 0.);
-                n = n * .5 + .5;
-                n = SCurveC2(n);
-                n = SCurveC2(n);
-                n = SCurveC2(n);
-                n = SCurveC2(n);
-
+                float density = 1.0;               
+               float n = noiseRand(p * _Tilling);
+               // n = SCurveC2(n);
                 density = saturate(n - _NoiseStrength) * _DensityScale;
                 
-                return density * smoothstep(_Range.x, _Range.y, distance);
+                return density * pow(distance, _Range);
             }
 
             float boxIntersection( in float3 ro, in float3 rd, out float2 t) 
             {
                 ro -= unity_ObjectToWorld._m03_m13_m23;
-                ro.y -= _Offsets.z;
+                ro.y -= _Offsets;
                  // extract x and y scale from object to world transform matrix
                 float3 scale = float3(
                     (unity_ObjectToWorld._m00_m10_m20).x,
@@ -251,8 +201,7 @@ Shader "Unlit/FogVolumetric"
             }
             float MieSc(float angle, float str)
             {
-                float gSqr = sqrt(str);
-	            // Magic number is 1/4pi
+                float gSqr = sqrt(str);	           
                 return (0.07957747154) * ((1 - gSqr) / (pow(abs((1 + gSqr) - (2 * str) * angle), 1.5)));
 
             }
@@ -282,10 +231,10 @@ Shader "Unlit/FogVolumetric"
                  float startingDistance = length(camera - ro);
                
                  float density = 0.0;
-                 //float stepSize = 1.0 / _MaxSteps;
+                 float stepSize = 1.0 / _MaxSteps;
                  float sliceVolume = (boxIntersect.y - boxIntersect.x) / _MaxSteps;
                  float travelled = 0; 
-                 float o_max = _Offsets.w;// maximal scattering coefficient
+                 float o_max = _LightScPower;// maximal scattering coefficient
                  float oc = 0.0;
                  float result = 0.0;  
                  half3 sceneColor = 0.;
@@ -294,10 +243,8 @@ Shader "Unlit/FogVolumetric"
                  for(int j = 0; j < _MaxSteps; j++){
                      
                     if(travelled + boxIntersect.x > depth || travelled > depth || travelled > boxIntersect.y )break;
-                    float3 pos = ro + rd * travelled;
-                    //lerp(insideOutBox.x, insideOutBox.y, (j  + noiseJitter) * stepS);
-                   
-                    float denC = EvalNoise(pos, travelled + startingDistance);
+                    float3 pos = ro + rd * travelled;                   
+                    float denC = EvalNoise(pos, travelled);
                   
                     float attenuation = _Accuracy;
                     half3 color = _Color.rgb;
