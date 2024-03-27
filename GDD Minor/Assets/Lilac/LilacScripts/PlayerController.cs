@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     {
         if (value.isPressed)
         {
-            if (isGrounded || !hasDoubleJumped)
+            if (isGrounded || (!hasDoubleJumped && !isGrounded))
             {
                 Jump();
             }
@@ -102,6 +102,11 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             rb.AddForce(jumpDirection * jumpForce, ForceMode.Impulse);
             isJumping = true;
             jumpTimeCounter = maxJumpTime;
+
+            if (!isGrounded)
+            {
+                hasDoubleJumped = true; // Set hasDoubleJumped to true if performing a double jump
+            }
         }
         else if (isJumping && jumpTimeCounter > 0)
         {
