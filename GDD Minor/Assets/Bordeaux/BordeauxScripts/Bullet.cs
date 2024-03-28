@@ -80,12 +80,14 @@ public class Bullet : MonoBehaviour
 
     public void Explode() {
 		Collider[] enemies = Physics.OverlapSphere(transform.position, explosionRange, enemyMask);
-		for (int i = 0; i < enemies.Length; i++) {
-			Debug.Log(enemies[i]);
-			if (i == 0 || enemies[i] != enemies[i - 1]) {
-				enemies[i].GetComponent<Entity>().TakeDamage(explosionDamage);
-			}
-		}
+        if (enemies.Length > 0) {
+		    for (int i = 0; i < enemies.Length; i++) {
+			    Debug.Log(enemies[i]);
+			    if (i == 0 || enemies[i] != enemies[i - 1]) {
+				    enemies[i].GetComponent<Entity>().TakeDamage(explosionDamage);
+			    }
+		    }
+        }
 	}
 
     public void Delay() {
