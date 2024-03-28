@@ -13,7 +13,7 @@ public class Entity : MonoBehaviour
         }
         set {
             health = value;
-            Debug.Log(health);
+            //Debug.Log(health);
 
             if (health <= 0f) {
                 Destroy(gameObject);
@@ -27,8 +27,8 @@ public class Entity : MonoBehaviour
         Health = startingHealth;
     }
 
-    void TakeDamage(int damage) {
-        Health -= damage;
+    public void TakeDamage(int damage) {
+        Health = health - damage;
     }
 
     // Update is called once per frame

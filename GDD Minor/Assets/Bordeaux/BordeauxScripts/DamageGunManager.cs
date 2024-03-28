@@ -40,7 +40,7 @@ public class DamageGunManager : MonoBehaviour
             targetPoint = hit.point;
         }
         else {
-            targetPoint = ray.GetPoint(100);
+            targetPoint = ray.GetPoint(50);
         }
         
         //Calculate direction from gun to target point
@@ -58,6 +58,9 @@ public class DamageGunManager : MonoBehaviour
 
         //Send bullet forward
         currentProj.GetComponent<Rigidbody>().AddForce(projectileDirection.normalized * BulletForce, ForceMode.Impulse);
+
+        //Delay the gravity enabling
+        currentProj.GetComponent<Bullet>().StartCoroutine("DelayGravity", 0.5f);
 	}
 
 	private void DoHitscanShot() {

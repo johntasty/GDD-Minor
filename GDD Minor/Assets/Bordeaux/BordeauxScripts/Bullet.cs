@@ -27,8 +27,9 @@ public class Bullet : MonoBehaviour
     public int maxCollisions;
     public float maxLifetime;
     public bool damageOnTouch = true;
+    public bool damageOnce = true;
 
-    int collisions;
+    int collisions = 0;
     PhysicMaterial physicMaterial;
 
 	private void Start() {
@@ -38,20 +39,68 @@ public class Bullet : MonoBehaviour
 	private void Update() {
         //Choose when to explode/disable bullet
 
-        if (collisions > maxCollisions) Damage();
+        if (collisions > maxCollisions && damageOnce) {
+            damageOnce = false;
+            Damage(null);
+        }
 
         maxLifetime -= Time.deltaTime;
-        if (maxLifetime <= 0f) Damage();
+        if (maxLifetime <= 0f && damageOnce) {
+            damageOnce = false;
+            Damage(null);
+        }
 	}
 
-	public void Damage() {
+	public void Damage(Collider collider) {
+        if (explosion != null) {
+            Instantiate(explosion, transform.position, Quaternion.identity);
+        }
+        //else {
+        //    Debug.LogWarning("No explosion effect.");
+        //}
 
+		if (IsExplosive) {
+			explosionRange = 50f;
+            Explode();
+		}
+		else {
+            if (collider != null) {
+                collider.GetComponent<Entity>().TakeDamage(explosionDamage);
+            }
+            else {
+			    explosionRange = 0.1f;
+                Explode();
+            }
+		}
+
+		
+
+		Invoke("Delay", 0.05f);
+    }
+
+    public void Explode() {
+		Collider[] enemies = Physics.OverlapSphere(transform.position, explosionRange, enemyMask);
+		for (int i = 0; i < enemies.Length; i++) {
+			Debug.Log(enemies[i]);
+			if (i == 0 || enemies[i] != enemies[i - 1]) {
+				enemies[i].GetComponent<Entity>().TakeDamage(explosionDamage);
+			}
+		}
+	}
+
+    public void Delay() {
+        StopAllCoroutines();
+        Destroy(gameObject);
     }
 
 	private void OnCollisionEnter(Collision collision) {
         collisions++;
 
-        if (collision.collider.CompareTag("Enemy") && damageOnTouch) Damage();
+        if (collision.collider.CompareTag("Enemy") && damageOnTouch && damageOnce) {
+            damageOnce = false;
+            Debug.Log("HIT!");
+            Damage(collision.collider);
+        }
 	}
 
 	public void Setup() {
@@ -66,5 +115,11 @@ public class Bullet : MonoBehaviour
 
         //Set Gravity
         rb.useGravity = useGravity;
+    }
+
+    public IEnumerator DelayGravity(float delay) {
+        rb.useGravity = false;
+        yield return new WaitForSeconds(delay);
+        rb.useGravity = true;
     }
 }
