@@ -4,21 +4,27 @@ using UnityEditor;
 using UnityEngine;
 using Bezier_Util_Functions;
 using System;
-using UnityEngine.Rendering.PostProcessing;
-using static Path_Spline;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
-using System.Drawing;
+
+
+//More information at catlikecoding, system is expanded from there
+
 public class Path_Spline : MonoBehaviour
 {
     [SerializeField]
     private Vector3[] points;
-    [HideInInspector]
+    [SerializeField]
+    private Vector3[] normals;
+
+    [SerializeField]
     private float[] normalsAngles;
+
     [SerializeField]
     private bool loop;
+
     [SerializeField]
     private float handleSize;
-    private float globalNormalsAngle;
+    [SerializeField]
+    private float globalNormalsAngle = 0f;
     public enum BezierControlPointMode
     {
         Free,
@@ -62,6 +68,11 @@ public class Path_Spline : MonoBehaviour
     public void SetNormalAngle(int index, float angle)
     {        
         normalsAngles[index] = angle;
+        if (loop)
+        {
+            normalsAngles[normalsAngles.Length - 1] = angle;
+        }
+
     }
     public void SetControlPoint(int index, Vector3 point)
     {
@@ -109,7 +120,6 @@ public class Path_Spline : MonoBehaviour
     {
         return modes[(index + 1) / 3];
     }
-
     public void SetControlPointMode(int index, BezierControlPointMode mode)
     {
         int modeIndex = (index + 1) / 3;
@@ -180,7 +190,8 @@ public class Path_Spline : MonoBehaviour
             new Vector3(3f, 0f, 0f),
             new Vector3(4f, 0f, 0f)
         };
-        normalsAngles = new float[] { 0f, 0f};
+        normalsAngles = new float[2] { 0f, 0f};
+        normals = new Vector3[2] { new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, 0f) };
 
         modes = new BezierControlPointMode[] {
             BezierControlPointMode.Free,
@@ -226,8 +237,8 @@ public class Path_Spline : MonoBehaviour
     {
         return GetVelocity(t).normalized;
     }
-    public Vector3 GetNormal(Vector3 tangent, float t) 
-    {
+    public Vector3 CalculateNormal(Vector3 tangent, float t) 
+    {        
         Vector3 previousPoint = GetPoint(t);
         Vector3 previousTangent = GetVelocity(t);
         Vector3 offset = (tangent - previousPoint);
@@ -241,9 +252,10 @@ public class Path_Spline : MonoBehaviour
 
         Vector3 finalRot = r - v2 * 2 / c2 * Vector3.Dot(v2, r);
         Vector3 n = Vector3.Cross(finalRot, tangent).normalized;
+        
         return n;
     }   
-    public Quaternion RotateNormal(float t, Vector3 tangent)
+    public Vector3 GetNormal(Vector3 tangent, float t)
     {
         int i;
         if (t >= 1f)
@@ -259,13 +271,41 @@ public class Path_Spline : MonoBehaviour
             i *= 3;
         }
         int anchor = i / 3;
-        float angleStart = GetNormalAngle(anchor) + globalNormalsAngle;
-        float angleEnd = GetNormalAngle(anchor + 1) + globalNormalsAngle;
+
+        float globalAngleOffset = globalNormalsAngle;
+        float normalAngularOffset = normalsAngles[anchor];
+        Quaternion globalRotation = Quaternion.AngleAxis(globalAngleOffset, tangent);
+        Quaternion normalRotation = Quaternion.AngleAxis(normalAngularOffset, tangent);
+        Vector3 normalVector = globalRotation * normalRotation * normals[anchor];
+        return normalVector;
+    }
+    public Vector3 RotateNormal(float t, Vector3 normal)
+    {
+        float curveSegmentSizeT = 1f / CurveCount;
+        int i = 0;
+        while (t > i * curveSegmentSizeT)
+        {
+            i++;
+        }
+        i = Mathf.Clamp(i - 1, 0, normalsAngles.Length - 2);
+
+        Vector3 tangent = GetDirection(t);
+        int anchor = i / 3;
+
+        float prevPointT = i * curveSegmentSizeT;
+        float nextPointT = (i + 1) * curveSegmentSizeT;
+        float alpha = Mathf.InverseLerp(prevPointT, nextPointT, t);
+
+        float normalAngularOffset = Mathf.Lerp(normalsAngles[i], normalsAngles[i + 1], alpha);
+
+        //float angleStart = GetNormalAngle(anchor);
+        //float angleEnd = GetNormalAngle(anchor + 1);
         
-        float angleD = Mathf.DeltaAngle(angleStart, angleEnd);
-        
-        Quaternion rot = Quaternion.AngleAxis(angleD, tangent);
-        return rot;
+        //float angleD = Mathf.DeltaAngle(angleStart, angleEnd);        
+        Quaternion rot = Quaternion.AngleAxis(normalAngularOffset, tangent);
+        Quaternion rotGlobal = Quaternion.AngleAxis(globalNormalsAngle, tangent);
+        normals[i] = rotGlobal * rot * normal;
+        return rotGlobal * rot * normal;
     }
     public void AddCurve()
     {        
@@ -281,6 +321,9 @@ public class Path_Spline : MonoBehaviour
         Array.Resize(ref normalsAngles, normalsAngles.Length + 1);
         normalsAngles[normalsAngles.Length - 1] = globalNormalsAngle;
 
+        Array.Resize(ref normals, normals.Length + 1);
+        normals[normals.Length - 1] = normals[normals.Length - 2];
+
         Array.Resize(ref modes, modes.Length + 1);
         modes[modes.Length - 1] = modes[modes.Length - 2];
 
@@ -292,5 +335,106 @@ public class Path_Spline : MonoBehaviour
             EnforceMode(0);
         }
     }
-    
+    public void RemoveCurve(int curveIndex)
+    {
+        if (CurveCount <= 1) { Debug.LogError("Needs more than one Curve"); return; }
+
+        bool isLastCurve = (loop && curveIndex == CurveCount) || (!loop && curveIndex == CurveCount - 1);
+        bool isStartCurve = curveIndex == 0;
+        int beginCurveIndex = curveIndex;
+        int startCurveIndex = beginCurveIndex;
+
+        if (isStartCurve)
+        {
+            startCurveIndex += 1;
+        }
+        else if (isLastCurve)
+        {
+            startCurveIndex = points.Length - 2;
+        }
+        //Removing control points first
+        RemovePoint(startCurveIndex + 1);
+        RemovePoint(startCurveIndex - 1);
+
+        if (!isLastCurve || !loop)
+        {
+            RemovePoint(startCurveIndex);
+            var modeIndex = (beginCurveIndex) / 3;
+
+            List<BezierControlPointMode> tmpMode = new List<BezierControlPointMode>(modes);
+            tmpMode.RemoveAt(modeIndex);
+            modes = tmpMode.ToArray();
+
+            List<Vector3> tmpNormals = new List<Vector3>(normals);
+            tmpNormals.RemoveAt(modeIndex);
+            normals = tmpNormals.ToArray();
+
+            List<float> tmpNormalAngles = new List<float>(normalsAngles);
+            tmpNormalAngles.RemoveAt(modeIndex);
+            normalsAngles = tmpNormalAngles.ToArray();
+
+        }
+
+        int nextPointIndex = (isLastCurve || startCurveIndex >= points.Length) ? points.Length - 1 : startCurveIndex;
+        if (loop && CurveCount == 1)
+        {
+            loop = false;
+        }
+        if (loop)
+        {
+            SetControlPoint(0, points[0]);
+        }
+        //Shift points to the left connect
+        SetControlPoint(nextPointIndex, points[nextPointIndex]);
+    }
+    public void InsertCurve(int curveIndex, float t)
+    {
+        if (CurveCount == 1) { AddCurve(); return; }
+        t = Mathf.Clamp01(t);
+        if (t == 0f || t == 1f)
+        {
+            return;
+        }
+        
+        float middle = (1f / (CurveCount)) * .5f;
+        float midPoint = t + middle;
+        List<Vector3> tmp = new List<Vector3>(points); 
+
+        float newT = midPoint - (middle * .5f);
+        Vector3 newPoint = GetPoint(newT);
+        tmp.Insert(curveIndex + 2, newPoint);
+
+        newT = midPoint;
+        Vector3 pointOnCurve1 = GetPoint(newT);
+        tmp.Insert(curveIndex + 3, pointOnCurve1);
+
+        newT = midPoint + (middle * .5f);
+        Vector3 pointOnCurve2 = GetPoint(newT);
+        tmp.Insert(curveIndex + 4, pointOnCurve2);
+
+        points = tmp.ToArray();
+
+        List<Vector3> tmpNormal = new List<Vector3>(normals);
+        tmpNormal.Insert((curveIndex / 3) + 1, normals[curveIndex / 3]);
+        normals = tmpNormal.ToArray();
+
+        List<float> tmpAngles = new List<float>(normalsAngles);
+        tmpAngles.Insert((curveIndex / 3) + 1, globalNormalsAngle);
+        normalsAngles = tmpAngles.ToArray();
+
+        List<BezierControlPointMode> tmpModes = new List<BezierControlPointMode>(modes);        
+        tmpModes.Insert((curveIndex / 3) + 1, modes[curveIndex / 3]);
+        modes = tmpModes.ToArray();
+       
+        EnforceMode((curveIndex / 3) + 1);
+
+    }
+    private void RemovePoint(int pointIndex)
+    {
+        //Casting to list because its easier
+        List<Vector3> tmp = new List<Vector3>(points);
+        if (pointIndex > points.Length) { Debug.LogError("Out Of Range Index"); return; }
+        tmp.RemoveAt(pointIndex);
+        points = tmp.ToArray();       
+    }
 }

@@ -26,7 +26,8 @@ public class SplineGui : Editor
         };
 
     public override void OnInspectorGUI()
-    {        
+    {
+        //DrawDefaultInspector();
         curve = (Path_Spline)target;
         EditorGUI.BeginChangeCheck();
 
@@ -40,7 +41,8 @@ public class SplineGui : Editor
         }
         else
         {
-            NormalsAngle = EditorGUILayout.Slider("Normals Angle", curve.GlobalNormalsAngle, 0, 360);
+            //Rotates entire path
+            NormalsAngle = EditorGUILayout.Slider("Global Normals Angle", curve.GlobalNormalsAngle, 0, 360);
             
         }     
         if (EditorGUI.EndChangeCheck())
@@ -55,6 +57,24 @@ public class SplineGui : Editor
             curve.AddCurve();
             EditorUtility.SetDirty(curve);
         }
+        if (selectedIndex % 3 == 0)
+        {
+            if (GUILayout.Button("Remove Curve"))
+            {
+                curve.RemoveCurve(selectedIndex);
+                EditorUtility.SetDirty(curve);
+            }
+            if (GUILayout.Button("Insert Curve"))
+            {
+                //point from 0-1 from all points
+                int cu = (selectedIndex / 3);
+                float po = (float)cu / (float)(curve.CurveCount);
+               
+                curve.InsertCurve(selectedIndex, po );
+                EditorUtility.SetDirty(curve);
+            }
+        }
+       
     }
    
     
@@ -133,8 +153,8 @@ public class SplineGui : Editor
             Handles.DrawLine(point, point + tangent);
             Handles.color = Color.blue;
 
-            Vector3 n = curve.GetNormal(tangent, (i - 1) / (float)steps) * .1f;
-            n = curve.RotateNormal(i / (float)steps, tangent) * n;
+            Vector3 n = curve.CalculateNormal(tangent, (i - 1) / (float)steps) * .3f;
+            n = curve.RotateNormal(i / (float)steps, n);
             Handles.DrawLine(point, point + n);
         }
     }   
