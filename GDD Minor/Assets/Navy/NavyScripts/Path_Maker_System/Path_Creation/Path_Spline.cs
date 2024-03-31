@@ -5,24 +5,18 @@ using UnityEngine;
 using Bezier_Util_Functions;
 using System;
 
-
-//More information at catlikecoding, system is expanded from there
-
 public class Path_Spline : MonoBehaviour
 {
     [SerializeField]
-    private Vector3[] points;
+    private Spline_Point path;
     [SerializeField]
-    private Vector3[] normals;
-
-    [SerializeField]
-    private float[] normalsAngles;
-
+    private Spline_Path path_spline;
+  
     [SerializeField]
     private bool loop;
 
     [SerializeField]
-    private float handleSize;
+    private float handleSize = .03f;
     [SerializeField]
     private float globalNormalsAngle = 0f;
     public enum BezierControlPointMode
@@ -47,72 +41,74 @@ public class Path_Spline : MonoBehaviour
             if (value == true)
             {
                 modes[modes.Length - 1] = modes[0];
-                SetControlPoint(0, points[0]);
+                SetControlPoint(0, path.PointsEditor[0]);
             }
         }
     }
     public float GlobalNormalsAngle { get => globalNormalsAngle; set => globalNormalsAngle = value; }
     public float HandleSize { set => handleSize = value; get => handleSize; }
-    public int CurveCount {get => (points.Length - 1) / 3;}    
-    public int ControlPointCount{get => points.Length;}
+    public int CurveCount {get => (path.PointsEditor.Count - 1) / 3;}    
+    public int ControlPointCount{get => path.PointsEditor.Count;}
+    public Spline_Point Path { get => path; set => path = value; }
+    public Spline_Path Path_spline { get => path_spline; set => path_spline = value; }
 
     #endregion
     public Vector3 GetControlPoint(int index)
     {
-        return points[index];
+        return path.PointsEditor[index];
     }
     public float GetNormalAngle(int index)
     {
-        return normalsAngles[index] % 360;
+        return path.Angles[index] % 360;
     }
     public void SetNormalAngle(int index, float angle)
-    {        
-        normalsAngles[index] = angle;
+    {
+        path.Angles[index] = angle;
         if (loop)
         {
-            normalsAngles[normalsAngles.Length - 1] = angle;
+            path.Angles[path.Angles.Count - 1] = angle;
         }
 
     }
     public void SetControlPoint(int index, Vector3 point)
     {
-        
+        int count = path.PointsEditor.Count;
         if (index % 3 == 0)
         {
-            Vector3 delta = point - points[index];
+            Vector3 delta = point - path.PointsEditor[index];
             if (loop)
             {
                 if (index == 0)
                 {
-                    points[1] += delta;
-                    points[points.Length - 2] += delta;
-                    points[points.Length - 1] = point;
+                    path.PointsEditor[1] += delta;
+                    path.PointsEditor[count - 2] += delta;
+                    path.PointsEditor[count - 1] = point;
                 }
-                else if (index == points.Length - 1)
+                else if (index == count - 1)
                 {
-                    points[0] = point;
-                    points[1] += delta;
-                    points[index - 1] += delta;
+                    path.PointsEditor[0] = point;
+                    path.PointsEditor[1] += delta;
+                    path.PointsEditor[index - 1] += delta;
                 }
                 else
                 {
-                    points[index - 1] += delta;
-                    points[index + 1] += delta;
+                    path.PointsEditor[index - 1] += delta;
+                    path.PointsEditor[index + 1] += delta;
                 }
             }
             else
             {
                 if (index > 0)
                 {
-                    points[index - 1] += delta;
+                    path.PointsEditor[index - 1] += delta;
                 }
-                if (index + 1 < points.Length)
+                if (index + 1 < count)
                 {
-                    points[index + 1] += delta;
+                    path.PointsEditor[index + 1] += delta;
                 }
             }
         }
-        points[index] = point;
+        path.PointsEditor[index] = point;
         EnforceMode(index);
 
     }
@@ -152,10 +148,10 @@ public class Path_Spline : MonoBehaviour
             fixedIndex = middleIndex - 1;
             if (fixedIndex < 0)
             {
-                fixedIndex = points.Length - 2;
+                fixedIndex = path.PointsEditor.Count - 2;
             }
             enforcedIndex = middleIndex + 1;
-            if (enforcedIndex >= points.Length)
+            if (enforcedIndex >= path.PointsEditor.Count)
             {
                 enforcedIndex = 1;
             }
@@ -163,48 +159,55 @@ public class Path_Spline : MonoBehaviour
         else
         {
             fixedIndex = middleIndex + 1;
-            if (fixedIndex >= points.Length)
+            if (fixedIndex >= path.PointsEditor.Count)
             {
                 fixedIndex = 1;
             }
             enforcedIndex = middleIndex - 1;
             if (enforcedIndex < 0)
             {
-                enforcedIndex = points.Length - 2;
+                enforcedIndex = path.PointsEditor.Count - 2;
             }
         }
-        Vector3 middle = points[middleIndex];
-        Vector3 enforcedTangent = middle - points[fixedIndex];
+        Vector3 middle = path.PointsEditor[middleIndex];
+        Vector3 enforcedTangent = middle - path.PointsEditor[fixedIndex];
         if (mode == BezierControlPointMode.Aligned)
         {
-            enforcedTangent = enforcedTangent.normalized * Vector3.Distance(middle, points[enforcedIndex]);
+            enforcedTangent = enforcedTangent.normalized * Vector3.Distance(middle, path.PointsEditor[enforcedIndex]);
         }
-        points[enforcedIndex] = middle + enforcedTangent;
+        path.PointsEditor[enforcedIndex] = middle + enforcedTangent;
     }
     public void Reset()
     {
-       
-        points = new Vector3[] {
+        path = new Spline_Point();        
+        path.Reset();
+
+        Vector3[]  points = new Vector3[] {
             new Vector3(1f, 0f, 0f),
             new Vector3(2f, 0f, 0f),
             new Vector3(3f, 0f, 0f),
             new Vector3(4f, 0f, 0f)
         };
-        normalsAngles = new float[2] { 0f, 0f};
-        normals = new Vector3[2] { new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, 0f) };
+        path.PointsEditor.AddRange(points);
+
+        float[] normalsAngles = new float[2] { 0f, 0f};
+        path.Angles.AddRange(normalsAngles);
 
         modes = new BezierControlPointMode[] {
             BezierControlPointMode.Free,
             BezierControlPointMode.Free
         };
+
+        path_spline = new Spline_Path();
     }
     public Vector3 GetPoint(float t)
     {
+        int length = path.PointsEditor.Count;
         int i;
         if (t >= 1f)
         {
             t = 1f;
-            i = points.Length - 4;
+            i = length - 4;
         }
         else
         {
@@ -213,15 +216,16 @@ public class Path_Spline : MonoBehaviour
             t -= i;
             i *= 3;
         }
-        return transform.TransformPoint(BezierUtils.GetPointBezier(points[i], points[i + 1], points[i + 2], points[i + 3], t));
+        return transform.TransformPoint(BezierUtils.GetPointBezier(path.PointsEditor[i], path.PointsEditor[i + 1], path.PointsEditor[i + 2], path.PointsEditor[i + 3], t));
     }
     public Vector3 GetVelocity(float t)
     {
+        int length = path.PointsEditor.Count;
         int i;
         if (t >= 1f)
         {
             t = 1f;
-            i = points.Length - 4;
+            i = length - 4;
         }
         else
         {
@@ -230,7 +234,7 @@ public class Path_Spline : MonoBehaviour
             t -= i;
             i *= 3;
         }
-        return transform.TransformPoint(BezierUtils.GetFirstDerivative(points[i], points[i + 1], points[i + 2], points[i + 3], t)) -
+        return transform.TransformPoint(BezierUtils.GetFirstDerivative(path.PointsEditor[i], path.PointsEditor[i + 1], path.PointsEditor[i + 2], path.PointsEditor[i + 3], t)) -
             transform.position;
     }
     public Vector3 GetDirection(float t)
@@ -255,30 +259,7 @@ public class Path_Spline : MonoBehaviour
         
         return n;
     }   
-    public Vector3 GetNormal(Vector3 tangent, float t)
-    {
-        int i;
-        if (t >= 1f)
-        {
-            t = 1f;
-            i = points.Length - 4;
-        }
-        else
-        {
-            t = Mathf.Clamp01(t) * CurveCount;
-            i = (int)t;
-            t -= i;
-            i *= 3;
-        }
-        int anchor = i / 3;
-
-        float globalAngleOffset = globalNormalsAngle;
-        float normalAngularOffset = normalsAngles[anchor];
-        Quaternion globalRotation = Quaternion.AngleAxis(globalAngleOffset, tangent);
-        Quaternion normalRotation = Quaternion.AngleAxis(normalAngularOffset, tangent);
-        Vector3 normalVector = globalRotation * normalRotation * normals[anchor];
-        return normalVector;
-    }
+   
     public Vector3 RotateNormal(float t, Vector3 normal)
     {
         float curveSegmentSizeT = 1f / CurveCount;
@@ -287,50 +268,40 @@ public class Path_Spline : MonoBehaviour
         {
             i++;
         }
-        i = Mathf.Clamp(i - 1, 0, normalsAngles.Length - 2);
+        i = Mathf.Clamp(i - 1, 0, path.Angles.Count - 2);
 
         Vector3 tangent = GetDirection(t);
-        int anchor = i / 3;
-
+       
         float prevPointT = i * curveSegmentSizeT;
         float nextPointT = (i + 1) * curveSegmentSizeT;
         float alpha = Mathf.InverseLerp(prevPointT, nextPointT, t);
 
-        float normalAngularOffset = Mathf.Lerp(normalsAngles[i], normalsAngles[i + 1], alpha);
+        float normalAngularOffset = Mathf.Lerp(path.Angles[i], path.Angles[i + 1], alpha);
 
-        //float angleStart = GetNormalAngle(anchor);
-        //float angleEnd = GetNormalAngle(anchor + 1);
-        
-        //float angleD = Mathf.DeltaAngle(angleStart, angleEnd);        
-        Quaternion rot = Quaternion.AngleAxis(normalAngularOffset, tangent);
-        Quaternion rotGlobal = Quaternion.AngleAxis(globalNormalsAngle, tangent);
-        normals[i] = rotGlobal * rot * normal;
+        Quaternion rot = Quaternion.AngleAxis(normalAngularOffset, tangent);       
+        Quaternion rotGlobal = Quaternion.AngleAxis(globalNormalsAngle, tangent);      
         return rotGlobal * rot * normal;
     }
     public void AddCurve()
-    {        
-        Vector3 point = points[points.Length - 1];
-        Array.Resize(ref points, points.Length + 3);
+    {
+        int length = path.PointsEditor.Count;
+        Vector3 point = path.PointsEditor[length - 1];
         point.x += 1f;
-        points[points.Length - 3] = point;
+        path.PointsEditor.Add(point);
         point.x += 1f;
-        points[points.Length - 2] = point;
+        path.PointsEditor.Add(point);
         point.x += 1f;
-        points[points.Length - 1] = point;
+        path.PointsEditor.Add(point);
 
-        Array.Resize(ref normalsAngles, normalsAngles.Length + 1);
-        normalsAngles[normalsAngles.Length - 1] = globalNormalsAngle;
-
-        Array.Resize(ref normals, normals.Length + 1);
-        normals[normals.Length - 1] = normals[normals.Length - 2];
-
+        path.Angles.Add(globalNormalsAngle);
+      
         Array.Resize(ref modes, modes.Length + 1);
         modes[modes.Length - 1] = modes[modes.Length - 2];
 
-        EnforceMode(points.Length - 4);
+        EnforceMode(length - 4);
         if (loop)
         {
-            points[points.Length - 1] = points[0];
+            path.PointsEditor[length - 1] = path.PointsEditor[0];
             modes[modes.Length - 1] = modes[0];
             EnforceMode(0);
         }
@@ -338,7 +309,7 @@ public class Path_Spline : MonoBehaviour
     public void RemoveCurve(int curveIndex)
     {
         if (CurveCount <= 1) { Debug.LogError("Needs more than one Curve"); return; }
-
+        int length = path.PointsEditor.Count;
         bool isLastCurve = (loop && curveIndex == CurveCount) || (!loop && curveIndex == CurveCount - 1);
         bool isStartCurve = curveIndex == 0;
         int beginCurveIndex = curveIndex;
@@ -350,7 +321,7 @@ public class Path_Spline : MonoBehaviour
         }
         else if (isLastCurve)
         {
-            startCurveIndex = points.Length - 2;
+            startCurveIndex = length - 2;
         }
         //Removing control points first
         RemovePoint(startCurveIndex + 1);
@@ -364,64 +335,43 @@ public class Path_Spline : MonoBehaviour
             List<BezierControlPointMode> tmpMode = new List<BezierControlPointMode>(modes);
             tmpMode.RemoveAt(modeIndex);
             modes = tmpMode.ToArray();
-
-            List<Vector3> tmpNormals = new List<Vector3>(normals);
-            tmpNormals.RemoveAt(modeIndex);
-            normals = tmpNormals.ToArray();
-
-            List<float> tmpNormalAngles = new List<float>(normalsAngles);
-            tmpNormalAngles.RemoveAt(modeIndex);
-            normalsAngles = tmpNormalAngles.ToArray();
-
+            path.Angles.RemoveAt(modeIndex);       
         }
 
-        int nextPointIndex = (isLastCurve || startCurveIndex >= points.Length) ? points.Length - 1 : startCurveIndex;
+        int nextPointIndex = (isLastCurve || startCurveIndex >= length) ? length - 1 : startCurveIndex;
         if (loop && CurveCount == 1)
         {
             loop = false;
         }
         if (loop)
         {
-            SetControlPoint(0, points[0]);
+            SetControlPoint(0, path.PointsEditor[0]);
         }
         //Shift points to the left connect
-        SetControlPoint(nextPointIndex, points[nextPointIndex]);
+        SetControlPoint(nextPointIndex, path.PointsEditor[nextPointIndex]);
     }
     public void InsertCurve(int curveIndex, float t)
     {
         if (CurveCount == 1) { AddCurve(); return; }
         t = Mathf.Clamp01(t);
-        if (t == 0f || t == 1f)
-        {
-            return;
-        }
-        
+               
         float middle = (1f / (CurveCount)) * .5f;
         float midPoint = t + middle;
-        List<Vector3> tmp = new List<Vector3>(points); 
-
+      
         float newT = midPoint - (middle * .5f);
         Vector3 newPoint = GetPoint(newT);
-        tmp.Insert(curveIndex + 2, newPoint);
+        path.PointsEditor.Insert(curveIndex + 2, newPoint);
 
         newT = midPoint;
         Vector3 pointOnCurve1 = GetPoint(newT);
-        tmp.Insert(curveIndex + 3, pointOnCurve1);
+        path.PointsEditor.Insert(curveIndex + 3, pointOnCurve1);
 
         newT = midPoint + (middle * .5f);
         Vector3 pointOnCurve2 = GetPoint(newT);
-        tmp.Insert(curveIndex + 4, pointOnCurve2);
-
-        points = tmp.ToArray();
-
-        List<Vector3> tmpNormal = new List<Vector3>(normals);
-        tmpNormal.Insert((curveIndex / 3) + 1, normals[curveIndex / 3]);
-        normals = tmpNormal.ToArray();
-
-        List<float> tmpAngles = new List<float>(normalsAngles);
-        tmpAngles.Insert((curveIndex / 3) + 1, globalNormalsAngle);
-        normalsAngles = tmpAngles.ToArray();
-
+        path.PointsEditor.Insert(curveIndex + 4, pointOnCurve2);
+              
+        path.Angles.Insert((curveIndex / 3) + 1, globalNormalsAngle);
+   
         List<BezierControlPointMode> tmpModes = new List<BezierControlPointMode>(modes);        
         tmpModes.Insert((curveIndex / 3) + 1, modes[curveIndex / 3]);
         modes = tmpModes.ToArray();
@@ -431,10 +381,40 @@ public class Path_Spline : MonoBehaviour
     }
     private void RemovePoint(int pointIndex)
     {
-        //Casting to list because its easier
-        List<Vector3> tmp = new List<Vector3>(points);
-        if (pointIndex > points.Length) { Debug.LogError("Out Of Range Index"); return; }
-        tmp.RemoveAt(pointIndex);
-        points = tmp.ToArray();       
+        //Casting to list because its easier       
+        if (pointIndex > path.PointsEditor.Count - 1) { Debug.LogError("Out Of Range Index"); return; }
+        path.PointsEditor.RemoveAt(pointIndex);   
     }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        GameObject selectedObj = UnityEditor.Selection.activeGameObject;
+        if (selectedObj != gameObject)
+        {
+            if(path_spline.Points.Count > 0)
+            {
+                for (int i = 0; i < path_spline.Points.Count; i++)
+                {
+                    int nextI = i + 1;
+                    if (nextI >= path_spline.Points.Count)
+                    {
+                        if (loop)
+                        {
+                            nextI %= path_spline.Points.Count;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    Gizmos.DrawLine(path_spline.Points[i], path_spline.Points[nextI]);
+                }
+            }
+        }
+
+    }
+#endif
+
 }
+

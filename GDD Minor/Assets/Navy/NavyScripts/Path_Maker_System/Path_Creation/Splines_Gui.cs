@@ -1,7 +1,6 @@
 
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
 using static Path_Spline;
 
 [CustomEditor(typeof(Path_Spline))]
@@ -17,7 +16,7 @@ public class SplineGui : Editor
     private const float pickSize = .1f;
     private int selectedIndex = -1;
 
-    private const int lineSteps = 10;
+    private int lineSteps = 10;
 
     private static Color[] modeColors = {
         Color.white,
@@ -27,26 +26,25 @@ public class SplineGui : Editor
 
     public override void OnInspectorGUI()
     {
-        //DrawDefaultInspector();
+        DrawDefaultInspector();
         curve = (Path_Spline)target;
         EditorGUI.BeginChangeCheck();
 
         bool loop = EditorGUILayout.Toggle("Loop", curve.Loop);
         handleSize = EditorGUILayout.FloatField("Handle Size", curve.HandleSize);
 
+        //Rotates entire path
+        NormalsAngle = EditorGUILayout.Slider("Global Normals Angle", curve.GlobalNormalsAngle, 0, 360);
+        lineSteps = EditorGUILayout.IntSlider("Curve Smoothing", lineSteps, 1, 50);
+
         if (selectedIndex >= 0 && selectedIndex < curve.ControlPointCount)
         {
             DrawSelectedPointInspector();
            
         }
-        else
-        {
-            //Rotates entire path
-            NormalsAngle = EditorGUILayout.Slider("Global Normals Angle", curve.GlobalNormalsAngle, 0, 360);
-            
-        }     
         if (EditorGUI.EndChangeCheck())
         {
+            
             EditorUtility.SetDirty(curve);
             curve.HandleSize = handleSize;
             curve.GlobalNormalsAngle = NormalsAngle;
@@ -74,6 +72,10 @@ public class SplineGui : Editor
                 EditorUtility.SetDirty(curve);
             }
         }
+        if (EditorUtility.IsDirty(curve) || EditorUtility.IsDirty(curve.transform))
+        {
+            GeneratePath();
+        }
        
     }
    
@@ -99,8 +101,7 @@ public class SplineGui : Editor
             Handles.DrawBezier(p0, p3, p1, p2, Color.green, null, 6f);
             p0 = p3;
         }
-
-
+        
         ShowDirections();
     }
     private void DrawSelectedPointInspector()
@@ -147,17 +148,42 @@ public class SplineGui : Editor
        
         for (int i = 1; i <= steps; i++)
         {
-            tangent = curve.GetDirection(i / (float)steps) *.3f;
-            Handles.color = Color.green;
+            tangent = curve.GetDirection(i / (float)steps) *.5f;
+            Handles.color = Color.black;
             point = curve.GetPoint(i / (float)steps);            
             Handles.DrawLine(point, point + tangent);
-            Handles.color = Color.blue;
 
+            Handles.color = Color.blue;
             Vector3 n = curve.CalculateNormal(tangent, (i - 1) / (float)steps) * .3f;
             n = curve.RotateNormal(i / (float)steps, n);
             Handles.DrawLine(point, point + n);
         }
-    }   
+    }
+    void GeneratePath()
+    {
+        curve.Path_spline.Reset();
+        Vector3 point = curve.GetPoint(0f);
+        curve.Path_spline.Points.Add(point);
+
+        int steps = lineSteps * curve.CurveCount;
+
+        Vector3 tangent = curve.GetDirection(0f);
+        curve.Path_spline.Tangents.Add(tangent);
+
+        Vector3 n;        
+        for (int i = 1; i <= steps; i++)
+        {
+            tangent = curve.GetDirection(i / (float)steps);
+            point = curve.GetPoint(i / (float)steps);
+            n = curve.CalculateNormal(tangent, (i - 1) / (float)steps);
+            n = curve.RotateNormal(i / (float)steps, n);
+
+            curve.Path_spline.Points.Add(point);
+            curve.Path_spline.Tangents.Add(tangent);
+            curve.Path_spline.Normals.Add(n);
+        }
+    }
+
     private Vector3 ShowPoint(int index)
     {
         Vector3 point = handleTransform.TransformPoint(curve.GetControlPoint(index));
