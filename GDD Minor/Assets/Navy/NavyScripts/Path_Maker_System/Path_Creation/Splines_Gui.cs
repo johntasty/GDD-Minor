@@ -26,7 +26,7 @@ public class SplineGui : Editor
 
     public override void OnInspectorGUI()
     {
-        DrawDefaultInspector();
+        //DrawDefaultInspector();
         curve = (Path_Spline)target;
         EditorGUI.BeginChangeCheck();
 
@@ -168,9 +168,13 @@ public class SplineGui : Editor
         int steps = lineSteps * curve.CurveCount;
 
         Vector3 tangent = curve.GetDirection(0f);
+        Vector3 n;
         curve.Path_spline.Tangents.Add(tangent);
+        n = curve.CalculateNormal(tangent, 0f);
+        n = curve.RotateNormal(0f, n);
+        curve.Path_spline.Normals.Add(n);
 
-        Vector3 n;        
+               
         for (int i = 1; i <= steps; i++)
         {
             tangent = curve.GetDirection(i / (float)steps);
