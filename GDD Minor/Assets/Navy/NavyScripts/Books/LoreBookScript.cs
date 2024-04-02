@@ -10,6 +10,9 @@ using UnityEngine.UI;
 public class LoreBookScript : MonoBehaviour
 {
     [Header("Customisation Settings")]
+    [Tooltip("The font color of the text.")]
+    [SerializeField] private Color fontColor = Color.white;
+    [Tooltip("The color of the panel behind the text, in case readability needs to be improved.")]
     [SerializeField] private Color pageBackgroundColor;
     [SerializeField] private float fadeInDuration = 1f;
     [SerializeField] private float fadeOutDuration = 1f;
@@ -24,6 +27,7 @@ public class LoreBookScript : MonoBehaviour
     [SerializeField] private InputActionAsset inputManager;
     [SerializeField] private Look_Target_script lookTarget;
     [SerializeField] private TMP_Text pageContent;
+    [SerializeField] private TMP_Text pageContentOverflow;
     [SerializeField] private Image backgroundLeft;
     [SerializeField] private Image backgroundRight;
 
@@ -39,8 +43,10 @@ public class LoreBookScript : MonoBehaviour
 
         backgroundLeft.color = pageBackgroundColor;
         backgroundRight.color = pageBackgroundColor;
+
+        pageContent.color = fontColor;
+        pageContentOverflow.color = fontColor;
         
-        // prevPageButton.gameObject.SetActive(false);
         nextPageButton.gameObject.SetActive(_pageCount > 1);
         
         if (_pageCount > 0)
@@ -85,7 +91,6 @@ public class LoreBookScript : MonoBehaviour
 
     public void OnCloseBookClicked()
     {
-        // bookUI.gameObject.SetActive(false);
         StartCoroutine(FadeCanvasCoroutine(bookUI, 1f, 0f, fadeOutDuration, false));
         lookTarget.DisableViewing();
         Cursor.lockState = CursorLockMode.Locked;
@@ -99,26 +104,18 @@ public class LoreBookScript : MonoBehaviour
     
     IEnumerator FadeCanvasCoroutine(CanvasGroup canvas, float from, float to, float fadeDuration, bool activeAtEnd)
     {
-        // Initialize timer
         float elapsedTime = 0f;
-
-        // Gradually increase the alpha value of the canvas group over time
         while (elapsedTime < fadeDuration)
         {
-            // Calculate the interpolation factor
             float t = elapsedTime / fadeDuration;
-
-            // Interpolate between the current alpha value and 1 (fully opaque)
+            
             canvas.alpha = Mathf.Lerp(from, to, t);
 
-            // Increment the timer
             elapsedTime += Time.deltaTime;
 
-            // Wait for the next frame
             yield return null;
         }
 
-        // Ensure that the canvas is fully visible at the end of the fade-in duration
         canvas.alpha = to;
         canvas.gameObject.SetActive(activeAtEnd);
         
