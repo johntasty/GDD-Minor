@@ -81,38 +81,41 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
         if (!isGrounded)
         {
-            // Calculate jump direction based on camera direction for mid-air jumps
+            // Adjust for mid-air jumps based on camera direction
             Vector3 forward = playerCamera.transform.forward;
             Vector3 right = playerCamera.transform.right;
-        
-            forward.y = 0; // Neutralize vertical component for forward direction
-            right.y = 0;  // Neutralize vertical component for right direction
+
+            forward.y = 0;
+            right.y = 0;
 
             forward.Normalize();
             right.Normalize();
 
-            Vector3 intendedDirection = right * movementInput.x + forward * movementInput.y;
+            Vector3 intendedDirection = right / 2 * movementInput.x + forward / 2 * movementInput.y;
             intendedDirection.Normalize();
 
-            jumpDirection += intendedDirection; // airControl is used to modulate the influence of camera direction
+            jumpDirection += intendedDirection; // Modulate influence of camera direction in air
         }
 
         if (!isJumping)
         {
             rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z); // Reset vertical velocity
             rb.AddForce(jumpDirection * jumpForce, ForceMode.Impulse);
-            isJumping = true;
-            jumpTimeCounter = maxJumpTime;
+            isJumping = true; // Mark the player as currently jumping
+            jumpTimeCounter = maxJumpTime; // Reset jump time counter
 
             if (!isGrounded)
             {
-                hasDoubleJumped = true; // Set hasDoubleJumped to true if performing a double jump
+                hasDoubleJumped = true;
             }
         }
         else if (isJumping && jumpTimeCounter > 0)
         {
-            rb.AddForce(jumpDirection * (maxJumpForce - jumpForce) * (Time.deltaTime / maxJumpTime), ForceMode.Impulse);
-            jumpTimeCounter -= Time.deltaTime;
+            // Apply additional force over time up to a maximum defined by maxJumpTime
+            // The force is reduced as the jumpTimeCounter decreases
+            float additionalJumpForce = (jumpForce + (maxJumpForce - jumpForce) * (jumpTimeCounter / maxJumpTime));
+            rb.AddForce(jumpDirection * additionalJumpForce * Time.deltaTime, ForceMode.Impulse);
+            jumpTimeCounter -= Time.deltaTime; // Decrement the counter
         }
     }
     
@@ -189,7 +192,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
     private void CheckGrounded()
     {
-        isGrounded = Physics.CheckBox(transform.position - new Vector3(0, -0.04f, 0), new Vector3(0.1f, 0.1f, 0.1f), Quaternion.identity, groundLayer, QueryTriggerInteraction.Ignore);
+        isGrounded = Physics.CheckBox(transform.position - new Vector3(0, -0.04f, 0), new Vector3(0.2f, 0.1f, 0.2f), Quaternion.identity, groundLayer, QueryTriggerInteraction.Ignore);
         if (isGrounded) hasDoubleJumped = false; // Reset double jump if grounded
     }
     

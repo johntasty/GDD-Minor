@@ -1,0 +1,182 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8193414316810439896
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: CustomVolumeFeatureBlur
+  m_EditorClassIdentifier: Assembly-CSharp::CustomVolumeFeatureBlur
+  active: 1
+  intensity:
+    m_OverrideState: 1
+    m_Value: 1
+  _Samples:
+    m_OverrideState: 1
+    m_Value: 10
+  _Strenght:
+    m_OverrideState: 1
+    m_Value: 1
+  _Radius:
+    m_OverrideState: 1
+    m_Value: 2.88
+  _MaskCenterSize:
+    m_OverrideState: 1
+    m_Value: 0.317
+  _MaskEdge:
+    m_OverrideState: 1
+    m_Value: 0.65
+--- !u!114 &-4142148734073102374
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72c443c8020dc9f4595afebc42daa074, type: 3}
+  m_Name: CustomVolumeFeatureLines
+  m_EditorClassIdentifier: 
+  active: 1
+  intensity:
+    m_OverrideState: 1
+    m_Value: 0.164
+  radial:
+    m_OverrideState: 1
+    m_Value: 0
+  LineThickness:
+    m_OverrideState: 1
+    m_Value: 8.3
+  _MaskCenterSize:
+    m_OverrideState: 1
+    m_Value: 0.234
+  _MaskEdge:
+    m_OverrideState: 1
+    m_Value: 0.746
+  _LineDensity:
+    m_OverrideState: 1
+    m_Value: 1
+  _RotationSpeed:
+    m_OverrideState: 1
+    m_Value: 0.4
+  _LineFallOff:
+    m_OverrideState: 1
+    m_Value: 0.677
+  overLayColor:
+    m_OverrideState: 1
+    m_Value: {r: 0, g: 1, b: 0.78378844, a: 1}
+    hdr: 0
+--- !u!114 &-2029919915679226374
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: CustomVolumeFeatureBlur
+  m_EditorClassIdentifier: Assembly-CSharp::CustomVolumeFeatureBlur
+  active: 1
+  intensity:
+    m_OverrideState: 1
+    m_Value: 1
+  _Samples:
+    m_OverrideState: 1
+    m_Value: 10
+  _Strenght:
+    m_OverrideState: 1
+    m_Value: 1
+  _Radius:
+    m_OverrideState: 1
+    m_Value: 1.17
+  _MaskCenterSize:
+    m_OverrideState: 1
+    m_Value: 0
+  _MaskEdge:
+    m_OverrideState: 1
+    m_Value: 0.918
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7fd9488000d3734a9e00ee676215985, type: 3}
+  m_Name: Global Volume Profile
+  m_EditorClassIdentifier: 
+  components:
+  - {fileID: -4142148734073102374}
+  - {fileID: 57364088617480134}
+--- !u!114 &57364088617480134
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a00fb2015892a0b40894d00e82aeb30a, type: 3}
+  m_Name: CustomVolumeFeatureBlur
+  m_EditorClassIdentifier: 
+  active: 1
+  intensity:
+    m_OverrideState: 1
+    m_Value: 1
+  _Samples:
+    m_OverrideState: 1
+    m_Value: 10
+  _Strenght:
+    m_OverrideState: 1
+    m_Value: 1
+  _Radius:
+    m_OverrideState: 1
+    m_Value: 0.8
+  _MaskCenterSize:
+    m_OverrideState: 1
+    m_Value: 0.03
+  _MaskEdge:
+    m_OverrideState: 1
+    m_Value: 0.751
+--- !u!114 &7301943893372166259
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: CustomVolumeFeatureBlur
+  m_EditorClassIdentifier: Assembly-CSharp::CustomVolumeFeatureBlur
+  active: 1
+  intensity:
+    m_OverrideState: 1
+    m_Value: 0
+  _Samples:
+    m_OverrideState: 1
+    m_Value: 10
+  _Strenght:
+    m_OverrideState: 1
+    m_Value: 1
+  _Radius:
+    m_OverrideState: 1
+    m_Value: 4.63
+  _MaskCenterSize:
+    m_OverrideState: 1
+    m_Value: 0.095
+  _MaskEdge:
+    m_OverrideState: 1
+    m_Value: 0.862
