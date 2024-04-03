@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class DataPersistenceManager : MonoBehaviour
 {
@@ -9,30 +10,48 @@ public class DataPersistenceManager : MonoBehaviour
     [SerializeField] private string fileName;
 
     public static DataPersistenceManager instance { get; private set; }
+    public GameData gameData;
 
     private FileDataHandler dataHandler;
-    private GameData gameData;
     private List<IDataPersistence> dataPersistenceObjects;
+    private bool loadSavedGame = false;
 
     private void Awake()
     {
-        if(instance != null)
+        /*if (instance == null)
         {
-            Debug.LogError("More than one Data Persistence Manager in the scene");
+            instance = this;
+            DontDestroyOnLoad(gameObject);
         }
-        instance = this;
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }*/
+
+        this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
+        this.dataPersistenceObjects = FindAllDataPersistenceObjects();
     }
 
     private void Start()
     {
-        this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
-        this.dataPersistenceObjects = FindAllDataPersistenceObjects();
+        if (loadSavedGame)
+        {
+            LoadGame();
+        }
+        else
+        {
+            NewGame();
+        }
 
     }
 
     public void NewGame()
     {
         this.gameData = new GameData();
+
+        
+        //ApplyGameData();
     }
 
     public void LoadGame()
@@ -43,11 +62,14 @@ public class DataPersistenceManager : MonoBehaviour
         {
             NewGame();
         }
-
-        foreach(IDataPersistence dataPersistenceObj in dataPersistenceObjects)
+        else
         {
-            dataPersistenceObj.LoadData(gameData);
+            Debug.Log("Game data loaded.");
+            ApplyGameData();
         }
+
+        
+        
     }
 
     public void SaveGame()
@@ -57,6 +79,21 @@ public class DataPersistenceManager : MonoBehaviour
             dataPersistenceObj.SaveData(ref gameData);
         }
         dataHandler.Save(gameData);
+        ApplyGameData();
+    }
+
+    public void SetLoadSavedGame(bool value)
+    {
+        loadSavedGame = value;
+        
+    }
+
+    private void ApplyGameData()
+    {
+        foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
+        {
+            dataPersistenceObj.LoadData(gameData);
+        }
     }
 
     private List<IDataPersistence> FindAllDataPersistenceObjects()
@@ -64,5 +101,29 @@ public class DataPersistenceManager : MonoBehaviour
         IEnumerable<IDataPersistence> dataPersistenceObjects = FindObjectsOfType<MonoBehaviour>().OfType<IDataPersistence>();
 
         return new List<IDataPersistence>(dataPersistenceObjects);
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (loadSavedGame && scene.name == "Svetlin-testing-safe-game")
+        {
+            LoadGame();
+        }
+        
+    }
+
+    private void OnApplicationQuit()
+    {
+        SaveGame();
     }
 }
