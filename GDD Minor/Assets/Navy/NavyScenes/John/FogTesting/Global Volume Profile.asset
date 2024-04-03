@@ -52,22 +52,22 @@ MonoBehaviour:
     m_Value: 0
   LineThickness:
     m_OverrideState: 1
-    m_Value: 6.5
+    m_Value: 8.3
   _MaskCenterSize:
     m_OverrideState: 1
-    m_Value: 0.33
+    m_Value: 0.234
   _MaskEdge:
     m_OverrideState: 1
-    m_Value: 0.782
+    m_Value: 0.746
   _LineDensity:
     m_OverrideState: 1
-    m_Value: 0.4
+    m_Value: 1
   _RotationSpeed:
     m_OverrideState: 1
     m_Value: 0.4
   _LineFallOff:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0.677
   overLayColor:
     m_OverrideState: 1
     m_Value: {r: 0, g: 1, b: 0.78378844, a: 1}
@@ -117,7 +117,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   components:
   - {fileID: -4142148734073102374}
-  - {fileID: 7301943893372166259}
+  - {fileID: 57364088617480134}
+--- !u!114 &57364088617480134
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a00fb2015892a0b40894d00e82aeb30a, type: 3}
+  m_Name: CustomVolumeFeatureBlur
+  m_EditorClassIdentifier: 
+  active: 1
+  intensity:
+    m_OverrideState: 1
+    m_Value: 1
+  _Samples:
+    m_OverrideState: 1
+    m_Value: 10
+  _Strenght:
+    m_OverrideState: 1
+    m_Value: 1
+  _Radius:
+    m_OverrideState: 1
+    m_Value: 0.8
+  _MaskCenterSize:
+    m_OverrideState: 1
+    m_Value: 0.03
+  _MaskEdge:
+    m_OverrideState: 1
+    m_Value: 0.751
 --- !u!114 &7301943893372166259
 MonoBehaviour:
   m_ObjectHideFlags: 3
