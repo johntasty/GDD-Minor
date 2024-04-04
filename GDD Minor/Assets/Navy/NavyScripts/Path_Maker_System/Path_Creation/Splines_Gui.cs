@@ -1,5 +1,6 @@
 
 using UnityEditor;
+using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using static Path_Spline;
 
@@ -17,6 +18,8 @@ public class SplineGui : Editor
     private int selectedIndex = -1;
 
     private int lineSteps = 10;
+
+    ArcHandle m_ArcHandle = new ArcHandle();
 
     private static Color[] modeColors = {
         Color.white,
@@ -43,12 +46,11 @@ public class SplineGui : Editor
            
         }
         if (EditorGUI.EndChangeCheck())
-        {
-            
-            EditorUtility.SetDirty(curve);
+        {            
             curve.HandleSize = handleSize;
             curve.GlobalNormalsAngle = NormalsAngle;
             curve.Loop = loop;
+            EditorUtility.SetDirty(curve);
         }
         if (GUILayout.Button("Add Curve"))
         {
@@ -63,12 +65,16 @@ public class SplineGui : Editor
                 EditorUtility.SetDirty(curve);
             }
             if (GUILayout.Button("Insert Curve"))
-            {
-                //point from 0-1 from all points
+            {                
                 int cu = (selectedIndex / 3);
                 float po = (float)cu / (float)(curve.CurveCount);
                
                 curve.InsertCurve(selectedIndex, po );
+                EditorUtility.SetDirty(curve);
+            }
+            if (GUILayout.Button("Reset Angles"))
+            {               
+                curve.ResetNormals();
                 EditorUtility.SetDirty(curve);
             }
         }
@@ -191,7 +197,7 @@ public class SplineGui : Editor
     private Vector3 ShowPoint(int index)
     {
         Vector3 point = handleTransform.TransformPoint(curve.GetControlPoint(index));
-        Quaternion pointRotation = handleRotation;
+        float pointRotation = handleRotation.eulerAngles.x;
         
         float size = HandleUtility.GetHandleSize(point);
         if (index == 0)
@@ -199,7 +205,7 @@ public class SplineGui : Editor
             size *= 2f;
         }
         Handles.color = modeColors[(int)curve.GetControlPointMode(index)];
-        if (Handles.Button(point, handleRotation, size * handleSize, size * pickSize, Handles.DotHandleCap))
+        if (Handles.Button(point, handleRotation, size * handleSize, size * pickSize, index % 3 == 0 ? Handles.CubeHandleCap : Handles.CircleHandleCap))
         {
             selectedIndex = index;
             Repaint();
@@ -207,17 +213,12 @@ public class SplineGui : Editor
         if (selectedIndex == index)
         {
             EditorGUI.BeginChangeCheck();            
-            if(Tools.current == Tool.Rotate && selectedIndex % 3 == 0) 
-            {                
-                pointRotation = Handles.DoRotationHandle(handleRotation, point); 
-
-            }else { point = Handles.DoPositionHandle(point, handleRotation); }
+            point = Handles.DoPositionHandle(point, handleRotation);
 
             if (EditorGUI.EndChangeCheck())
             {
                 EditorUtility.SetDirty(curve);               
-                curve.SetControlPoint(index, handleTransform.InverseTransformPoint(point));
-                
+                curve.SetControlPoint(index, handleTransform.InverseTransformPoint(point));               
             }
         }
         return point;

@@ -66,7 +66,12 @@ public class Path_Spline : MonoBehaviour
         path.Angles[index] = angle;
         if (loop)
         {
-            path.Angles[path.Angles.Count - 1] = angle;
+            if(index == path.Angles.Count - 1 || index == 0)
+            {
+                path.Angles[path.Angles.Count - 1] = angle;
+                path.Angles[0] = angle;
+            }
+            
         }
 
     }
@@ -200,6 +205,15 @@ public class Path_Spline : MonoBehaviour
 
         path_spline = new Spline_Path();
     }
+    public void ResetNormals()
+    {
+        for (int i = 0; i < path.Angles.Count; i++)
+        {
+            path.Angles[i] = 0f;
+        }
+        GlobalNormalsAngle = 0f;
+    }
+
     public Vector3 GetPoint(float t)
     {
         int length = path.PointsEditor.Count;
@@ -386,6 +400,7 @@ public class Path_Spline : MonoBehaviour
         path.PointsEditor.RemoveAt(pointIndex);   
     }
 
+    
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
