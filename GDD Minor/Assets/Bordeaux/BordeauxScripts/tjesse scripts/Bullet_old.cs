@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
  
-public class Bullet : MonoBehaviour
+public class Bullet_old : MonoBehaviour
 {
     public float life = 3;
  
