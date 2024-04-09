@@ -11,7 +11,7 @@ public class PauseManager : MonoBehaviour
     public bool pauseMenuInput { get; private set; }
     [SerializeField]
     GameObject canvasUi;
-    bool paused = false;
+    //bool paused = false;
     private PlayerInput playerInput;
     private InputAction pauseAction;
 

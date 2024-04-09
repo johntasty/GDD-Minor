@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(AudioSource))]
 public class PlayerController : MonoBehaviour, IDataPersistence
 {
     [SerializeField] private float moveSpeed = 10.0f;
@@ -11,7 +12,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     [SerializeField] private float jumpForce = 5.0f;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Camera playerCamera;
-    [SerializeField] private float groundDrag = 6.0f; // Adjusted for more natural deceleration
+    //[SerializeField] private float groundDrag = 6.0f; // Adjusted for more natural deceleration
     [SerializeField] private float airDrag = 0.4f; // Adjusted for more consistent air movement
     [SerializeField] private float airControl = 0.3f; // This is now a multiplier for how much control you have in the air
     [SerializeField] private MenuManager pauseMenu;
@@ -20,6 +21,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     [SerializeField] private float highGroundDrag;
     [SerializeField] private float maxJumpForce = 10.0f; // The maximum force applied when holding the jump button
     [SerializeField] private float maxJumpTime = 0.5f; // The maximum time the jump button can be held to increase jump height
+    [SerializeField] private AudioClip footstepSoundClip;
+    [SerializeField] private AudioClip jumpSoundClip;
 
     private bool isSprinting = false;
     private bool isJumping = false;
@@ -28,6 +31,10 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     private Vector2 movementInput;
     private bool isGrounded;
     private bool hasDoubleJumped = false;
+    private float footstepTimer = 0f;
+    private float footstepInterval = 0.5f;
+    private float jumpTimer = 0f;
+    private float jumpInterval = 0.5f;
 
     public void LoadData(GameData data)
     {
@@ -62,6 +69,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             if (isGrounded || (!hasDoubleJumped && !isGrounded))
             {
                 Jump();
+                GetComponent<AudioSource>().PlayOneShot(jumpSoundClip);
             }
         }
         else
@@ -69,7 +77,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             isJumping = false; // Reset when the jump button is released
         }
     }
-    
+
     public void OnSprint(InputValue value)
     {
         isSprinting = value.isPressed;
@@ -118,12 +126,15 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             jumpTimeCounter -= Time.deltaTime; // Decrement the counter
         }
     }
-    
-    void FixedUpdate() {
-        if (!pauseMenu.isPaused) {
+
+    void FixedUpdate()
+    {
+        if (!pauseMenu.isPaused)
+        {
             MovePlayer();
 
-            if (!isGrounded) {
+            if (!isGrounded)
+            {
                 ApplyAirDrag(); // Now also handles air movement direction change
             }
         }
@@ -133,47 +144,63 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         }
     }
 
-    private void Update() {
+    private void Update()
+    {
         CheckGrounded();
         Pvelocity = rb.velocity;
         AdjustGroundDrag();
     }
-    
-    private void AdjustGroundDrag() {
-        if (isGrounded) {
+
+    private void AdjustGroundDrag()
+    {
+        if (isGrounded)
+        {
             // Apply lower drag if moving, higher if stationary to allow for instant stopping
             rb.drag = (movementInput.magnitude > 0) ? lowGroundDrag : highGroundDrag;
-        } else {
+        }
+        else
+        {
             rb.drag = airDrag; // Use air drag when not grounded
         }
     }
 
-    private void MovePlayer() {
+    private void MovePlayer()
+    {
         // Get the right and forward direction of the camera on the horizontal plane
         Vector3 forward = playerCamera.transform.forward;
         Vector3 right = playerCamera.transform.right;
-    
+
         // Zero out the y component to keep movement on the horizontal plane
         forward.y = 0;
         right.y = 0;
-    
+
         forward.Normalize();
         right.Normalize();
 
         // Calculate movement direction based on input and camera orientation
         Vector3 movementDirection = right * movementInput.x + forward * movementInput.y;
-        
+
         float currentSpeed = isSprinting ? sprintSpeed : moveSpeed;
 
         // Ground movement
-        if (isGrounded) {
+        if (isGrounded)
+        {
+            footstepTimer += Time.deltaTime;
+
+            if (footstepTimer >= footstepInterval && (movementInput.x != 0 || movementInput.y != 0))
+            {
+                GetComponent<AudioSource>().PlayOneShot(footstepSoundClip);
+                footstepTimer = 0f;
+            }
+
             Vector3 forceDirection = movementDirection * currentSpeed - rb.velocity;
             forceDirection.y = 0; // Keep vertical velocity unaffected
             rb.AddForce(forceDirection, ForceMode.VelocityChange);
         }
     }
 
-    private void ApplyAirDrag() {
+    private void ApplyAirDrag()
+    {
         // Calculate the intended air movement direction
         Vector3 airMovementDirection = playerCamera.transform.right * movementInput.x + playerCamera.transform.forward * movementInput.y;
         airMovementDirection.Normalize();
@@ -195,8 +222,9 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         isGrounded = Physics.CheckBox(transform.position - new Vector3(0, -0.04f, 0), new Vector3(0.2f, 0.1f, 0.2f), Quaternion.identity, groundLayer, QueryTriggerInteraction.Ignore);
         if (isGrounded) hasDoubleJumped = false; // Reset double jump if grounded
     }
-    
-    void OnDrawGizmos() {
+
+    void OnDrawGizmos()
+    {
         // Set the color of the Gizmo (optional)
         Gizmos.color = Color.red;
 
