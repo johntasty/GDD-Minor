@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             isJumping = false; // Reset when the jump button is released
         }
     }
-    
+
     public void OnSprint(InputValue value)
     {
         isSprinting = value.isPressed;
@@ -118,12 +118,15 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             jumpTimeCounter -= Time.deltaTime; // Decrement the counter
         }
     }
-    
-    void FixedUpdate() {
-        if (!pauseMenu.isPaused) {
+
+    void FixedUpdate()
+    {
+        if (!pauseMenu.isPaused)
+        {
             MovePlayer();
 
-            if (!isGrounded) {
+            if (!isGrounded)
+            {
                 ApplyAirDrag(); // Now also handles air movement direction change
             }
         }
@@ -133,47 +136,60 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         }
     }
 
-    private void Update() {
+    private void Update()
+    {
         CheckGrounded();
         Pvelocity = rb.velocity;
         AdjustGroundDrag();
     }
-    
-    private void AdjustGroundDrag() {
-        if (isGrounded) {
+
+    private void AdjustGroundDrag()
+    {
+        if (isGrounded)
+        {
             // Apply lower drag if moving, higher if stationary to allow for instant stopping
             rb.drag = (movementInput.magnitude > 0) ? lowGroundDrag : highGroundDrag;
-        } else {
+        }
+        else
+        {
             rb.drag = airDrag; // Use air drag when not grounded
         }
     }
 
-    private void MovePlayer() {
+    private void MovePlayer()
+    {
         // Get the right and forward direction of the camera on the horizontal plane
         Vector3 forward = playerCamera.transform.forward;
         Vector3 right = playerCamera.transform.right;
-    
+
         // Zero out the y component to keep movement on the horizontal plane
         forward.y = 0;
         right.y = 0;
-    
+
         forward.Normalize();
         right.Normalize();
 
         // Calculate movement direction based on input and camera orientation
         Vector3 movementDirection = right * movementInput.x + forward * movementInput.y;
-        
+
         float currentSpeed = isSprinting ? sprintSpeed : moveSpeed;
 
         // Ground movement
-        if (isGrounded) {
+        if (isGrounded)
+        {
             Vector3 forceDirection = movementDirection * currentSpeed - rb.velocity;
             forceDirection.y = 0; // Keep vertical velocity unaffected
             rb.AddForce(forceDirection, ForceMode.VelocityChange);
         }
+        else
+        {
+            Vector3 airForceDirection = movementDirection.normalized * currentSpeed;
+            rb.AddForce(airForceDirection * Time.deltaTime, ForceMode.VelocityChange);
+        }
     }
 
-    private void ApplyAirDrag() {
+    private void ApplyAirDrag()
+    {
         // Calculate the intended air movement direction
         Vector3 airMovementDirection = playerCamera.transform.right * movementInput.x + playerCamera.transform.forward * movementInput.y;
         airMovementDirection.Normalize();
@@ -195,8 +211,9 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         isGrounded = Physics.CheckBox(transform.position - new Vector3(0, -0.04f, 0), new Vector3(0.2f, 0.1f, 0.2f), Quaternion.identity, groundLayer, QueryTriggerInteraction.Ignore);
         if (isGrounded) hasDoubleJumped = false; // Reset double jump if grounded
     }
-    
-    void OnDrawGizmos() {
+
+    void OnDrawGizmos()
+    {
         // Set the color of the Gizmo (optional)
         Gizmos.color = Color.red;
 
