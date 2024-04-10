@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: FogVolumetric
+  m_Shader: {fileID: 4800000, guid: bdf8a729f69de6e4495edc5198705b02, type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 7ef05de05db3f144e967ef6c57b7d7b8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex2d:
+        m_Texture: {fileID: 2800000, guid: 264dfe07275064b45b47f4d254b7cbd7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex3D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTexS:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Noise:
+        m_Texture: {fileID: 2800000, guid: 7ef05de05db3f144e967ef6c57b7d7b8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _Accuracy: 1
+    - _DensRemoval: 1.4
+    - _DensityScale: 3
+    - _Distance: 35
+    - _Extinction: 0.2
+    - _Inscatter: 0.16
+    - _Intensity: 0.45
+    - _LightScPower: 0.04
+    - _LightScatter: 0.14
+    - _MaxLights: 15
+    - _MaxSteps: 20
+    - _NoiseMovement: 3
+    - _NoiseStrength: 0.2
+    - _NoiseTilling: 2.49
+    - _NoiseWeight: 0.5
+    - _Offsets: 0
+    - _Range: 35
+    - _Scatter: 0.75
+    - _Scattering: 2.61
+    - _Tilling: 2.34
+    - _TimerRange: 0.37
+    - _TimerRangeY: 1
+    m_Colors:
+    - _Bounds: {r: 2.02, g: 0.26, b: 1.01, a: 0.3}
+    - _Color: {r: 0.48095408, g: 0.5125193, b: 0.5283019, a: 0}
+    - _ColorAmbient: {r: 0.2834194, g: 0.30104133, b: 0.31132078, a: 0}
+    - _ColorFog: {r: 1, g: 1, b: 1, a: 0}
+    - _Edge: {r: 1, g: 1, b: 1.6, a: 0.3}
+    - _Offsets: {r: 53, g: 113, b: 0, a: 0.02}
+    - _Range: {r: -25.91, g: 20, b: 0, a: 0}
+  m_BuildTextureStacks: []
