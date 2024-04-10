@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI; // Required for the NavMeshAgent
+// GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>();
 
 public class Enemy_follow : MonoBehaviour
 {
