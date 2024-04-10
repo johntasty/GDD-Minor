@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(AudioSource))]
 public class PlayerController : MonoBehaviour, IDataPersistence
 {
     [SerializeField] private float moveSpeed = 10.0f;
@@ -11,7 +12,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     [SerializeField] private float jumpForce = 5.0f;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Camera playerCamera;
-    [SerializeField] private float groundDrag = 6.0f; // Adjusted for more natural deceleration
+    //[SerializeField] private float groundDrag = 6.0f; // Adjusted for more natural deceleration
     [SerializeField] private float airDrag = 0.4f; // Adjusted for more consistent air movement
     [SerializeField] private float airControl = 0.3f; // This is now a multiplier for how much control you have in the air
     [SerializeField] private MenuManager pauseMenu;
@@ -20,6 +21,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     [SerializeField] private float highGroundDrag;
     [SerializeField] private float maxJumpForce = 10.0f; // The maximum force applied when holding the jump button
     [SerializeField] private float maxJumpTime = 0.5f; // The maximum time the jump button can be held to increase jump height
+    [SerializeField] private AudioClip footstepSoundClip;
+    [SerializeField] private AudioClip jumpSoundClip;
 
     private bool isSprinting = false;
     private bool isJumping = false;
@@ -28,6 +31,10 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     private Vector2 movementInput;
     private bool isGrounded;
     private bool hasDoubleJumped = false;
+    private float footstepTimer = 0f;
+    private float footstepInterval = 0.5f;
+    private float jumpTimer = 0f;
+    private float jumpInterval = 0.5f;
 
     public void LoadData(GameData data)
     {
@@ -62,6 +69,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             if (isGrounded || (!hasDoubleJumped && !isGrounded))
             {
                 Jump();
+                GetComponent<AudioSource>().PlayOneShot(jumpSoundClip);
             }
         }
         else
@@ -177,6 +185,14 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         // Ground movement
         if (isGrounded)
         {
+            footstepTimer += Time.deltaTime;
+
+            if (footstepTimer >= footstepInterval && (movementInput.x != 0 || movementInput.y != 0))
+            {
+                GetComponent<AudioSource>().PlayOneShot(footstepSoundClip);
+                footstepTimer = 0f;
+            }
+
             Vector3 forceDirection = movementDirection * currentSpeed - rb.velocity;
             forceDirection.y = 0; // Keep vertical velocity unaffected
             rb.AddForce(forceDirection, ForceMode.VelocityChange);
