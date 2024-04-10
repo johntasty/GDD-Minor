@@ -197,6 +197,11 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             forceDirection.y = 0; // Keep vertical velocity unaffected
             rb.AddForce(forceDirection, ForceMode.VelocityChange);
         }
+        else
+        {
+            Vector3 airForceDirection = movementDirection.normalized * currentSpeed;
+            rb.AddForce(airForceDirection * Time.deltaTime, ForceMode.VelocityChange);
+        }
     }
 
     private void ApplyAirDrag()
