@@ -23,7 +23,7 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Health.GetComponent<currenHealth>.DecreaseHealth(10);
+        //Health.GetComponent<currenHealth>.DecreaseHealth(10);
         
         Destroy(this.gameObject);
 
