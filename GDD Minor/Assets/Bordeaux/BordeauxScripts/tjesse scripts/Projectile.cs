@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-
 public class Projectile : MonoBehaviour
 {
     public float speed = 20f;
     private float lifeDuration = 5f;
 
+    public float damageAmount = 10f; // Amount of damage of the projectile 
+
 
     void Start()
     {
         Destroy(this.gameObject, lifeDuration);
+       
 
     }
 
@@ -23,8 +25,13 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        //Health.GetComponent<currenHealth>.DecreaseHealth(10);
-        
+        Health health = collision.gameObject.GetComponent<Health>();
+
+        if (health != null)
+        {
+            // Decrease the health of the player, maybe add a check tag if its hit a enemy or any other game object...
+            health.DecreaseHealth(damageAmount);
+        }
         Destroy(this.gameObject);
 
 
