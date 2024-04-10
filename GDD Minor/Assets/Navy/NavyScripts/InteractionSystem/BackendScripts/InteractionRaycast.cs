@@ -35,7 +35,7 @@ public class InteractionRaycast
     public IObjectInteractable Cast()
     {
         Ray ray = _playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        Debug.DrawRay(ray.origin, ray.direction * _maxInteractionDistance, Color.green);
+        
         bool isHit = Physics.Raycast(ray, out var hitInfo, _maxInteractionDistance, _interactionLayers);       
         if (!isHit)
         {
