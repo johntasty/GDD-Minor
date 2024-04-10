@@ -20,7 +20,7 @@ namespace Bordeaux.BordeauxScripts
 
         private void Update()
         {
-            text.text = currentTokens.ToString();
+            // text.text = currentTokens.ToString();
         }
 
         public bool RequestToken()
