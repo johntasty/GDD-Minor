@@ -5,17 +5,28 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-   [SerializeField] private string sceneName;
    
+    public string gameSceneName = "Svetlin-testing-safe-game";
 
-    public void changeScene()
+    
+    public DataPersistenceManager dataPersistenceManager;
+
+    public void LoadGameScene()
     {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(sceneName);
+        
+        dataPersistenceManager.SetLoadSavedGame(true);
+
+        
+        SceneManager.LoadScene(gameSceneName);
+        
     }
 
-    public void exitGame()
+    public void NewGame()
     {
-        Application.Quit();
+        
+        dataPersistenceManager.NewGame();
+
+        SceneManager.LoadScene(gameSceneName);
+        
     }
 }
