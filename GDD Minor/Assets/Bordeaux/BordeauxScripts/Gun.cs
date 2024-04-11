@@ -9,8 +9,6 @@ public class Gun : MonoBehaviour
     //semi-auto if false, auto if true
     public bool Automatic;
 
-    public bool shooting;
-
     private float currentCooldown;
     
     // Start is called before the first frame update
@@ -22,32 +20,23 @@ public class Gun : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Automatic) shooting = Input.GetMouseButton(0);
-        else shooting = Input.GetMouseButtonDown(0);
-
-        if(shooting && currentCooldown <= 0f) {
-			OnGunShoot?.Invoke();
-			currentCooldown = cooldownFire;
-		}
+        if (Automatic) {
+            if (Input.GetMouseButton(0)) {
+                if (currentCooldown <= 0f) {
+                    OnGunShoot?.Invoke();
+                    currentCooldown = cooldownFire;
+                }
+            }
+        }
+        else {
+            if (Input.GetMouseButtonDown(0)) {
+                if (currentCooldown <= 0f) {
+                    OnGunShoot?.Invoke();
+                    currentCooldown = cooldownFire;
+                }
+            }
+        }
 
         currentCooldown -= Time.deltaTime;
-
-		//if (Automatic) {
-  //          if (shooting) {
-  //              if (currentCooldown <= 0f) {
-		//			OnGunShoot?.Invoke();
-		//			currentCooldown = cooldownFire;
-		//		}
-  //          }
-  //      }
-  //      else {
-  //          if (Input.GetMouseButtonDown(0)) {
-  //              if (currentCooldown <= 0f) {
-  //                  OnGunShoot?.Invoke();
-  //                  currentCooldown = cooldownFire;
-  //              }
-  //          }
-  //      }
-
     }
 }
