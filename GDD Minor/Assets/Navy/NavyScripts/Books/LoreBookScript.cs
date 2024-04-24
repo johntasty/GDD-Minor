@@ -37,8 +37,8 @@ public class LoreBookScript : MonoBehaviour
 
     private void Start()
     {
-        var activeCam = CinemachineCore.Instance.GetActiveBrain(0).ActiveVirtualCamera;
-        _playerCamera = (CinemachineVirtualCamera) activeCam;
+        // var activeCam = CinemachineCore.Instance.GetActiveBrain(0).ActiveVirtualCamera;
+        // _playerCamera = (CinemachineVirtualCamera) activeCam;
         _pageCount = pages.Count;
 
         backgroundLeft.color = pageBackgroundColor;
@@ -76,7 +76,7 @@ public class LoreBookScript : MonoBehaviour
 
 
         inputManager.Disable();
-        _playerCamera.gameObject.SetActive(false);
+        // _playerCamera.gameObject.SetActive(false);
     }
 
     public void OnPreviousPageClicked()
@@ -98,7 +98,7 @@ public class LoreBookScript : MonoBehaviour
         
 
         inputManager.Enable();
-        _playerCamera.gameObject.SetActive(true);
+        // _playerCamera.gameObject.SetActive(true);
 
     }
     
