@@ -20,9 +20,11 @@ public class RopeNode
         _oldPosition = _position = newPosition;
     }
 
-    public void UpdateNode(Vector3 gravity) 
+    public void UpdateNode(Vector3 gravity, float damp) 
     { 
-        Vector3 curVelocity = this.Velocity;        
+        Vector3 curVelocity = this.Velocity;
+        curVelocity *= damp;
+
         Vector3 newPos = this.Position + curVelocity;
         newPos += gravity * Time.fixedDeltaTime;
         this.UpdatePositions(newPos);

@@ -1,7 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
+using static TriggerObject;
 
 
 public class RopeCompoment : MonoBehaviour
@@ -11,13 +14,13 @@ public class RopeCompoment : MonoBehaviour
 
     [SerializeField] Transform starPoint;
     [SerializeField] Transform endPoint;
+    [SerializeField] LayerMask m_LayerMask;
+    [SerializeField] ReferenceFloat ropeLength;
+    [SerializeField] ReferenceFloat ropeWidth;
+    [SerializeField] ReferenceInt RopePoints;
 
-    [SerializeField] float ropeLength = 0.5f;
-    [SerializeField] float ropeWidth = 4;
-    [SerializeField] int numPoints = 25;
 
-
-    [SerializeField] int iterations = 2;
+    [SerializeField] ReferenceInt iterations;
 
     [SerializeField, Range(0, 1)] float stiffness;
     [SerializeField, Range(0, 1)] float dampen;
@@ -26,16 +29,30 @@ public class RopeCompoment : MonoBehaviour
     private int segments = 0;
     private float segmentLength;
     private LineRenderer line;
-    public RopeNode[] nodes;
+    private RopeNode[] nodes;
+    Matrix4x4[] matrices;
     Vector3 gravityDisplacement;
+    
+    Collider[] hitColliders = new Collider[2];
+    Collider endPointCollider;
+
+    Vector3 collisionDirection;
+    Vector3 CrossDir;
+    Vector3 otherCollider;
+    Quaternion otherColliderRot;
+    float collisionDistance;
+
+    private float RopeLength { get { return (ropeLength / 10f);}}
+
     private void Start()
     {
         initPoints();
-        InitLineRenderer();
+        //InitLineRenderer();
     }
     private void Update()
     {
-        RenderRope();
+        //RenderRope();
+        Graphics.DrawMeshInstanced(mesh, 0, material, matrices, segments);
     }
    
     private void FixedUpdate()
@@ -45,9 +62,24 @@ public class RopeCompoment : MonoBehaviour
         {
             
             UpdateConstrains();
+            if(i % 2 == 0)
+            {
+                Collide();
+            }
+        }
+        TranslateMatrices();
+    }
+
+    void TranslateMatrices()
+    {
+        for (int i = 0; i < segments; i++)
+        {
+            Vector3 dir = (nodes[i + 1].Position - nodes[i].Position).normalized;
+            Quaternion desiredRotation = Quaternion.LookRotation(dir, Vector3.right);
+
+            matrices[i].SetTRS(nodes[i].Position, desiredRotation, Vector3.one * ropeWidth);
         }
     }
-    
     private void RenderRope()
     {
         for (int i = 0; i < segments + 1; i++)
@@ -57,15 +89,16 @@ public class RopeCompoment : MonoBehaviour
     }
     void UpdateGravity()
     {
-        gravityDisplacement = Time.fixedDeltaTime * (Vector3.up * (-2f * gravity));
+        //gravityDisplacement = (Vector3.up * (-2f * gravity));
         foreach (RopeNode node in nodes)
         {
-            node.UpdateNode(gravityDisplacement);
+            node.UpdateNode(gravityDisplacement, dampen);
         }
     }
     private void UpdateConstrains()
     {
         nodes[0].Position = starPoint.position;
+        
         
         for (int i = 0; i < segments; i++)
         {
@@ -76,44 +109,72 @@ public class RopeCompoment : MonoBehaviour
         }
         endPoint.position = nodes[segments].Position;
     }
-     
+    private void Collide()
+    {
 
+        int result = Physics.OverlapBoxNonAlloc(endPoint.position, endPoint.localScale / 2, hitColliders, Quaternion.identity, m_LayerMask);
+        for (int i = 0; i < result; i++)
+        {
+
+            var collider = hitColliders[i];
+
+            if (collider == endPointCollider) continue;
+
+            otherCollider = hitColliders[i].transform.position;
+            otherColliderRot = hitColliders[i].transform.rotation;
+            Vector3 dir = (endPoint.position - otherCollider).normalized;
+            Vector3 temp = Vector3.Cross(dir, Vector3.down);
+            CrossDir = Vector3.Cross(temp, Vector3.up);
+
+            Physics.ComputePenetration(
+               endPointCollider, endPoint.position, endPoint.rotation,
+               collider, otherCollider, otherColliderRot,
+               out collisionDirection, out collisionDistance
+            );
+            nodes[segments].Position += collisionDirection * collisionDistance;
+            nodes[segments].Position += CrossDir * collisionDistance;
+        }
+    }
+    
     private void DistanceConstrain(RopeNode nodeA, RopeNode nodeB)
     {
         float delta = (nodeA.Position - nodeB.Position).magnitude;
-        float dx = Mathf.Abs(delta - ropeLength);
+        float dx = Mathf.Abs(delta - RopeLength);
         Vector3 direction = Vector3.zero;
 
-        if(delta > ropeLength) 
+        if(delta > RopeLength) 
         {
             direction = (nodeA.Position - nodeB.Position).normalized;
         }
-        else if(delta < ropeLength)
+        else if(delta < RopeLength)
         {
             direction = (nodeB.Position - nodeA.Position).normalized;
         }
 
         Vector3 movementVector = direction * dx;
 
-        nodeA.Position -= (movementVector * .5f);
-        nodeB.Position += (movementVector * .5f);
+        nodeA.Position -= (movementVector * stiffness);
+        nodeB.Position += (movementVector * stiffness);
     }
 
     void initPoints()
     {
-        segments = numPoints;
+        segments = RopePoints;
+        segmentLength = RopeLength / segments;
 
-        Vector3 direction = (endPoint.position - starPoint.position).normalized;
-        segmentLength = ropeLength / segments;
-        
+        gravityDisplacement = new Vector3(0, -2f * gravity, 0);
         nodes = new RopeNode[segments + 1];
+        matrices = new Matrix4x4[segments + 1];
+
+        Vector3 startPosition = Vector3.zero;
 
         for (int i = 0; i <= segments; i++) 
-        {
-            Vector3 startPosition = starPoint.position + (direction * (segmentLength * i));
+        {            
             nodes[i] = new RopeNode(startPosition);
+            matrices[i] = Matrix4x4.TRS(startPosition, Quaternion.identity, Vector3.one);
+            startPosition.y -= segmentLength;
         }
-
+        endPointCollider = endPoint.GetComponent<Collider>();  
     }
     void InitLineRenderer()
     {

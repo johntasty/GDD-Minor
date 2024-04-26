@@ -11,7 +11,7 @@ public class EnemyHealth : MonoBehaviour
 
     [SerializeField] FloatValue Health;
     [SerializeField] bool Reset;
-    [SerializeField] Reference StartHP;
+    [SerializeField] ReferenceFloat StartHP;
     [SerializeField] UnityEvent Event;
         
 

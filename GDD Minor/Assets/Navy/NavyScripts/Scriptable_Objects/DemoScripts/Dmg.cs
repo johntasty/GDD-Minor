@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class Dmg : MonoBehaviour
 {
-    [SerializeField] Reference damage;
-    public Reference Damage { get => damage; set => damage = value; }
+    [SerializeField] ReferenceFloat damage;
+    public ReferenceFloat Damage { get => damage; set => damage = value; }
 }

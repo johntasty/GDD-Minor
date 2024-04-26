@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class ImageFill : MonoBehaviour
 {
-    [SerializeField] Reference FloatValue;
-    [SerializeField] Reference Min;
-    [SerializeField] Reference Max;
+    [SerializeField] ReferenceFloat FloatValue;
+    [SerializeField] ReferenceFloat Min;
+    [SerializeField] ReferenceFloat Max;
     [SerializeField] Image Image;
 
     private void Update()
