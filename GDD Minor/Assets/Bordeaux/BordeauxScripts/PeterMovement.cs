@@ -1,3 +1,4 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -40,7 +41,7 @@ public class PeterMovement : MonoBehaviour
     private bool exitingSlope;
 
     [Header("Camera Effects")]
-    // public PlayerCam cam;
+    public PlayerCam cam;
     public float grappleFov = 95f;
 
     public Transform orientation;
@@ -277,6 +278,7 @@ public class PeterMovement : MonoBehaviour
     {
         activeGrapple = false;
         // cam.DoFov(85f);
+        //todo FOV
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -321,17 +323,17 @@ public class PeterMovement : MonoBehaviour
 
     #region Text & Debugging
 
-    // public TextMeshProUGUI text_speed;
-    // public TextMeshProUGUI text_mode;
+    public TextMeshProUGUI text_speed;
+    public TextMeshProUGUI text_mode;
     private void TextStuff()
     {
         Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
         // if (OnSlope())
-            // text_speed.SetText("Speed: " + Round(rb.velocity.magnitude, 1) + " / " + Round(moveSpeed, 1));
-
+        //     text_speed.SetText("Speed: " + Round(rb.velocity.magnitude, 1) + " / " + Round(moveSpeed, 1));
+        //
         // else
-            // text_speed.SetText("Speed: " + Round(flatVel.magnitude, 1) + " / " + Round(moveSpeed, 1));
+        //     text_speed.SetText("Speed: " + Round(flatVel.magnitude, 1) + " / " + Round(moveSpeed, 1));
 
         // text_mode.SetText(state.ToString());
     }
