@@ -13,22 +13,22 @@ public class PeterMovement : MonoBehaviour
     public float swingSpeed;
 
     public float groundDrag;
-
+    public float gravityStrength = 3f;
     [Header("Jumping")]
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
     bool readyToJump;
 
-    [Header("Crouching")]
-    public float crouchSpeed;
-    public float crouchYScale;
-    private float startYScale;
+    // [Header("Crouching")]
+    // public float crouchSpeed;
+    // public float crouchYScale;
+    // private float startYScale;
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
     public KeyCode sprintKey = KeyCode.LeftShift;
-    public KeyCode crouchKey = KeyCode.LeftControl;
+    // public KeyCode crouchKey = KeyCode.LeftControl;
 
     [Header("Ground Check")]
     public float playerHeight;
@@ -49,6 +49,10 @@ public class PeterMovement : MonoBehaviour
     float horizontalInput;
     float verticalInput;
 
+
+    
+    bool gravityEnabled = true;
+    
     Vector3 moveDirection;
 
     Rigidbody rb;
@@ -61,7 +65,7 @@ public class PeterMovement : MonoBehaviour
         swinging,
         walking,
         sprinting,
-        crouching,
+        // crouching,
         air
     }
 
@@ -77,7 +81,7 @@ public class PeterMovement : MonoBehaviour
 
         readyToJump = true;
 
-        startYScale = transform.localScale.y;
+        // startYScale = transform.localScale.y;
     }
 
     private void Update()
@@ -100,6 +104,11 @@ public class PeterMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (gravityEnabled)
+        {
+            rb.AddForce(Physics.gravity * gravityStrength, ForceMode.Acceleration);
+        }
+
         MovePlayer();
     }
 
@@ -118,19 +127,19 @@ public class PeterMovement : MonoBehaviour
             Invoke(nameof(ResetJump), jumpCooldown);
         }
 
-        // start crouch
-        if (Input.GetKeyDown(crouchKey))
-        {
-            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
-            rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
-        }
-
-        // stop crouch
-        if (Input.GetKeyUp(crouchKey))
-        {
-            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
-        }
-    }
+    //     // start crouch
+    //     if (Input.GetKeyDown(crouchKey))
+    //     {
+    //         transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+    //         rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
+    //     }
+    //
+    //     // stop crouch
+    //     if (Input.GetKeyUp(crouchKey))
+    //     {
+    //         transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+    //     }
+     }
 
     private void StateHandler()
     {
@@ -156,12 +165,12 @@ public class PeterMovement : MonoBehaviour
             moveSpeed = swingSpeed;
         }
 
-        // Mode - Crouching
-        else if (Input.GetKey(crouchKey))
-        {
-            state = MovementState.crouching;
-            moveSpeed = crouchSpeed;
-        }
+        // // Mode - Crouching
+        // else if (Input.GetKey(crouchKey))
+        // {
+        //     state = MovementState.crouching;
+        //     moveSpeed = crouchSpeed;
+        // }
 
         // Mode - Sprinting
         else if (grounded && Input.GetKey(sprintKey))
@@ -210,7 +219,8 @@ public class PeterMovement : MonoBehaviour
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
 
         // turn gravity off while on slope
-        rb.useGravity = !OnSlope();
+        // rb.useGravity = !OnSlope();
+        gravityEnabled = !OnSlope();
     }
 
     private void SpeedControl()
@@ -310,7 +320,8 @@ public class PeterMovement : MonoBehaviour
 
     public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
     {
-        float gravity = Physics.gravity.y;
+        float gravity = Physics.gravity.y * gravityStrength;
+        Debug.Log(gravity);
         float displacementY = endPoint.y - startPoint.y;
         Vector3 displacementXZ = new Vector3(endPoint.x - startPoint.x, 0f, endPoint.z - startPoint.z);
 
