@@ -26,6 +26,9 @@ public class Grappling : MonoBehaviour
     public KeyCode grappleKey = KeyCode.Mouse1;
 
     private bool grappling;
+    
+    
+    private Collider grapplePointObjectCollider;
 
     private void Start()
     {
@@ -57,8 +60,9 @@ public class Grappling : MonoBehaviour
         RaycastHit hit;
         if(Physics.Raycast(cam.position, cam.forward, out hit, maxGrappleDistance, whatIsGrappleable))
         {
+            grapplePointObjectCollider = hit.collider;
             grapplePoint = hit.point;
-
+    
             Invoke(nameof(ExecuteGrapple), grappleDelayTime);
         }
         else
@@ -86,10 +90,13 @@ public class Grappling : MonoBehaviour
         pm.JumpToPosition(grapplePoint, highestPointOnArc);
 
         Invoke(nameof(StopGrapple), 1f);
+        grapplePointObjectCollider.enabled = false;
     }
 
     public void StopGrapple()
     {
+        grapplePointObjectCollider.gameObject.SetActive(false);
+        
         pm.freeze = false;
 
         grappling = false;

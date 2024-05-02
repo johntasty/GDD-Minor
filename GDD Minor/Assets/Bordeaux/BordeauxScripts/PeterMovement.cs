@@ -10,7 +10,8 @@ public class PeterMovement : MonoBehaviour
     private float moveSpeed;
     public float walkSpeed;
     public float sprintSpeed;
-    public float swingSpeed;
+    [Range(1f, 2f)]
+    public float grappleSpeed = 1f;
 
     public float groundDrag;
     public float gravityStrength = 3f;
@@ -19,22 +20,18 @@ public class PeterMovement : MonoBehaviour
     public float jumpCooldown;
     public float airMultiplier;
     bool readyToJump;
-
-    // [Header("Crouching")]
-    // public float crouchSpeed;
-    // public float crouchYScale;
-    // private float startYScale;
+    bool canDoubleJump = false;
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
     public KeyCode sprintKey = KeyCode.LeftShift;
-    // public KeyCode crouchKey = KeyCode.LeftControl;
 
     [Header("Ground Check")]
     public float playerHeight;
     public LayerMask whatIsGround;
     bool grounded;
-
+    
+    
     [Header("Slope Handling")]
     public float maxSlopeAngle;
     private RaycastHit slopeHit;
@@ -62,7 +59,6 @@ public class PeterMovement : MonoBehaviour
     {
         freeze,
         grappling,
-        swinging,
         walking,
         sprinting,
         // crouching,
@@ -72,7 +68,6 @@ public class PeterMovement : MonoBehaviour
     public bool freeze;
 
     public bool activeGrapple;
-    public bool swinging;
 
     private void Start()
     {
@@ -118,13 +113,25 @@ public class PeterMovement : MonoBehaviour
         verticalInput = Input.GetAxisRaw("Vertical");
 
         // when to jump
-        if (Input.GetKey(jumpKey) && readyToJump && grounded)
+        if (Input.GetKey(jumpKey) && readyToJump)
         {
-            readyToJump = false;
+            if (grounded || canDoubleJump)
+            {
+                if (!grounded)
+                {
+                    canDoubleJump = false;
+                }
+                else
+                {
+                    canDoubleJump = true;
+                }
 
-            Jump();
+                readyToJump = false;
 
-            Invoke(nameof(ResetJump), jumpCooldown);
+                Jump();
+
+                Invoke(nameof(ResetJump), jumpCooldown);
+            }
         }
 
     //     // start crouch
@@ -148,30 +155,16 @@ public class PeterMovement : MonoBehaviour
         {
             state = MovementState.freeze;
             moveSpeed = 0;
-            rb.velocity = Vector3.zero;
+            // rb.velocity = Vector3.zero;
         }
 
         // Mode - Grappling
         else if (activeGrapple)
         {
             state = MovementState.grappling;
-            moveSpeed = sprintSpeed;
+            moveSpeed = grappleSpeed;
+            //todo make grapple speed work
         }
-
-        // Mode - Swinging
-        else if (swinging)
-        {
-            state = MovementState.swinging;
-            moveSpeed = swingSpeed;
-        }
-
-        // // Mode - Crouching
-        // else if (Input.GetKey(crouchKey))
-        // {
-        //     state = MovementState.crouching;
-        //     moveSpeed = crouchSpeed;
-        // }
-
         // Mode - Sprinting
         else if (grounded && Input.GetKey(sprintKey))
         {
@@ -196,7 +189,6 @@ public class PeterMovement : MonoBehaviour
     private void MovePlayer()
     {
         if (activeGrapple) return;
-        if (swinging) return;
 
         // calculate movement direction
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
@@ -260,7 +252,6 @@ public class PeterMovement : MonoBehaviour
     private void ResetJump()
     {
         readyToJump = true;
-
         exitingSlope = false;
     }
 
@@ -272,6 +263,7 @@ public class PeterMovement : MonoBehaviour
         velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
         Invoke(nameof(SetVelocity), 0.1f);
 
+        CancelInvoke(nameof(ResetRestrictions));
         Invoke(nameof(ResetRestrictions), 3f);
     }
 
@@ -297,7 +289,6 @@ public class PeterMovement : MonoBehaviour
         {
             enableMovementOnNextTouch = false;
             ResetRestrictions();
-
             GetComponent<Grappling>().StopGrapple();
         }
     }
@@ -321,7 +312,6 @@ public class PeterMovement : MonoBehaviour
     public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
     {
         float gravity = Physics.gravity.y * gravityStrength;
-        Debug.Log(gravity);
         float displacementY = endPoint.y - startPoint.y;
         Vector3 displacementXZ = new Vector3(endPoint.x - startPoint.x, 0f, endPoint.z - startPoint.z);
 
@@ -329,6 +319,9 @@ public class PeterMovement : MonoBehaviour
         Vector3 velocityXZ = displacementXZ / (Mathf.Sqrt(-2 * trajectoryHeight / gravity) 
             + Mathf.Sqrt(2 * (displacementY - trajectoryHeight) / gravity));
 
+        // velocityXZ *= grappleSpeed;
+        // velocityY *= grappleSpeed;
+        
         return velocityXZ + velocityY;
     }
 
