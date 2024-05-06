@@ -15,5 +15,4 @@ public class GameData
         playerPosition = Vector3.zero;
     }
 
-
 }
