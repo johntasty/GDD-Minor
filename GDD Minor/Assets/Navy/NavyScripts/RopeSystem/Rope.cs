@@ -1,9 +1,4 @@
-using System;
-using System.Collections;
 using UnityEngine;
-using static UnityEditor.Progress;
-
-
 
 public struct RopeNodes
 {
@@ -66,9 +61,11 @@ public struct RopeNodes
     }
     public void RopeUpdate(Vector3 gravity, float damp)
     {
+        Vector3 newPos = Vector3.zero;
+        Vector3 curVelocity = Vector3.zero;
         for (int i = 0; i < Positions.Length; i++)
         {
-            Vector3 newPos = Positions[i];
+            newPos = Positions[i];
             if (Collide)
             {
                 int result = Physics.OverlapBoxNonAlloc(Positions[i], Vector3.one * .25f, Colliders, Quaternion.identity, LayerMask);
@@ -80,7 +77,7 @@ public struct RopeNodes
                     continue;
                 }
             }
-            Vector3 curVelocity = Velocity(i);
+            curVelocity = Velocity(i);
             newPos = Positions[i];
             newPos += curVelocity * damp + Time.fixedDeltaTime * gravity;
             UpdatePosition(newPos, i);
