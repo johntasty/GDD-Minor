@@ -20178,6 +20178,10 @@ PrefabInstance:
       value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 2960359371433524972, guid: 532f29ea3e02ee946a433df070d3f11a, type: 3}
+      propertyPath: m_TagString
+      value: GrapplePoint
+      objectReference: {fileID: 0}
+    - target: {fileID: 2960359371433524972, guid: 532f29ea3e02ee946a433df070d3f11a, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -23969,6 +23973,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1402463178}
+    - target: {fileID: 7953582608434398412, guid: 532f29ea3e02ee946a433df070d3f11a, type: 3}
+      propertyPath: m_TagString
+      value: GrapplePoint
+      objectReference: {fileID: 0}
     - target: {fileID: 7953582608434398412, guid: 532f29ea3e02ee946a433df070d3f11a, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
@@ -28992,6 +29000,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerPrefab
       objectReference: {fileID: 0}
+    - target: {fileID: 3324743158284821828, guid: fd21bcaeb4b270843a1af7b1e90a6f57, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3324743158284821831, guid: fd21bcaeb4b270843a1af7b1e90a6f57, type: 3}
       propertyPath: m_RootOrder
       value: 31
@@ -29002,7 +29014,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3324743158284821831, guid: fd21bcaeb4b270843a1af7b1e90a6f57, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1.775
       objectReference: {fileID: 0}
     - target: {fileID: 3324743158284821831, guid: fd21bcaeb4b270843a1af7b1e90a6f57, type: 3}
       propertyPath: m_LocalPosition.z
@@ -75693,13 +75705,41 @@ PrefabInstance:
       value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4276558338990219587, guid: df7252a7f0f2a2f49a301769728a530c, type: 3}
+      propertyPath: jumpForce
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 4276558338990219587, guid: df7252a7f0f2a2f49a301769728a530c, type: 3}
       propertyPath: pauseMenu
       value: 
       objectReference: {fileID: 1727993315}
     - target: {fileID: 4276558338990219587, guid: df7252a7f0f2a2f49a301769728a530c, type: 3}
+      propertyPath: walkSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4276558338990219587, guid: df7252a7f0f2a2f49a301769728a530c, type: 3}
+      propertyPath: groundDrag
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4276558338990219587, guid: df7252a7f0f2a2f49a301769728a530c, type: 3}
+      propertyPath: sprintSpeed
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4276558338990219587, guid: df7252a7f0f2a2f49a301769728a530c, type: 3}
+      propertyPath: jumpCooldown
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4276558338990219587, guid: df7252a7f0f2a2f49a301769728a530c, type: 3}
+      propertyPath: airMultiplier
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4276558338990219587, guid: df7252a7f0f2a2f49a301769728a530c, type: 3}
       propertyPath: jumpSoundClip
       value: 
       objectReference: {fileID: 8300000, guid: 4da46d96d6fea43d89a10e001ad62119, type: 3}
+    - target: {fileID: 4276558338990219587, guid: df7252a7f0f2a2f49a301769728a530c, type: 3}
+      propertyPath: gravityStrength
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4276558338990219587, guid: df7252a7f0f2a2f49a301769728a530c, type: 3}
       propertyPath: footstepSoundClip
       value: 
@@ -75778,7 +75818,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8273510027169333235, guid: df7252a7f0f2a2f49a301769728a530c, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696484074810140434, guid: df7252a7f0f2a2f49a301769728a530c, type: 3}
+      propertyPath: m_Mass
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696484074810140434, guid: df7252a7f0f2a2f49a301769728a530c, type: 3}
+      propertyPath: m_UseGravity
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696484074810140434, guid: df7252a7f0f2a2f49a301769728a530c, type: 3}
+      propertyPath: m_AngularDrag
+      value: 0.05
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: df7252a7f0f2a2f49a301769728a530c, type: 3}
