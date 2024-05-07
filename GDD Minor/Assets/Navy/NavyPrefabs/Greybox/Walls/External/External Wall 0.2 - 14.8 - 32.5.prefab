@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 1283132291413611454}
   - component: {fileID: 9022347770454795784}
   - component: {fileID: 5477889526553322205}
-  - component: {fileID: 461257376443846465}
   - component: {fileID: 184008341867820988}
   m_Layer: 0
   m_Name: External Wall 0.2 - 14.8 - 32.5
@@ -36,7 +35,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: -90}
 --- !u!114 &7199686482454421495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,7 +248,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 5094
+  m_VersionIndex: 5097
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -331,20 +330,6 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4665559622471028345}
-  m_Mesh: {fileID: 0}
---- !u!64 &461257376443846465
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4665559622471028345}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
   m_Mesh: {fileID: 0}
 --- !u!65 &184008341867820988
 BoxCollider:
