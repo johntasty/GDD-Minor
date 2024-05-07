@@ -15,6 +15,7 @@ public class PeterMovement : MonoBehaviour
 
     public float groundDrag;
     public float gravityStrength = 3f;
+    
     [Header("Jumping")]
     public float jumpForce;
     public float jumpCooldown;
