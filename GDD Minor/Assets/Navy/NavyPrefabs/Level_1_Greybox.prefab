@@ -6057,8 +6057,22 @@ PrefabInstance:
       propertyPath: m_SelectedVertices.Array.size
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3772051816766061496, guid: 3a27e7e5426eae44e9f6707b49025b93, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 3a27e7e5426eae44e9f6707b49025b93, type: 3}
+--- !u!1 &1049073917895192385 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 466271874291668765, guid: 3a27e7e5426eae44e9f6707b49025b93, type: 3}
+  m_PrefabInstance: {fileID: 646135597549500508}
+  m_PrefabAsset: {fileID: 0}
+--- !u!33 &8112937015359082012
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1049073917895192385}
+  m_Mesh: {fileID: -5495902117074765545, guid: 6c90ccfe46574804d8f5d9bb37ed7028, type: 3}
 --- !u!4 &2204917564939217024 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1616502204696662236, guid: 3a27e7e5426eae44e9f6707b49025b93, type: 3}
