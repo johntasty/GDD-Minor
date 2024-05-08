@@ -46,7 +46,7 @@ namespace Bordeaux.BordeauxScripts
         {
             currentTokens++;
             currentTokens = Mathf.Clamp(currentTokens, 0, totalTokens);
-            Debug.Log(currentTokens);
+            // Debug.Log(currentTokens);
         }
     
     }
