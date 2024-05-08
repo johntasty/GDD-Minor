@@ -26,6 +26,7 @@ public class Enemy_follow : MonoBehaviour
 
     private void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player").transform;
         agent = GetComponent<NavMeshAgent>();
         agent.stoppingDistance = stoppingDistance;
         startPosition = transform.position;

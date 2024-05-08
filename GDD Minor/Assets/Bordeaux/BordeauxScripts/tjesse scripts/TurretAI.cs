@@ -10,6 +10,10 @@ public class TurretAI : MonoBehaviour
     public float aimingRange = 20f; // aiming range
     private float shootCooldown;
 
+    private void Start()
+    {
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+    }
     void Update()
     {
         shootCooldown -= Time.deltaTime;
