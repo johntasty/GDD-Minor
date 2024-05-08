@@ -8,21 +8,19 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-
   - component: {fileID: 6815349079211302063}
+  - component: {fileID: 6815349077845272895}
   - component: {fileID: 6815349077845272833}
   - component: {fileID: 6815349077845272894}
-  - component: {fileID: 6815349077845272895}
   - component: {fileID: 6815349077845272892}
   - component: {fileID: 6815349077845272893}
   m_Layer: 0
-  m_Name: Gun
+  m_Name: 
   m_TagString: Untagged
-
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6815349079211302063
 Transform:
   m_ObjectHideFlags: 0
@@ -38,6 +36,19 @@ Transform:
   m_Father: {fileID: 6815349078422685099}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &6815349077845272895
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6815349077845272890}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &6815349077845272833
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -88,19 +99,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6815349077845272895
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6815349077845272890}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &6815349077845272892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -143,18 +141,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd9f299bc9f36924dbd7f6554c720196, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-
-  damage: 10
-  BulletRange: 5000
-  BulletForce: 25
+  damage: 0
+  BulletRange: 0
+  BulletForce: 0
   BulletSpread: 0
   IsHitscan: 0
-  bulletPrefab: {fileID: 4060619419401689138, guid: 1eeabbd0c3e07034395fcbde65b09f8c, type: 3}
+  bulletPrefab: {fileID: 0}
   targetPoint: {x: 0, y: 0, z: 0}
-  attackPoint: {fileID: 6815349079211302063}
+  attackPoint: {fileID: 0}
 --- !u!1 &6815349078252164137
 GameObject:
-
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -165,12 +161,12 @@ GameObject:
   - component: {fileID: 6815349078252164138}
   - component: {fileID: 6815349078252164139}
   m_Layer: 0
-  m_Name: Stamina
+  m_Name: 
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6815349078252164136
 RectTransform:
   m_ObjectHideFlags: 0
@@ -211,7 +207,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -231,7 +226,6 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
 --- !u!1 &6815349078286504510
-
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -531,14 +525,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ac5ea0f314bce04a9619a84e8818459, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-
   maxInteractionDistance: 3
   interactableLayers:
     serializedVersion: 2
-    m_Bits: 72
+    m_Bits: 0
   playerCamera: {fileID: 0}
 --- !u!114 &6815349078350190666
-
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -550,7 +542,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5a01a6cff18caf44bc778dee033c308, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-
   _PostEffect: {fileID: 11400000, guid: 57eee701fd7a9774eb9e413cc46f664d, type: 2}
   speed: 0
 --- !u!82 &6815349078350190667
@@ -650,7 +641,6 @@ AudioSource:
     m_PostInfinity: 2
     m_RotationOrder: 4
 --- !u!1 &6815349078422685096
-
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
