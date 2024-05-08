@@ -5,26 +5,25 @@ public class TurretAI : MonoBehaviour
     public Transform player;
     public GameObject Projectile;
     public Transform shootingPoint;
-    public float shootingInterval = 2f;
-    public float range = 10f;
+    public float shootingInterval = 2f; // shooting interval
+    public float shootingRange = 10f; // shooting range
+    public float aimingRange = 20f; // aiming range
     private float shootCooldown;
 
     void Update()
     {
         shootCooldown -= Time.deltaTime;
 
-        // To check distance between turret and player if within range
+        // Calculate distance to player
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-        if(distanceToPlayer <= range)
-        {
-            // Rotate to the player
-            Vector3 direction = player.position - transform.position;
-            Quaternion rotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * 5f);
-			
 
-            // Shoot if cooldown is finished
-            if(shootCooldown <= 0f)
+        // Check if player is within aiming range
+        if (distanceToPlayer <= aimingRange)
+        {
+            AimAtPlayer();
+
+            // Check if the player is within shooting range and cooldown is finished
+            if (distanceToPlayer <= shootingRange && shootCooldown <= 0f)
             {
                 Shoot();
                 shootCooldown = shootingInterval;
@@ -32,16 +31,20 @@ public class TurretAI : MonoBehaviour
         }
     }
 
-void Shoot()
-{
-    if(Projectile && shootingPoint)
+    void AimAtPlayer()
     {
-        // Calculate the rotation to look at player
-        Vector3 direction = (player.position - shootingPoint.position).normalized;
+        // Rotate turret to the player smoothly
+        Vector3 direction = player.position - transform.position;
         Quaternion rotation = Quaternion.LookRotation(direction);
-
-        // instantiate or create bullet with turret's rotation
-        Instantiate(Projectile, shootingPoint.position, rotation);
+        transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * 5f);
     }
-}
+
+    void Shoot()
+    {
+        if (Projectile && shootingPoint)
+        {
+            // Instantiate the projectile at the shooting point 
+            Instantiate(Projectile, shootingPoint.position, transform.rotation); // Use turret's current rotation
+        }
+    }
 }
