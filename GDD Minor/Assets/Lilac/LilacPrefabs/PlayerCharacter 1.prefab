@@ -936,7 +936,7 @@ CapsuleCollider:
   m_Radius: 0.6
   m_Height: 1.6
   m_Direction: 1
-  m_Center: {x: 0, y: 0.8, z: 0}
+  m_Center: {x: 0, y: 1.2, z: 0}
 --- !u!136 &3441640765232581241
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1016,10 +1016,12 @@ MonoBehaviour:
   airMultiplier: 0.7
   jumpForce: 11
   jumpCooldown: 0.35
+  cayoteTime: 0.15
+  jumpBufferDuration: 0.15
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
-  maxSlopeAngle: 0
+  maxSlopeAngle: 90
   playerCamera: {fileID: 3876793837261406020}
   pauseMenu: {fileID: 0}
 --- !u!114 &3876793837331505830

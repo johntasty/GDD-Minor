@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     [Header("Jumping Settings")]
     [SerializeField] private float jumpForce = 5.0f;
     [SerializeField] private float jumpCooldown = 0.5f;
+    [SerializeField] private float cayoteTime = 0.15f;
+    [SerializeField] private float jumpBufferDuration = 0.15f;
+    private float LastJumpPressTime = 0;
     private bool readyToJump = true;
     private bool canDoubleJump = false;
 
@@ -39,6 +42,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     private Vector2 movementInput;
     private AudioSource audioSource;
     
+    private float lastTimeGrounded;
+
     private float horizontalInput;
     private float verticalInput;
     private Vector3 moveDirection;
@@ -59,15 +64,34 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         Gizmos.DrawWireCube(transform.position - new Vector3(0, 0.05f, 0), new Vector3(0.1f, 0.1f, 0.1f));
     }
 
+    private void FixedUpdate()
+    {
+        if (!pauseMenu.isPaused)
+        {
+            MovePlayer();
+            JumpBuffer();
+            ApplyCustomGravity();
+        }
+    }
+
+    private void Update()
+    {
+        CheckGrounded();
+        SpeedControl();
+        StateHandler();
+        AdjustGroundDrag();
+    }
+    
+    
     public void LoadData(GameData data)
     {
-    	this.transform.position = data.playerPosition;
-    	rb.velocity = Vector3.zero;
+        transform.position = data.playerPosition;
+        rb.velocity = Vector3.zero;
     }
     
     public void SaveData(ref GameData data)
     {
-    	data.playerPosition = this.transform.position;
+        data.playerPosition = this.transform.position;
     }
 
     public void OnMove(InputValue value)
@@ -77,14 +101,28 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         verticalInput = movementInput.y;
     }
 
+    public void JumpBuffer() {
+        if (Time.time - LastJumpPressTime <= jumpBufferDuration) {
+            tryToJump();
+        }
+    }
+
     public void OnJump(InputValue value)
     {
-        if (value.isPressed && readyToJump)
+        if (value.isPressed) {
+            LastJumpPressTime = Time.time;
+            tryToJump();
+        }
+
+    }
+
+    private void tryToJump() {
+        if (readyToJump)
         {
-            if (isGrounded || canDoubleJump)
+            if (checkCayoteJump() || canDoubleJump)
             {
                 Jump();
-                if (!isGrounded && canDoubleJump)
+                if (!checkCayoteJump() && canDoubleJump)
                 {
                     canDoubleJump = false; // Prevent further jumps
                 }
@@ -97,22 +135,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         isSprinting = value.isPressed;
     }
 
-    private void FixedUpdate()
-    {
-        if (!pauseMenu.isPaused)
-        {
-            MovePlayer();
-            ApplyCustomGravity();
-        }
-    }
-
-    private void Update()
-    {
-        CheckGrounded();
-        SpeedControl();
-        StateHandler();
-        AdjustGroundDrag();
-    }
 
     private void ApplyCustomGravity()
     {
@@ -179,6 +201,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         
         readyToJump = false;
         exitingSlope = true;
+        LastJumpPressTime = 0;
         
         Invoke(nameof(ResetJump), jumpCooldown);
     }
@@ -195,7 +218,12 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         if (isGrounded)
         {
             canDoubleJump = true;
+            lastTimeGrounded = Time.time;
         }
+    }
+
+    private bool checkCayoteJump() {
+        return Time.time - lastTimeGrounded <= cayoteTime;
     }
 
     private void AdjustGroundDrag()
