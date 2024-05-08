@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6612617007844821191
+--- !u!1 &6617857382846514793
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,44 +8,40 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6612617007844821189}
-  - component: {fileID: 6612617007844821188}
+  - component: {fileID: 6617857382846514799}
+  - component: {fileID: 6617857382846514798}
   m_Layer: 0
-  m_Name: DataPersistenceManager
+  m_Name: SceneManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &6612617007844821189
+  m_IsActive: 1
+--- !u!4 &6617857382846514799
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6612617007844821191}
+  m_GameObject: {fileID: 6617857382846514793}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 391.3243, y: 81.43163, z: -15.518616}
+  m_LocalPosition: {x: 420.14252, y: 217.13641, z: 1.4443665}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6612617007844821188
+--- !u!114 &6617857382846514798
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6612617007844821191}
+  m_GameObject: {fileID: 6617857382846514793}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8b27a29868ca664a9c8eefd481dfecb, type: 3}
+  m_Script: {fileID: 11500000, guid: b507116d2491e714fa4258ca40a03bcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initializeDataIfNull: 0
-  fileName: data.game
-  useEncryption: 0
-  gameData:
-    playerPosition: {x: 0, y: 0, z: 0}
+  sceneName: Svetlin-testing-fixed-safe

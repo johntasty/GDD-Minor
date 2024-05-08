@@ -7,9 +7,12 @@ public class MenuManager : MonoBehaviour
 {
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject settingsMenu;
+    [SerializeField] private GameObject DeathScreen;
     [SerializeField] private string sceneName;
     [SerializeField] private CinemachineVirtualCamera PlayerVirtualCamera;
     [SerializeField] private InputActionAsset actions;
+
+    public bool isDead = false;
 
     public bool isPaused = false;
     public bool settingsOpen = false;
@@ -23,9 +26,18 @@ public class MenuManager : MonoBehaviour
     {
         actions.FindAction("Pause").performed -= OnPause;
     }
+
     void start()
     {
         pauseMenu.SetActive(false);
+    }
+
+    void Update()
+    {
+        if(isDead == true)
+        {
+            DeathMenu();
+        }
     }
 
     private void OnPause(InputAction.CallbackContext context)
@@ -86,5 +98,33 @@ public class MenuManager : MonoBehaviour
     public void ChangeScene()
     {
         SceneManager.LoadScene(sceneName);
+    }
+
+
+    public void DeathMenu()
+    {
+        isPaused = false;
+        DeathScreen.SetActive(true);
+        Time.timeScale = 0f;
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        PlayerVirtualCamera.gameObject.SetActive(false);
+        pauseMenu.SetActive(false);
+        settingsMenu.SetActive(false);
+    }
+
+    public void RemoveDeathMenu()
+    {
+        isDead = false;
+        isPaused = false;
+        DeathScreen.SetActive(false);
+        Time.timeScale = 1f;
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        PlayerVirtualCamera.gameObject.SetActive(true);
+        pauseMenu.SetActive(false);
+        settingsMenu.SetActive(false);
     }
 }
