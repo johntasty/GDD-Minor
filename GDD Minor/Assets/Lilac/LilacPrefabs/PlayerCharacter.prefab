@@ -8,6 +8,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+
   - component: {fileID: 6815349079211302063}
   - component: {fileID: 6815349077845272833}
   - component: {fileID: 6815349077845272894}
@@ -17,6 +18,7 @@ GameObject:
   m_Layer: 0
   m_Name: Gun
   m_TagString: Untagged
+
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -141,6 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd9f299bc9f36924dbd7f6554c720196, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+
   damage: 10
   BulletRange: 5000
   BulletForce: 25
@@ -151,6 +154,7 @@ MonoBehaviour:
   attackPoint: {fileID: 6815349079211302063}
 --- !u!1 &6815349078252164137
 GameObject:
+
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -207,6 +211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -226,6 +231,7 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
 --- !u!1 &6815349078286504510
+
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -525,12 +531,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ac5ea0f314bce04a9619a84e8818459, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+
   maxInteractionDistance: 3
   interactableLayers:
     serializedVersion: 2
     m_Bits: 72
   playerCamera: {fileID: 0}
 --- !u!114 &6815349078350190666
+
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -542,6 +550,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5a01a6cff18caf44bc778dee033c308, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+
   _PostEffect: {fileID: 11400000, guid: 57eee701fd7a9774eb9e413cc46f664d, type: 2}
   speed: 0
 --- !u!82 &6815349078350190667
@@ -641,6 +650,7 @@ AudioSource:
     m_PostInfinity: 2
     m_RotationOrder: 4
 --- !u!1 &6815349078422685096
+
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
