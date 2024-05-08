@@ -1,3 +1,5 @@
+using System;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -24,6 +26,11 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     [Header("Ground Check")]
     [SerializeField] private LayerMask groundLayer;
     private bool isGrounded;
+    
+    [Header("Slope Handling")]
+    public float maxSlopeAngle;
+    private RaycastHit slopeHit;
+    private bool exitingSlope;
 
     [Header("Misc")]
     [SerializeField] private Camera playerCamera;
@@ -44,10 +51,14 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-        rb.interpolation = RigidbodyInterpolation.Interpolate;
         rb.useGravity = false;
     }
-    
+
+    private void OnDrawGizmos() {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(transform.position - new Vector3(0, 0.05f, 0), new Vector3(0.1f, 0.1f, 0.1f));
+    }
+
     public void LoadData(GameData data)
     {
     	this.transform.position = data.playerPosition;
@@ -111,11 +122,18 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     private void MovePlayer()
     {
         moveDirection = playerCamera.transform.forward * verticalInput + playerCamera.transform.right * horizontalInput;
-        moveDirection.y = 0;
-        
+        moveDirection.y = 0; // Keep movement horizontal
+
         float currentSpeed = isSprinting ? sprintSpeed : walkSpeed;
         
-        if (isGrounded)
+        if (OnSlope() && !exitingSlope)
+        {
+            rb.AddForce(GetSlopeMoveDirection() * (currentSpeed + 12 ) * 8f, ForceMode.Force);
+
+            if (rb.velocity.y > 0)
+                rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+        }
+        else if (isGrounded)
         {
             rb.AddForce(moveDirection.normalized * currentSpeed * 10f, ForceMode.Force);
         }
@@ -123,15 +141,26 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         {
             rb.AddForce(moveDirection.normalized * currentSpeed * 10f * airMultiplier, ForceMode.Force);
         }
+
+        // Control gravity manually
+        gravityEnabled = !OnSlope();
     }
 
     private void SpeedControl()
     {
-        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         float limitSpeed = isSprinting ? sprintSpeed : walkSpeed;
-        if (flatVel.magnitude > limitSpeed)
-        {
-            rb.velocity = new Vector3(flatVel.normalized.x * limitSpeed, rb.velocity.y, flatVel.normalized.z * limitSpeed);
+        // limiting speed on slope
+        if (OnSlope() && !exitingSlope) {
+            if (rb.velocity.magnitude > limitSpeed)
+                rb.velocity = rb.velocity.normalized * limitSpeed;
+        } 
+        else {
+            Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+            
+            if (flatVel.magnitude > limitSpeed)
+            {
+                rb.velocity = new Vector3(flatVel.normalized.x * limitSpeed, rb.velocity.y, flatVel.normalized.z * limitSpeed);
+            }
         }
     }
 
@@ -147,18 +176,22 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     {
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        
         readyToJump = false;
+        exitingSlope = true;
+        
         Invoke(nameof(ResetJump), jumpCooldown);
     }
 
     private void ResetJump()
     {
         readyToJump = true;
+        exitingSlope = false;
     }
 
     private void CheckGrounded()
     {
-        isGrounded = Physics.CheckBox(transform.position - new Vector3(0, 0.1f, 0), new Vector3(0.5f, 0.1f, 0.5f), Quaternion.identity, groundLayer);
+        isGrounded = Physics.CheckBox(transform.position - new Vector3(0, 0.05f, 0), new Vector3(0.2f, 0.1f, 0.2f), Quaternion.identity, groundLayer);
         if (isGrounded)
         {
             canDoubleJump = true;
@@ -171,5 +204,20 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             rb.drag = groundDrag;
         else
             rb.drag = 0;
+    }
+
+    private bool OnSlope()
+    {
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, 0.3f)) // Adjust 1f if needed
+        {
+            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+            return angle <= maxSlopeAngle && angle != 0;
+        }
+        return false;
+    }
+
+    private Vector3 GetSlopeMoveDirection()
+    {
+        return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
     }
 }
