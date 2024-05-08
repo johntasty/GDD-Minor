@@ -1,85 +1,130 @@
 using Cinemachine;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
-
     [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private GameObject settingsMenu;
+    [SerializeField] private GameObject DeathScreen;
     [SerializeField] private string sceneName;
+    [SerializeField] private CinemachineVirtualCamera PlayerVirtualCamera;
+    [SerializeField] private InputActionAsset actions;
 
-    [SerializeField]
-    InputActionAsset actions;
+    public bool isDead = false;
 
     public bool isPaused = false;
+    public bool settingsOpen = false;
 
-    [SerializeField]
-    CinemachineVirtualCamera PlayerVirtualCamera;
-   
     private void OnEnable()
     {
         actions.FindAction("Pause").performed += OnPause;
     }
+
     private void OnDisable()
     {
         actions.FindAction("Pause").performed -= OnPause;
     }
-    private void OnPause(InputAction.CallbackContext context)
-    {
-        isPaused = !pauseMenu.activeInHierarchy;
-        Time.timeScale = isPaused ? 0f : 1f;
 
-        Cursor.lockState = isPaused ? CursorLockMode.None: CursorLockMode.Locked;
-        Cursor.visible = isPaused;
-        pauseMenu.SetActive(isPaused);
-
-        PlayerVirtualCamera.gameObject.SetActive(!isPaused);
-    }
-
-    private void Start()
+    void start()
     {
         pauseMenu.SetActive(false);
-        
     }
-   
-    public void Pause()
+
+    void Update()
+    {
+        if(isDead == true)
+        {
+            DeathMenu();
+        }
+    }
+
+    private void OnPause(InputAction.CallbackContext context)
+    {
+        if (!isPaused)
+        {
+            settingsOpen = false;
+            Pause();
+        }
+        else
+        {
+            Unpause();
+        }
+    }
+
+    private void Pause()
     {
         isPaused = true;
         Time.timeScale = 0f;
-        OpenPauseMenu();
-    }
 
-    public void Unpause()
-    {
-        
-        isPaused = false;
-        PlayerVirtualCamera.gameObject.SetActive(!isPaused);
-        Cursor.visible = isPaused;
-        Cursor.lockState = CursorLockMode.Locked;
-        Time.timeScale = 1f;
-        ClosePauseMenu(); 
-    }
-
-    private void OpenPauseMenu()
-    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         pauseMenu.SetActive(true);
+
+        PlayerVirtualCamera.gameObject.SetActive(false);
     }
 
-    private void ClosePauseMenu()
+    private void Unpause()
     {
+        isPaused = false;
+        Time.timeScale = 1f;
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         pauseMenu.SetActive(false);
+        settingsMenu.SetActive(false);
+
+        PlayerVirtualCamera.gameObject.SetActive(true);
     }
 
-    public void changeScene()
+    public void SettingsMenu()
     {
+        settingsOpen = !settingsOpen;
+        settingsMenu.SetActive(settingsOpen);
 
-        //DataPersistenceManager.instance.SetLoadSavedGame(false);
-        
+        if (settingsOpen)
+        {
+            isPaused = true; 
+        }
+    }
+
+    public void CloseSettingsMenu()
+    {
+        settingsOpen = false;
+        settingsMenu.SetActive(false);
+    }
+
+    public void ChangeScene()
+    {
         SceneManager.LoadScene(sceneName);
     }
-    
+
+
+    public void DeathMenu()
+    {
+        isPaused = false;
+        DeathScreen.SetActive(true);
+        Time.timeScale = 0f;
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        PlayerVirtualCamera.gameObject.SetActive(false);
+        pauseMenu.SetActive(false);
+        settingsMenu.SetActive(false);
+    }
+
+    public void RemoveDeathMenu()
+    {
+        isDead = false;
+        isPaused = false;
+        DeathScreen.SetActive(false);
+        Time.timeScale = 1f;
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        PlayerVirtualCamera.gameObject.SetActive(true);
+        pauseMenu.SetActive(false);
+        settingsMenu.SetActive(false);
+    }
 }
