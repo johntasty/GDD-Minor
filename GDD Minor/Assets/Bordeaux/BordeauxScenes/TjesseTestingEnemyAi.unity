@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -80604,6 +80604,42 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 9180303516653771481}
+    - target: {fileID: 2935227999693803788, guid: f35b9f846805419499a5420055606f07, type: 3}
+      propertyPath: patrolRadius
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2935227999693803788, guid: f35b9f846805419499a5420055606f07, type: 3}
+      propertyPath: shootingRange
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2935227999693803788, guid: f35b9f846805419499a5420055606f07, type: 3}
+      propertyPath: tooCloseRange
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2935227999693803788, guid: f35b9f846805419499a5420055606f07, type: 3}
+      propertyPath: detectionRange
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 2935227999693803788, guid: f35b9f846805419499a5420055606f07, type: 3}
+      propertyPath: patrolDuration
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2935227999693803788, guid: f35b9f846805419499a5420055606f07, type: 3}
+      propertyPath: searchDuration
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2935227999693803788, guid: f35b9f846805419499a5420055606f07, type: 3}
+      propertyPath: stoppingDistance
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2935227999693803789, guid: f35b9f846805419499a5420055606f07, type: 3}
+      propertyPath: m_Speed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2935227999693803789, guid: f35b9f846805419499a5420055606f07, type: 3}
+      propertyPath: m_StoppingDistance
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f35b9f846805419499a5420055606f07, type: 3}
 --- !u!114 &2941878001208187548
@@ -81155,6 +81191,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4463989017169039657, guid: a62d65a7d8ed40f41aa67709f482b233, type: 3}
+      propertyPath: range
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 4463989017169039657, guid: a62d65a7d8ed40f41aa67709f482b233, type: 3}
       propertyPath: player
       value: 
