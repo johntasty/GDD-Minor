@@ -93,14 +93,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     {
         data.playerPosition = this.transform.position;
     }
-
-    public void OnMove(InputValue value)
-    {
-        movementInput = value.Get<Vector2>();
-        horizontalInput = movementInput.x;
-        verticalInput = movementInput.y;
-    }
-
+    
     public void JumpBuffer() {
         if (Time.time - LastJumpPressTime <= jumpBufferDuration) {
             tryToJump();
@@ -119,28 +112,38 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     private void tryToJump() {
         if (readyToJump)
         {
-            if (checkCayoteJump() || canDoubleJump)
+            if (CheckCayoteJump() || canDoubleJump)
             {
                 Jump();
-                if (!checkCayoteJump() && canDoubleJump)
+                if (!CheckCayoteJump() && canDoubleJump)
                 {
                     canDoubleJump = false; // Prevent further jumps
                 }
             }
         }
     }
-
-    public void OnSprint(InputValue value)
-    {
-        isSprinting = value.isPressed;
+    
+    private bool CheckCayoteJump() {
+        return Time.time - lastTimeGrounded <= cayoteTime;
     }
-
-
+    
     private void ApplyCustomGravity()
     {
         rb.AddForce(Physics.gravity * gravityStrength, ForceMode.Acceleration);
     }
 
+    public void OnSprint(InputValue value)
+    {
+        isSprinting = value.isPressed;
+    }
+    
+    public void OnMove(InputValue value)
+    {
+        movementInput = value.Get<Vector2>();
+        horizontalInput = movementInput.x;
+        verticalInput = movementInput.y;
+    }
+    
     private void MovePlayer()
     {
         moveDirection = playerCamera.transform.forward * verticalInput + playerCamera.transform.right * horizontalInput;
@@ -220,10 +223,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             canDoubleJump = true;
             lastTimeGrounded = Time.time;
         }
-    }
-
-    private bool checkCayoteJump() {
-        return Time.time - lastTimeGrounded <= cayoteTime;
     }
 
     private void AdjustGroundDrag()
