@@ -153,7 +153,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         
         if (OnSlope() && !exitingSlope)
         {
-            rb.AddForce(GetSlopeMoveDirection() * (currentSpeed + 12 ) * 8f, ForceMode.Force);
+            rb.AddForce(GetSlopeMoveDirection() * (currentSpeed + 16 ) * 8f, ForceMode.Force);
 
             if (rb.velocity.y > 0)
                 rb.AddForce(Vector3.down * 80f, ForceMode.Force);
