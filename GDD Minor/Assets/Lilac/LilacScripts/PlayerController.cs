@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
     [Header("Misc")]
     [SerializeField] private Camera playerCamera;
-    [SerializeField] private MenuManager pauseMenu;
+
     private Rigidbody rb;
     private Vector2 movementInput;
     private AudioSource audioSource;
@@ -57,6 +57,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         Cursor.visible = false;
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
         rb.useGravity = false;
+        this.enabled = true;
     }
 
     private void OnDrawGizmos() {
@@ -66,12 +67,9 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
     private void FixedUpdate()
     {
-        if (!pauseMenu.isPaused)
-        {
-            MovePlayer();
-            JumpBuffer();
-            ApplyCustomGravity();
-        }
+        MovePlayer();
+        JumpBuffer();
+        ApplyCustomGravity();
     }
 
     private void Update()
