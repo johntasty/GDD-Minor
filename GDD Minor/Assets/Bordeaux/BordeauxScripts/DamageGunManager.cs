@@ -40,7 +40,7 @@ public class DamageGunManager : MonoBehaviour
             targetPoint = hit.point;
         }
         else {
-            targetPoint = ray.GetPoint(50);
+            targetPoint = ray.GetPoint(40);
         }
         
         //Calculate direction from gun to target point
