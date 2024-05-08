@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,239 +7,244 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(AudioSource))]
 public class PlayerController : MonoBehaviour, IDataPersistence
 {
-    [SerializeField] private float moveSpeed = 10.0f;
-    [SerializeField] private float sprintSpeed = 15.0f; // Adjust this value as needed
-    [SerializeField] private float targetAirSpeed = 10.0f;
-    [SerializeField] private float jumpForce = 5.0f;
-    [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private Camera playerCamera;
-    //[SerializeField] private float groundDrag = 6.0f; // Adjusted for more natural deceleration
-    [SerializeField] private float airDrag = 0.4f; // Adjusted for more consistent air movement
-    [SerializeField] private float airControl = 0.3f; // This is now a multiplier for how much control you have in the air
-    [SerializeField] private MenuManager pauseMenu;
-    [SerializeField] private Vector3 Pvelocity;
-    [SerializeField] private float lowGroundDrag;
-    [SerializeField] private float highGroundDrag;
-    [SerializeField] private float maxJumpForce = 10.0f; // The maximum force applied when holding the jump button
-    [SerializeField] private float maxJumpTime = 0.5f; // The maximum time the jump button can be held to increase jump height
-    [SerializeField] private AudioClip footstepSoundClip;
-    [SerializeField] private AudioClip jumpSoundClip;
+    [Header("Movement Settings")]
+    [SerializeField] private float walkSpeed = 6.0f;
+    [SerializeField] private float sprintSpeed = 10.0f;
+    [SerializeField] private float gravityStrength = 3f;
+    [SerializeField] private float groundDrag;
+    [SerializeField] private float airMultiplier = 1.2f;
 
+    [Header("Jumping Settings")]
+    [SerializeField] private float jumpForce = 5.0f;
+    [SerializeField] private float jumpCooldown = 0.5f;
+    [SerializeField] private float cayoteTime = 0.15f;
+    [SerializeField] private float jumpBufferDuration = 0.15f;
+    private float LastJumpPressTime = 0;
+    private bool readyToJump = true;
+    private bool canDoubleJump = false;
+
+    [Header("Input Settings")]
     private bool isSprinting = false;
-    private bool isJumping = false;
-    private float jumpTimeCounter;
+
+    [Header("Ground Check")]
+    [SerializeField] private LayerMask groundLayer;
+    private bool isGrounded;
+    
+    [Header("Slope Handling")]
+    public float maxSlopeAngle;
+    private RaycastHit slopeHit;
+    private bool exitingSlope;
+
+    [Header("Misc")]
+    [SerializeField] private Camera playerCamera;
+    [SerializeField] private MenuManager pauseMenu;
     private Rigidbody rb;
     private Vector2 movementInput;
-    private bool isGrounded;
-    private bool hasDoubleJumped = false;
-    private float footstepTimer = 0f;
-    private float footstepInterval = 0.5f;
-    private float jumpTimer = 0f;
-    private float jumpInterval = 0.5f;
+    private AudioSource audioSource;
+    
+    private float lastTimeGrounded;
 
-    public void LoadData(GameData data)
-    {
-        this.transform.position = data.playerPosition;
-        rb.velocity = Vector3.zero;
-    }
-
-    public void SaveData(ref GameData data)
-    {
-        data.playerPosition = this.transform.position;
-    }
-
+    private float horizontalInput;
+    private float verticalInput;
+    private Vector3 moveDirection;
+    private bool gravityEnabled = true;
+    
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-        rb.interpolation = RigidbodyInterpolation.Interpolate; // Ensure smoother Rigidbody movement
-        rb.useGravity = true;
+        rb.useGravity = false;
     }
 
-    public void OnMove(InputValue value)
-    {
-        movementInput = value.Get<Vector2>();
+    private void OnDrawGizmos() {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(transform.position - new Vector3(0, 0.05f, 0), new Vector3(0.1f, 0.1f, 0.1f));
     }
 
-    public void OnJump(InputValue value)
-    {
-        if (value.isPressed)
-        {
-            if (isGrounded || (!hasDoubleJumped && !isGrounded))
-            {
-                Jump();
-                GetComponent<AudioSource>().PlayOneShot(jumpSoundClip);
-            }
-        }
-        else
-        {
-            isJumping = false; // Reset when the jump button is released
-        }
-    }
-
-    public void OnSprint(InputValue value)
-    {
-        isSprinting = value.isPressed;
-    }
-
-    private void Jump()
-    {
-        Vector3 jumpDirection = Vector3.up;
-
-        if (!isGrounded)
-        {
-            // Adjust for mid-air jumps based on camera direction
-            Vector3 forward = playerCamera.transform.forward;
-            Vector3 right = playerCamera.transform.right;
-
-            forward.y = 0;
-            right.y = 0;
-
-            forward.Normalize();
-            right.Normalize();
-
-            Vector3 intendedDirection = right / 2 * movementInput.x + forward / 2 * movementInput.y;
-            intendedDirection.Normalize();
-
-            jumpDirection += intendedDirection; // Modulate influence of camera direction in air
-        }
-
-        if (!isJumping)
-        {
-            rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z); // Reset vertical velocity
-            rb.AddForce(jumpDirection * jumpForce, ForceMode.Impulse);
-            isJumping = true; // Mark the player as currently jumping
-            jumpTimeCounter = maxJumpTime; // Reset jump time counter
-
-            if (!isGrounded)
-            {
-                hasDoubleJumped = true;
-            }
-        }
-        else if (isJumping && jumpTimeCounter > 0)
-        {
-            // Apply additional force over time up to a maximum defined by maxJumpTime
-            // The force is reduced as the jumpTimeCounter decreases
-            float additionalJumpForce = (jumpForce + (maxJumpForce - jumpForce) * (jumpTimeCounter / maxJumpTime));
-            rb.AddForce(jumpDirection * additionalJumpForce * Time.deltaTime, ForceMode.Impulse);
-            jumpTimeCounter -= Time.deltaTime; // Decrement the counter
-        }
-    }
-
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         if (!pauseMenu.isPaused)
         {
             MovePlayer();
-
-            if (!isGrounded)
-            {
-                ApplyAirDrag(); // Now also handles air movement direction change
-            }
-        }
-        if (isJumping && jumpTimeCounter > 0)
-        {
-            Jump(); // Continue applying jump force while the button is held
+            JumpBuffer();
+            ApplyCustomGravity();
         }
     }
 
     private void Update()
     {
         CheckGrounded();
-        Pvelocity = rb.velocity;
+        SpeedControl();
+        StateHandler();
         AdjustGroundDrag();
+    }
+    
+    
+    public void LoadData(GameData data)
+    {
+        transform.position = data.playerPosition;
+        rb.velocity = Vector3.zero;
+    }
+    
+    public void SaveData(ref GameData data)
+    {
+        data.playerPosition = this.transform.position;
+    }
+    
+    public void JumpBuffer() {
+        if (Time.time - LastJumpPressTime <= jumpBufferDuration) {
+            tryToJump();
+        }
+    }
+
+    public void OnJump(InputValue value)
+    {
+        if (value.isPressed) {
+            LastJumpPressTime = Time.time;
+            tryToJump();
+        }
+
+    }
+
+    private void tryToJump() {
+        if (readyToJump)
+        {
+            if (CheckCayoteJump() || canDoubleJump)
+            {
+                Jump();
+                if (!CheckCayoteJump() && canDoubleJump)
+                {
+                    canDoubleJump = false; // Prevent further jumps
+                }
+            }
+        }
+    }
+    
+    private bool CheckCayoteJump() {
+        return Time.time - lastTimeGrounded <= cayoteTime;
+    }
+    
+    private void ApplyCustomGravity()
+    {
+        rb.AddForce(Physics.gravity * gravityStrength, ForceMode.Acceleration);
+    }
+
+    public void OnSprint(InputValue value)
+    {
+        isSprinting = value.isPressed;
+    }
+    
+    public void OnMove(InputValue value)
+    {
+        movementInput = value.Get<Vector2>();
+        horizontalInput = movementInput.x;
+        verticalInput = movementInput.y;
+    }
+    
+    private void MovePlayer()
+    {
+        moveDirection = playerCamera.transform.forward * verticalInput + playerCamera.transform.right * horizontalInput;
+        moveDirection.y = 0; // Keep movement horizontal
+
+        float currentSpeed = isSprinting ? sprintSpeed : walkSpeed;
+        
+        if (OnSlope() && !exitingSlope)
+        {
+            rb.AddForce(GetSlopeMoveDirection() * (currentSpeed + 16 ) * 8f, ForceMode.Force);
+
+            if (rb.velocity.y > 0)
+                rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+        }
+        else if (isGrounded)
+        {
+            rb.AddForce(moveDirection.normalized * currentSpeed * 10f, ForceMode.Force);
+        }
+        else
+        {
+            rb.AddForce(moveDirection.normalized * currentSpeed * 10f * airMultiplier, ForceMode.Force);
+        }
+
+        // Control gravity manually
+        gravityEnabled = !OnSlope();
+    }
+
+    private void SpeedControl()
+    {
+        float limitSpeed = isSprinting ? sprintSpeed : walkSpeed;
+        // limiting speed on slope
+        if (OnSlope() && !exitingSlope) {
+            if (rb.velocity.magnitude > limitSpeed)
+                rb.velocity = rb.velocity.normalized * limitSpeed;
+        } 
+        else {
+            Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+            
+            if (flatVel.magnitude > limitSpeed)
+            {
+                rb.velocity = new Vector3(flatVel.normalized.x * limitSpeed, rb.velocity.y, flatVel.normalized.z * limitSpeed);
+            }
+        }
+    }
+
+    private void StateHandler()
+    {
+        if (isGrounded)
+        {
+            canDoubleJump = true; // Reset double jump capability when grounded
+        }
+    }
+
+    private void Jump()
+    {
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        
+        readyToJump = false;
+        exitingSlope = true;
+        LastJumpPressTime = 0;
+        
+        Invoke(nameof(ResetJump), jumpCooldown);
+    }
+
+    private void ResetJump()
+    {
+        readyToJump = true;
+        exitingSlope = false;
+    }
+
+    private void CheckGrounded()
+    {
+        isGrounded = Physics.CheckBox(transform.position - new Vector3(0, 0.05f, 0), new Vector3(0.2f, 0.1f, 0.2f), Quaternion.identity, groundLayer);
+        if (isGrounded)
+        {
+            canDoubleJump = true;
+            lastTimeGrounded = Time.time;
+        }
     }
 
     private void AdjustGroundDrag()
     {
         if (isGrounded)
-        {
-            // Apply lower drag if moving, higher if stationary to allow for instant stopping
-            rb.drag = (movementInput.magnitude > 0) ? lowGroundDrag : highGroundDrag;
-        }
+            rb.drag = groundDrag;
         else
+            rb.drag = 0;
+    }
+
+    private bool OnSlope()
+    {
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, 0.3f)) // Adjust 1f if needed
         {
-            rb.drag = airDrag; // Use air drag when not grounded
+            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+            return angle <= maxSlopeAngle && angle != 0;
         }
+        return false;
     }
 
-    private void MovePlayer()
+    private Vector3 GetSlopeMoveDirection()
     {
-        // Get the right and forward direction of the camera on the horizontal plane
-        Vector3 forward = playerCamera.transform.forward;
-        Vector3 right = playerCamera.transform.right;
-
-        // Zero out the y component to keep movement on the horizontal plane
-        forward.y = 0;
-        right.y = 0;
-
-        forward.Normalize();
-        right.Normalize();
-
-        // Calculate movement direction based on input and camera orientation
-        Vector3 movementDirection = right * movementInput.x + forward * movementInput.y;
-
-        float currentSpeed = isSprinting ? sprintSpeed : moveSpeed;
-
-        // Ground movement
-        if (isGrounded)
-        {
-            footstepTimer += Time.deltaTime;
-
-            if (footstepTimer >= footstepInterval && (movementInput.x != 0 || movementInput.y != 0))
-            {
-                GetComponent<AudioSource>().PlayOneShot(footstepSoundClip);
-                footstepTimer = 0f;
-            }
-
-            Vector3 forceDirection = movementDirection * currentSpeed - rb.velocity;
-            forceDirection.y = 0; // Keep vertical velocity unaffected
-            rb.AddForce(forceDirection, ForceMode.VelocityChange);
-        }
-        else
-        {
-            Vector3 airForceDirection = movementDirection.normalized * currentSpeed;
-            rb.AddForce(airForceDirection * Time.deltaTime, ForceMode.VelocityChange);
-        }
-    }
-
-    private void ApplyAirDrag()
-    {
-        // Calculate the intended air movement direction
-        Vector3 airMovementDirection = playerCamera.transform.right * movementInput.x + playerCamera.transform.forward * movementInput.y;
-        airMovementDirection.Normalize();
-        airMovementDirection.y = 0; // Keep vertical movement out of our calculations
-
-        // Calculate target velocity in the air
-        Vector3 targetVelocity = airMovementDirection * targetAirSpeed;
-        // Calculate the difference between current and target velocity
-        Vector3 velocityDifference = targetVelocity - rb.velocity;
-        velocityDifference.y = 0; // Ignore vertical velocity
-
-        // Apply a force based on the difference, scaled by air control
-        // This allows for changing direction without increasing overall speed
-        rb.AddForce(velocityDifference * airControl, ForceMode.Acceleration);
-    }
-
-    private void CheckGrounded()
-    {
-        isGrounded = Physics.CheckBox(transform.position - new Vector3(0, -0.04f, 0), new Vector3(0.2f, 0.1f, 0.2f), Quaternion.identity, groundLayer, QueryTriggerInteraction.Ignore);
-        if (isGrounded) hasDoubleJumped = false; // Reset double jump if grounded
-    }
-
-    void OnDrawGizmos()
-    {
-        // Set the color of the Gizmo (optional)
-        Gizmos.color = Color.red;
-
-        // Draw a cube to visualize the ground check area
-        // Adjust the position and size according to your ground check logic
-        Vector3 boxCenter = transform.position - new Vector3(0, -0.04f, 0);
-        Vector3 boxSize = new Vector3(0.1f, 0.1f, 0.1f);
-
-        // Actually draw the cube
-        Gizmos.DrawWireCube(boxCenter, boxSize);
+        return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
     }
 }

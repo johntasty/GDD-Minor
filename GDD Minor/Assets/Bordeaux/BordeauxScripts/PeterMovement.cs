@@ -1,6 +1,3 @@
-
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -15,6 +12,7 @@ public class PeterMovement : MonoBehaviour
 
     public float groundDrag;
     public float gravityStrength = 3f;
+    
     [Header("Jumping")]
     public float jumpForce;
     public float jumpCooldown;
@@ -329,6 +327,7 @@ public class PeterMovement : MonoBehaviour
 
     public TextMeshProUGUI text_speed;
     public TextMeshProUGUI text_mode;
+    
     private void TextStuff()
     {
         Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
