@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class Custom_Assets : MonoBehaviour
+public class Custom_Assets 
 {
     [MenuItem("Splines/Path Maker", false, 10)]
     static void CreateCustomSpline(MenuCommand menuCommand)
