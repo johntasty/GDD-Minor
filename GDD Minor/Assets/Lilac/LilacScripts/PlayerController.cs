@@ -163,7 +163,14 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         isGrappling = false;
         grappleTime = 0f;
         lastGrappleTime = Time.time;
-        rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y * 1.25f, rb.velocity.z);
+
+        // Calculate a momentum boost vector
+        Vector3 momentumBoost = (grappleTarget - transform.position).normalized * (grappleSpeed * 0.5f);  // Adjust the multiplier to desired effect
+
+        // Apply the current velocity with a portion of the boost
+        rb.velocity = rb.velocity * 0.75f + momentumBoost;  // Blend current velocity with a boost vector
+
+        Debug.Log("Grapple released with momentum: " + rb.velocity);
     }
     
     public void JumpBuffer() {
