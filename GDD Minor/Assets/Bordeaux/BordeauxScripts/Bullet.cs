@@ -11,6 +11,7 @@ public class Bullet : MonoBehaviour
     //Assigned things
     public Rigidbody rb;
     public GameObject explosion;
+    public GameObject trail;
     public LayerMask enemyMask;
 
     //Bullet stats
@@ -31,6 +32,10 @@ public class Bullet : MonoBehaviour
 
     int collisions = 0;
     PhysicMaterial physicMaterial;
+
+	private void Awake() {
+        trail = transform.GetChild(1).gameObject;
+	}
 
 	private void Start() {
         Setup();
@@ -124,4 +129,9 @@ public class Bullet : MonoBehaviour
         yield return new WaitForSeconds(delay);
         rb.useGravity = true;
     }
+
+	private void OnDestroy() {
+        trail.GetComponent<TrailRenderer>().autodestruct = true;
+        trail.transform.parent = null;
+	}
 }
