@@ -2,6 +2,7 @@ using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class MenuManager : MonoBehaviour
 {
@@ -17,9 +18,11 @@ public class MenuManager : MonoBehaviour
     public bool isPaused = false;
     public bool settingsOpen = false;
 
+    private GameObject _Player;
     private void OnEnable()
     {
         actions.FindAction("Pause").performed += OnPause;
+        
     }
 
     private void OnDisable()
@@ -27,9 +30,12 @@ public class MenuManager : MonoBehaviour
         actions.FindAction("Pause").performed -= OnPause;
     }
 
-    void start()
-    {
-        pauseMenu.SetActive(false);
+    void Start()
+    {                
+        _Player = GameObject.FindGameObjectWithTag("Player");
+        
+        pauseMenu.SetActive(true);
+        PlayerVirtualCamera = _Player.GetComponentInChildren<CinemachineVirtualCamera>();
     }
 
     void Update()
@@ -61,7 +67,7 @@ public class MenuManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         pauseMenu.SetActive(true);
-
+        _Player.GetComponent<PlayerController>().enabled = false;
         PlayerVirtualCamera.gameObject.SetActive(false);
     }
 
@@ -74,7 +80,7 @@ public class MenuManager : MonoBehaviour
         Cursor.visible = false;
         pauseMenu.SetActive(false);
         settingsMenu.SetActive(false);
-
+        _Player.GetComponent<PlayerController>().enabled = true;
         PlayerVirtualCamera.gameObject.SetActive(true);
     }
 
