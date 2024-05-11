@@ -1,5 +1,4 @@
 using System;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -29,37 +28,39 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     [Header("Ground Check")]
     [SerializeField] private LayerMask groundLayer;
     private bool isGrounded;
-    
+
     [Header("Slope Handling")]
     public float maxSlopeAngle;
     private RaycastHit slopeHit;
     private bool exitingSlope;
-    
-    [Header("Grappling Hook Settings")] // Added some comments here because even I got confused by them :)
-    [SerializeField] private float grappleCooldown = 2f; // The cooldown time in seconds that the player must wait before being able to use the grappling hook again after it has been used.
-    [SerializeField] private AnimationCurve grappleAccelerationCurve; // An animation curve that allows the designer to visually edit how the grapple speed accelerates over the duration of the grapple. This is used to make the grappling feel more dynamic.
-    [SerializeField]private float grappleSpeed = 10f; // The base speed of the grapple when it is first initiated. This speed is modified by the grappleAccelerationCurve as the grapple continues.
-    private Transform grapplePoint; // A reference to the transform of the target object that the grappling hook attaches to. This could be any dynamic object in the game scene, like a flying book.
-    private float lastGrappleTime = -Mathf.Infinity; // The time at which the last grapple was initiated. This is used to enforce the grappleCooldown period.
-    private bool isGrappling = false; // A boolean flag indicating whether the player is currently using the grappling hook. This is used to control game logic in Update or FixedUpdate methods.
-    private Vector3 grappleTarget; // The current target position of the grapple. If the grapplePoint is a moving object, this position is updated every frame to ensure the player moves towards the current position of the target.
-    private float grappleTime = 0f; // A timer that tracks the duration of the current grapple from start to finish. Used with the grappleAccelerationCurve to calculate the current speed.
-    private float startGrappleDistance;
-    
+
+    [Header("Grappling Hook Settings")]
+    [SerializeField] Transform grapplingCamTransform;
+    [SerializeField] Transform GrappleGunTip;
+    [SerializeField] LineRenderer lineRenderer;
+    [SerializeField] LayerMask whatIsGrappleable;
+    [SerializeField] float maxGrappleDistance = 100f;
+    [SerializeField] float grappleDelayTime = 0.1f;
+    [SerializeField] float overshootYAxis = 5f;
+    [SerializeField] float grappleCoolDown = 2f;
+    private Vector3 grapplePoint;
+    private float grapplingCooldownTimer;
+    private bool grappling;
+    private Transform targetTransform;
+
     [Header("Misc")]
     [SerializeField] private Camera playerCamera;
 
     private Rigidbody rb;
     private Vector2 movementInput;
     private AudioSource audioSource;
-    
     private float lastTimeGrounded;
 
     private float horizontalInput;
     private float verticalInput;
     private Vector3 moveDirection;
     private bool gravityEnabled = true;
-    
+
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -69,6 +70,108 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
         rb.useGravity = false;
         this.enabled = true;
+    }
+
+    private void Update()
+    {
+        CheckGrounded();
+        SpeedControl();
+        StateHandler();
+        AdjustGroundDrag();
+
+        if (Input.GetKeyDown(KeyCode.Mouse1) && !grappling) {
+            StartGrapple();
+        }
+
+        if (grapplingCooldownTimer > 0)
+            grapplingCooldownTimer -= Time.deltaTime;
+
+        if (grappling) {
+            UpdateLineRenderer();
+        }
+
+        UpdateLineRenderer();  // Update the line renderer every frame during grappling
+    }
+    
+    private void UpdateLineRenderer()
+    {
+        if (lineRenderer && grappling) {
+            lineRenderer.SetPosition(0, GrappleGunTip.position);
+            if (targetTransform != null) {
+                lineRenderer.SetPosition(1, targetTransform.position);
+            } else {
+                lineRenderer.SetPosition(1, grapplePoint);
+            }
+        }
+    }
+
+    private void ExecuteGrapple()
+    {
+
+    }
+
+    private void JumpToPosition(Vector3 position, float height)
+    {
+        Vector3 jumpDirection = (position - transform.position).normalized;
+        float distance = Vector3.Distance(transform.position, position);
+        float velocity = Mathf.Sqrt(distance * (gravityStrength) / Mathf.Sin(2 * 45 * Mathf.Deg2Rad));
+
+        rb.velocity = new Vector3(jumpDirection.x * velocity, height * 1.4f, jumpDirection.z * velocity);
+    }
+
+    public void OnGrapple(InputValue value)
+    {
+        if (value.isPressed)
+        {
+            StartGrapple();
+        }
+        else
+        {
+            StopGrapple();
+        }
+    }
+
+    private void StartGrapple()
+    {
+        if (grappling || grapplingCooldownTimer > 0) return;
+
+        RaycastHit hit;
+        if (Physics.Raycast(grapplingCamTransform.position, grapplingCamTransform.forward, out hit, maxGrappleDistance, whatIsGrappleable))
+        {
+            SetupGrapple(hit);
+        }
+        else
+        {
+            grapplePoint = grapplingCamTransform.position + grapplingCamTransform.forward * maxGrappleDistance;
+            // Optionally manage a missed grapple...
+        }
+    }
+
+    private void SetupGrapple(RaycastHit hit)
+    {
+        grapplePoint = hit.point;
+        targetTransform = hit.transform; // Save hit object's transform
+        lineRenderer.enabled = true;
+        lineRenderer.SetPosition(0, GrappleGunTip.position);
+        lineRenderer.SetPosition(1, grapplePoint);
+        grappling = true;
+        grapplingCooldownTimer = grappleCoolDown;
+        
+        Vector3 lowestPoint = new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z);
+        float grapplePointRelativeYPos = grapplePoint.y - lowestPoint.y;
+        float highestPointOnArc = grapplePointRelativeYPos + overshootYAxis;
+        if (grapplePointRelativeYPos < 0) highestPointOnArc = overshootYAxis;
+
+        JumpToPosition(grapplePoint, highestPointOnArc);
+
+        Invoke(nameof(StopGrapple), 1.5f);
+    }
+
+    public void StopGrapple()
+    {
+        grappling = false;
+        targetTransform = null; // Clear the target transform
+        if (lineRenderer) lineRenderer.enabled = false;
     }
 
     private void OnDrawGizmos() {
@@ -83,18 +186,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         ApplyCustomGravity();
     }
 
-    private void Update()
-    {
-        CheckGrounded();
-        SpeedControl();
-        StateHandler();
-        AdjustGroundDrag();
-        if (isGrappling) {
-            GrappleMove();
-        }
-    }
-    
-    
     public void LoadData(GameData data)
     {
         transform.position = data.playerPosition;
@@ -106,79 +197,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         data.playerPosition = this.transform.position;
     }
     
-    public void OnGrapple(InputValue value) {
-        bool isPressed = value.isPressed;
-        if (Time.time - lastGrappleTime > grappleCooldown && isPressed && !isGrappling) {
-            StartGrapple();
-        } else if (!isPressed && isGrappling) {
-            ReleaseGrapple();
-        }
-    }
-
-    private void StartGrapple() {
-        RaycastHit hit;
-        Vector3 rayOrigin = playerCamera.transform.position + playerCamera.transform.forward * 0.5f;
-        int layerMask = 1 << LayerMask.NameToLayer("GrapplingPoint");
-
-        if (Physics.Raycast(rayOrigin, playerCamera.transform.forward, out hit, 100.0f, layerMask)) {
-            if (hit.point.y > transform.position.y) {
-                lastGrappleTime = Time.time;
-                Debug.DrawLine(rayOrigin, hit.point, Color.red, 5f);
-                Debug.DrawRay(hit.point, Vector3.up * 1, Color.blue, 5f);
-                Debug.Log("Hit: " + hit.collider.name + ", Point: " + hit.point + ", Distance: " + hit.distance);
-
-                grapplePoint = hit.transform;
-                grappleTarget = grapplePoint.position;
-                startGrappleDistance = Vector3.Distance(transform.position, grappleTarget);
-                isGrappling = true;
-                rb.velocity = Vector3.zero;
-                Debug.Log("Grapple started to: " + grappleTarget);
-            }
-        } else {
-            Debug.Log("No hit");
-        }
-    }
-    
-    private void GrappleMove() {
-        if (grapplePoint != null) {
-            grappleTarget = grapplePoint.position;
-        }
-        float currentDistance = Vector3.Distance(transform.position, grappleTarget);
-        grappleTime += Time.deltaTime;
-        
-        currentDistance = Mathf.Min(currentDistance, startGrappleDistance);
-    
-        float normalizedDistance = 1 - (currentDistance / startGrappleDistance);
-        float curveSpeed = grappleAccelerationCurve.Evaluate(normalizedDistance) * grappleSpeed;
-        Vector3 direction = (grappleTarget - transform.position).normalized;
-    
-        rb.velocity = Vector3.Lerp(rb.velocity, direction * curveSpeed, Time.deltaTime * 10);
-    
-        if (currentDistance < 2f || transform.position.y >= grapplePoint.position.y) {
-            ReleaseGrapple();
-        }
-    }
-
-    private void ReleaseGrapple() {
-        isGrappling = false;
-        grappleTime = 0f;
-        lastGrappleTime = Time.time;
-
-        // Calculate a momentum boost vector
-        Vector3 momentumBoost = (grappleTarget - transform.position).normalized * (grappleSpeed * 0.5f);  // Adjust the multiplier to desired effect
-
-        // Apply the current velocity with a portion of the boost
-        rb.velocity = rb.velocity * 0.75f + momentumBoost;  // Blend current velocity with a boost vector
-
-        Debug.Log("Grapple released with momentum: " + rb.velocity);
-    }
-    
-    public void JumpBuffer() {
-        if (Time.time - LastJumpPressTime <= jumpBufferDuration) {
-            tryToJump();
-        }
-    }
-
     public void OnJump(InputValue value)
     {
         if (value.isPressed) {
@@ -187,9 +205,16 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         }
 
     }
+    
+    public void JumpBuffer() {
+        if (Time.time - LastJumpPressTime <= jumpBufferDuration) {
+            tryToJump();
+        }
+    }
+
 
     private void tryToJump() {
-        if (readyToJump && !isGrappling)
+        if (readyToJump)
         {
             if (CheckCayoteJump() || canDoubleJump)
             {
@@ -225,11 +250,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     
     private void MovePlayer()
     {
-        
-        if (isGrappling) {
-            return;
-        }
-        
         moveDirection = playerCamera.transform.forward * verticalInput + playerCamera.transform.right * horizontalInput;
         moveDirection.y = 0; // Keep movement horizontal
 
