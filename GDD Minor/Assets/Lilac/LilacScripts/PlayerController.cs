@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
     [Header("Ground Check")]
     [SerializeField] private LayerMask groundLayer;
-    private bool isGrounded;
+    public bool isGrounded;
 
     [Header("Slope Handling")]
     public float maxSlopeAngle;
@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     [Header("Misc")]
     [SerializeField] private Camera playerCamera;
 
-    private Rigidbody rb;
+    public Rigidbody rb;
     private Vector2 movementInput;
     private AudioSource audioSource;
     private float lastTimeGrounded;
@@ -90,7 +90,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             UpdateLineRenderer();
         }
 
-        UpdateLineRenderer();  // Update the line renderer every frame during grappling
+        UpdateLineRenderer();
     }
     
     private void UpdateLineRenderer()
@@ -143,14 +143,13 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         else
         {
             grapplePoint = grapplingCamTransform.position + grapplingCamTransform.forward * maxGrappleDistance;
-            // Optionally manage a missed grapple...
         }
     }
 
     private void SetupGrapple(RaycastHit hit)
     {
         grapplePoint = hit.point;
-        targetTransform = hit.transform; // Save hit object's transform
+        targetTransform = hit.transform;
         lineRenderer.enabled = true;
         lineRenderer.SetPosition(0, GrappleGunTip.position);
         lineRenderer.SetPosition(1, grapplePoint);
@@ -170,7 +169,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     public void StopGrapple()
     {
         grappling = false;
-        targetTransform = null; // Clear the target transform
+        targetTransform = null;
         if (lineRenderer) lineRenderer.enabled = false;
     }
 

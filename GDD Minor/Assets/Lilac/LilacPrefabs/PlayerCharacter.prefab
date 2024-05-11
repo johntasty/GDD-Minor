@@ -438,7 +438,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_RecenterTarget: 0
   m_VerticalAxis:
-    Value: -60.549908
+    Value: -87.29997
     m_SpeedMode: 1
     m_MaxSpeed: 3
     m_AccelTime: 0
@@ -446,8 +446,8 @@ MonoBehaviour:
     m_InputAxisName: Mouse Y
     m_InputAxisValue: 0
     m_InvertInput: 1
-    m_MinValue: -70
-    m_MaxValue: 70
+    m_MinValue: -90
+    m_MaxValue: 90
     m_Wrap: 0
     m_Recentering:
       m_enabled: 0
@@ -462,7 +462,7 @@ MonoBehaviour:
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_HorizontalAxis:
-    Value: 157.49991
+    Value: 106.80032
     m_SpeedMode: 1
     m_MaxSpeed: 3
     m_AccelTime: 0
@@ -504,6 +504,7 @@ GameObject:
   - component: {fileID: 6815349078350190669}
   - component: {fileID: 6815349078350190666}
   - component: {fileID: 6815349078350190667}
+  - component: {fileID: 4121557359906897303}
   m_Layer: 10
   m_Name: PlayerCharacter
   m_TagString: Player
@@ -641,6 +642,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
+  isGrounded: 0
   maxSlopeAngle: 90
   grapplingCamTransform: {fileID: 4353896669066146550}
   GrappleGunTip: {fileID: 1578549503238061286}
@@ -653,6 +655,7 @@ MonoBehaviour:
   overshootYAxis: 10
   grappleCoolDown: 1
   playerCamera: {fileID: 6815349078422685103}
+  rb: {fileID: 0}
 --- !u!114 &6815349078350190669
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -780,6 +783,59 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &4121557359906897303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6815349078350190665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_ImpulseShape: 2
+    m_CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ImpulseDuration: 0.2
+    m_ImpulseType: 0
+    m_DissipationRate: 0.25
+    m_RawSignal: {fileID: 0}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 100
+    m_PropagationSpeed: 343
+  m_DefaultVelocity: {x: 0, y: -1, z: 0}
 --- !u!1 &6815349078422685096
 GameObject:
   m_ObjectHideFlags: 0
@@ -807,7 +863,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6815349078422685096}
-  m_LocalRotation: {x: -0.46939534, y: 0.3431963, z: 0.20458575, w: 0.7874192}
+  m_LocalRotation: {x: -0.41154334, y: 0.58089584, z: 0.5541468, w: 0.4314088}
   m_LocalPosition: {x: 0, y: 1.5650002, z: 0.0539999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -816,7 +872,7 @@ Transform:
   - {fileID: 6815349079211302063}
   m_Father: {fileID: 6815349078350190664}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 54.45}
 --- !u!20 &6815349078422685103
 Camera:
   m_ObjectHideFlags: 0
@@ -833,7 +889,7 @@ Camera:
   m_FOVAxisMode: 0
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
-  m_FocalLength: 50
+  m_FocalLength: 13.563533
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -892,7 +948,7 @@ MonoBehaviour:
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 0
-  m_Antialiasing: 0
+  m_Antialiasing: 1
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 0
@@ -1028,6 +1084,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4353896669066146550}
   - component: {fileID: 4353896669066146551}
+  - component: {fileID: 6551470896922338518}
   m_Layer: 10
   m_Name: VirtualCamera
   m_TagString: Untagged
@@ -1042,7 +1099,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6815349078532295150}
-  m_LocalRotation: {x: -0.09835519, y: 0.84702176, z: 0.494463, w: 0.16848376}
+  m_LocalRotation: {x: -0.41154334, y: 0.58089584, z: 0.5541468, w: 0.4314088}
   m_LocalPosition: {x: 0, y: 1.5650002, z: 0.0539999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1052,7 +1109,7 @@ Transform:
   - {fileID: 594348094926998004}
   m_Father: {fileID: 6815349078350190664}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -89.912, y: 0, z: 54.361}
 --- !u!114 &4353896669066146551
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1091,6 +1148,29 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 6815349078286504449}
+--- !u!114 &6551470896922338518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6815349078532295150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00b2d199b96b516448144ab30fb26aed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ApplyAfter: 2
+  m_ChannelMask: 1
+  m_Gain: 1
+  m_Use2DDistance: 0
+  m_UseCameraSpace: 1
+  m_ReactionSettings:
+    m_SecondaryNoise: {fileID: 0}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_Duration: 1
+    m_NoiseOffsets: {x: 228.7258, y: -799.7722, z: -400.2446}
 --- !u!1 &6815349078606012791
 GameObject:
   m_ObjectHideFlags: 0
