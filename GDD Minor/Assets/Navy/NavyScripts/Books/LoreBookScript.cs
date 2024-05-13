@@ -24,21 +24,17 @@ public class LoreBookScript : MonoBehaviour
     [SerializeField] private CanvasGroup bookUI;
     [SerializeField] private Button prevPageButton;
     [SerializeField] private Button nextPageButton;
-    [SerializeField] private InputActionAsset inputManager;
-    [SerializeField] private Look_Target_script lookTarget;
+
     [SerializeField] private TMP_Text pageContent;
     [SerializeField] private TMP_Text pageContentOverflow;
     [SerializeField] private Image backgroundLeft;
     [SerializeField] private Image backgroundRight;
 
-    private CinemachineVirtualCamera _playerCamera;
     private int _currentPage = 0;
     private int _pageCount;
-
+    private Vector2 inOut;
     private void Start()
     {
-        var activeCam = CinemachineCore.Instance.GetActiveBrain(0).ActiveVirtualCamera;
-        _playerCamera = (CinemachineVirtualCamera) activeCam;
         _pageCount = pages.Count;
 
         backgroundLeft.color = pageBackgroundColor;
@@ -68,15 +64,14 @@ public class LoreBookScript : MonoBehaviour
     
     public void ShowBook()
     {
-        bookUI.gameObject.SetActive(true);
-        StartCoroutine(FadeCanvasCoroutine(bookUI, 0f, 1f, fadeInDuration, true));
-        lookTarget.EnableViewing();
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        bookUI.gameObject.SetActive(!bookUI.gameObject.activeInHierarchy);
+        bool activeBook = bookUI.gameObject.activeInHierarchy;
 
+        inOut = activeBook ? new Vector2(0f, 1f) : new Vector2(1f, 0f);
+        StartCoroutine(FadeCanvasCoroutine(bookUI, inOut.x, inOut.y, fadeInDuration, activeBook));        
+        Cursor.lockState = activeBook ? CursorLockMode.None : CursorLockMode.Locked; 
+        Cursor.visible = activeBook;
 
-        inputManager.Disable();
-        _playerCamera.gameObject.SetActive(false);
     }
 
     public void OnPreviousPageClicked()
@@ -91,15 +86,9 @@ public class LoreBookScript : MonoBehaviour
 
     public void OnCloseBookClicked()
     {
-        StartCoroutine(FadeCanvasCoroutine(bookUI, 1f, 0f, fadeOutDuration, false));
-        lookTarget.DisableViewing();
+        StartCoroutine(FadeCanvasCoroutine(bookUI, 1f, 0f, fadeOutDuration, false));        
         Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        
-
-        inputManager.Enable();
-        _playerCamera.gameObject.SetActive(true);
-
+        Cursor.visible = false;      
     }
     
     IEnumerator FadeCanvasCoroutine(CanvasGroup canvas, float from, float to, float fadeDuration, bool activeAtEnd)
