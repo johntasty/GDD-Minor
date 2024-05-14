@@ -36,8 +36,9 @@ namespace Bordeaux.BordeauxScripts
         {
                 if (canAttack && player != null)
                 {
-                    if (Vector3.Distance(player.position, transform.position) < 30)
+                    if (Vector3.Distance(player.position, transform.position) < 15)
                     {
+                        //possibly do with raycast to have line of sight
                     Vector3 direction = player.position - transform.position;
                     Quaternion rotation = Quaternion.LookRotation(direction);
                     transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * 5f);
