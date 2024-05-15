@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -60,6 +61,9 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     private float verticalInput;
     private Vector3 moveDirection;
     private bool gravityEnabled = true;
+    private bool wasInAir = false;
+    private bool canBounce = true;
+    private float bounceCooldown = 0.5f;
 
     void Awake()
     {
@@ -320,12 +324,40 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
     private void CheckGrounded()
     {
+
+        bool isPreviouslyGrounded = isGrounded;
         isGrounded = Physics.CheckBox(transform.position - new Vector3(0, 0.05f, 0), new Vector3(0.2f, 0.1f, 0.2f), Quaternion.identity, groundLayer);
+
+        if (!isPreviouslyGrounded && isGrounded && wasInAir && canBounce)
+        {
+            StartCoroutine(ApplyBounceEffect());
+        }
+
         if (isGrounded)
         {
             canDoubleJump = true;
             lastTimeGrounded = Time.time;
+            wasInAir = false;
         }
+        else
+        {
+            wasInAir = true;
+        }
+    }
+
+    private IEnumerator ApplyBounceEffect()
+    {
+        
+        canBounce = false;
+
+        float bounceForce = 3f;
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        rb.AddForce(Vector3.up * bounceForce, ForceMode.Impulse);
+
+        yield return new WaitForSeconds(0.2f);
+
+        yield return new WaitForSeconds(bounceCooldown);
+        canBounce = true;
     }
 
     private void AdjustGroundDrag()
