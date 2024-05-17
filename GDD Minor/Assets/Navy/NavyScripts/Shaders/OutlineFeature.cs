@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using static Unity.Burst.Intrinsics.X86.Avx;
 using static Unity.VisualScripting.Member;
 using static UnityEditor.ShaderData;
 
@@ -21,11 +22,13 @@ public class OutlineFeature : ScriptableRendererFeature
         private FilteringSettings _filteringSettings;
         private static readonly ShaderTagId _outlineDe = new ShaderTagId("OutlineShader");
         private const string ProfilerTag = "Outline Pass";
-        public CustomRenderPass(Material mat, LayerMask layerMask)
+        Renderer OutlinedObject;
+        public CustomRenderPass(Material mat, LayerMask layerMask, Renderer objectRend)
         {
             material = mat;
             LayerMask = layerMask;
             profilingSampler = new ProfilingSampler(ProfilerTag);
+            OutlinedObject = objectRend;
         }
         // This method is called before executing the render pass.
         // It can be used to configure render targets and their clear state. Also to create temporary render target textures.
@@ -41,7 +44,7 @@ public class OutlineFeature : ScriptableRendererFeature
             
             source = renderer.cameraColorTarget;
 
-            cmd.GetTemporaryRT(temporaryRTIdA, descriptor, FilterMode.Bilinear);
+            cmd.GetTemporaryRT(temporaryRTIdA, descriptor);
             destinationA = new RenderTargetIdentifier(temporaryRTIdA);
 
             _filteringSettings = new FilteringSettings(RenderQueueRange.all, LayerMask.value);
@@ -59,20 +62,25 @@ public class OutlineFeature : ScriptableRendererFeature
                 return;
             }
             CommandBuffer cmd = CommandBufferPool.Get();
-            using (new ProfilingScope(cmd, profilingSampler))
+            Blit(cmd, source, destinationA);
+
+            cmd.SetRenderTarget(destinationA);
+            
+            cmd.ClearRenderTarget(true, true, Color.clear);
+           
+            //FilteringSettings filteringSettings = new FilteringSettings(RenderQueueRange.all,
+            //                                                                LayerMask.value,
+            //                                                                uint.MaxValue);
+            //DrawingSettings drawingSettings = CreateDrawingSettings(_outlineDe, ref renderingData, SortingCriteria.CommonOpaque);
+            //context.DrawRenderers(renderingData.cullResults, ref drawingSettings, ref filteringSettings);
+            //context.Submit();
+            if (OutlinedObject != null)
             {
-                context.ExecuteCommandBuffer(cmd);
-                cmd.Clear();
+                cmd.DrawRenderer(OutlinedObject, material);
+            }           
 
-
-                FilteringSettings filteringSettings = new FilteringSettings(RenderQueueRange.all,
-                                                                            LayerMask.value,
-                                                                            uint.MaxValue);
-                DrawingSettings drawingSettings = CreateDrawingSettings(_outlineDe, ref renderingData, SortingCriteria.CommonOpaque);
-                context.DrawRenderers(renderingData.cullResults, ref drawingSettings, ref filteringSettings);
-                context.Submit();
-            }
-          
+            
+            Blit(cmd, destinationA, source);
             context.ExecuteCommandBuffer(cmd);            
             CommandBufferPool.Release(cmd);
             
@@ -90,10 +98,11 @@ public class OutlineFeature : ScriptableRendererFeature
     public Material m_Material;
     [Header("Rendering")]
     public LayerMask LayerMask = 0;
+    public Renderer m_Renderer;
     /// <inheritdoc/>
     public override void Create()
     {
-        m_ScriptablePass = new CustomRenderPass(m_Material, LayerMask);
+        m_ScriptablePass = new CustomRenderPass(m_Material, LayerMask, m_Renderer);
 
         // Configures where the render pass should be injected.
         m_ScriptablePass.renderPassEvent = m_PassEvent;
