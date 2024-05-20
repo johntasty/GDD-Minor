@@ -78,8 +78,6 @@ public class Bullet : MonoBehaviour
             }
 		}
 
-		
-
 		Invoke("Delay", 0.01f);
     }
 
