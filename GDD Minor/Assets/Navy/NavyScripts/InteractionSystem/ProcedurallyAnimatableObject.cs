@@ -15,7 +15,7 @@ public class ProcedurallyAnimatableObject : MonoBehaviour
     [Tooltip("The amount of time it will take for the door to animate")]
     [Min(0)]
     [SerializeField]
-    private float durationSeconds = 1.0f;
+    public float durationSeconds = 1.0f;
 
     //[SerializeField]
     [HideInInspector]
@@ -76,7 +76,7 @@ public class ProcedurallyAnimatableObject : MonoBehaviour
             if (AnimatePosition)
             {
                 float t = positionCurve.Evaluate(percentDone);
-                Vector3 slerpedPosition = Vector3.Slerp(_originalPosition, targetPosition, t);
+                Vector3 slerpedPosition = Vector3.Lerp(_originalPosition, targetPosition, t);
                 pivotObject.position = slerpedPosition;
             }
 
