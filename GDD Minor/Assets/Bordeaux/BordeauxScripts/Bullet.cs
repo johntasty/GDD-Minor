@@ -70,7 +70,7 @@ public class Bullet : MonoBehaviour
 		}
 		else {
             if (collider != null) {
-                collider.GetComponent<Entity>().TakeDamage(explosionDamage);
+                collider.GetComponent<Health>().DecreaseHealth(explosionDamage);
             }
             else {
 			    explosionRange = 0.1f;
@@ -89,7 +89,7 @@ public class Bullet : MonoBehaviour
 		    for (int i = 0; i < enemies.Length; i++) {
 			    Debug.Log(enemies[i]);
 			    if (i == 0 || enemies[i] != enemies[i - 1]) {
-				    enemies[i].GetComponent<Entity>().TakeDamage(explosionDamage);
+				    enemies[i].GetComponent<Health>().DecreaseHealth(explosionDamage);
 			    }
 		    }
         }

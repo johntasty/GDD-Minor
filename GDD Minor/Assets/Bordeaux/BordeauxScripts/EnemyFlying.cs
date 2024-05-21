@@ -9,8 +9,8 @@ namespace Bordeaux.BordeauxScripts
         private Transform player;
         public float moveSpeed = 5f;
         public float stoppingDistance = 5f;
-        public float verticalDistance = 10f;
-        public float horizontalDistance = 10f;
+        public float verticalDistance = 5f;
+        public float horizontalDistance = 5f;
 
         private Rigidbody rb;
         private bool canAttack = true;
@@ -34,26 +34,30 @@ namespace Bordeaux.BordeauxScripts
 
         void Update()
         {
-            if (canAttack && player != null)
-            {
-                Vector3 direction = player.position - transform.position;
-                Quaternion rotation = Quaternion.LookRotation(direction);
-                transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * 5f);
-            
-            
-                Vector3 targetPosition = player.position + new Vector3(0, verticalDistance, horizontalDistance);
-                Vector3 moveDirection = (targetPosition - transform.position).normalized;
-
-                float distanceToPlayer = Vector3.Distance(transform.position, targetPosition);
-
-                if (distanceToPlayer > stoppingDistance)
+                if (canAttack && player != null)
                 {
-                    rb.MovePosition(transform.position + moveDirection * moveSpeed * Time.fixedDeltaTime);
-                }
-                else
-                {
-                    rb.velocity = Vector3.zero;
-                    RequestAttack();
+                    if (Vector3.Distance(player.position, transform.position) < 15)
+                    {
+                        //possibly do with raycast to have line of sight
+                    Vector3 direction = player.position - transform.position;
+                    Quaternion rotation = Quaternion.LookRotation(direction);
+                    transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * 5f);
+
+
+                    Vector3 targetPosition = player.position + new Vector3(0, verticalDistance, horizontalDistance);
+                    Vector3 moveDirection = (targetPosition - transform.position).normalized;
+
+                    float distanceToPlayer = Vector3.Distance(transform.position, targetPosition);
+
+                    if (distanceToPlayer > stoppingDistance)
+                    {
+                        rb.MovePosition(transform.position + moveDirection * moveSpeed * Time.fixedDeltaTime);
+                    }
+                    else
+                    {
+                        rb.velocity = Vector3.zero;
+                        RequestAttack();
+                    }
                 }
             }
         }
