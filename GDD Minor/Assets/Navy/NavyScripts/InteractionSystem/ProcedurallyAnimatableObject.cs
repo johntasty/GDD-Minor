@@ -46,7 +46,13 @@ public class ProcedurallyAnimatableObject : MonoBehaviour
     private Vector3 _originalPosition;
     private Vector3 _originalRotation;
     private Coroutine _animationRoutine;
-
+    private enum AnimationUpdate
+    {
+        physicsUpdate = 1,
+        regularUpdate = 2
+    }
+    [SerializeField] private AnimationUpdate animationUpdate = AnimationUpdate.regularUpdate;
+    
     private void Start()
     {
         if (pivotObject == null)
@@ -68,7 +74,8 @@ public class ProcedurallyAnimatableObject : MonoBehaviour
         _isMoving = true;
 
         float elapsedTime = 0f;
-        
+
+        var updateAnimation = animationUpdate == AnimationUpdate.regularUpdate ? null : new WaitForEndOfFrame();
         while (elapsedTime < durationSeconds)
         {
             float percentDone = elapsedTime / durationSeconds;
@@ -87,9 +94,9 @@ public class ProcedurallyAnimatableObject : MonoBehaviour
                 Quaternion newRotation = Quaternion.Euler(slerpedRotation);
                 pivotObject.rotation = newRotation;
             }
-            
+
             elapsedTime += Time.deltaTime;
-            yield return null;
+            yield return updateAnimation;
         }
 
         if (AnimateRotation)

@@ -715,6 +715,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3297063126655750335, guid: ae37ac014d6934542ac703dd72728ca8, type: 3}
   m_PrefabInstance: {fileID: 4597006131240182584}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &7106168427238300424 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6725552307678722096, guid: ae37ac014d6934542ac703dd72728ca8, type: 3}
+  m_PrefabInstance: {fileID: 4597006131240182584}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5105778281081044942
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -770,8 +775,55 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4413885992866760395, guid: 6f04e5ce81334204aba30fbed41c450a, type: 3}
+      propertyPath: onTriggerEnter.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4413885992866760395, guid: 6f04e5ce81334204aba30fbed41c450a, type: 3}
+      propertyPath: onTriggerEnter.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4413885992866760395, guid: 6f04e5ce81334204aba30fbed41c450a, type: 3}
+      propertyPath: onTriggerEnter.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 8906461617996708099}
+    - target: {fileID: 4413885992866760395, guid: 6f04e5ce81334204aba30fbed41c450a, type: 3}
+      propertyPath: onTriggerEnter.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4413885992866760395, guid: 6f04e5ce81334204aba30fbed41c450a, type: 3}
+      propertyPath: onTriggerEnter.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: CheckpointColor
+      objectReference: {fileID: 0}
+    - target: {fileID: 4413885992866760395, guid: 6f04e5ce81334204aba30fbed41c450a, type: 3}
+      propertyPath: onTriggerEnter.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Floor_Checkpoint, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4413885992866760395, guid: 6f04e5ce81334204aba30fbed41c450a, type: 3}
+      propertyPath: onTriggerEnter.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4413885992866760395, guid: 6f04e5ce81334204aba30fbed41c450a, type: 3}
+      propertyPath: onTriggerEnter.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 7106168427238300424}
+    - target: {fileID: 4413885992866760395, guid: 6f04e5ce81334204aba30fbed41c450a, type: 3}
+      propertyPath: onTriggerEnter.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.MeshRenderer, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6f04e5ce81334204aba30fbed41c450a, type: 3}
+--- !u!114 &8906461617996708099 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4413885992866760397, guid: 6f04e5ce81334204aba30fbed41c450a, type: 3}
+  m_PrefabInstance: {fileID: 5105778281081044942}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd8f1c6af2c3f54ca8c98501974dd74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &8906461617996708100 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4413885992866760394, guid: 6f04e5ce81334204aba30fbed41c450a, type: 3}

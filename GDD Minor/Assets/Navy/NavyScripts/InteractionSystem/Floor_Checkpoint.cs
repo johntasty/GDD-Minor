@@ -14,6 +14,9 @@ public class Floor_Checkpoint : MonoBehaviour
         floorUnlocked.RaiseEvent(floorNumber);
         
     }
-    
+    public void CheckpointColor(MeshRenderer mesh)
+    {
+        mesh.material.color = new Color(255, 255, 255);
+    }
 
 }

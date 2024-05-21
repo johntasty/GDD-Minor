@@ -76,8 +76,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5647254898705660912}
-  - component: {fileID: 2346759724618332573}
-  - component: {fileID: 1391498413320940242}
+  - component: {fileID: 7285745698891093056}
+  - component: {fileID: 1723134067294017992}
   - component: {fileID: 1675418853750455657}
   - component: {fileID: 9096812422277616963}
   m_Layer: 6
@@ -94,17 +94,17 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 926313795560924309}
-  m_LocalRotation: {x: -0.27059805, y: -0.6532815, z: 0.27059805, w: 0.6532815}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.4999998, y: 2.4999998, z: 3.3333323}
+  m_LocalScale: {x: 0.05, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3554061644188172084}
   m_Father: {fileID: 8115537637084679974}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &2346759724618332573
-SphereCollider:
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!65 &7285745698891093056
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -114,9 +114,9 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.2
+  m_Size: {x: 1, y: 1.0000001, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1391498413320940242
+--- !u!114 &1723134067294017992
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -170,7 +170,7 @@ MonoBehaviour:
   onInteractEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1391498413320940242}
+      - m_Target: {fileID: 1723134067294017992}
         m_TargetAssemblyTypeName: Look_Target_script, Assembly-CSharp
         m_MethodName: EnableViewing
         m_Mode: 1
@@ -248,8 +248,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1103278239113647585}
-  m_LocalRotation: {x: 0.24344866, y: 0.6648583, z: -0.24479124, w: 0.6623997}
-  m_LocalPosition: {x: -0.17600004, y: 0.216, z: 0.0000000178814}
+  m_LocalRotation: {x: -0.042207424, y: 0.70752376, z: 0.0387843, w: 0.704361}
+  m_LocalPosition: {x: -13.859292, y: 0.070711344, z: 0.000000059604645}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2304,6 +2304,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  animationUpdate: 2
 --- !u!114 &619602406
 MonoBehaviour:
   m_ObjectHideFlags: 0
