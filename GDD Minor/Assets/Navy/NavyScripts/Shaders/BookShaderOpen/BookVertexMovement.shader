@@ -38,14 +38,16 @@ Shader "Unlit/BookVertexMovement"
             // make fog work
             #pragma multi_compile_fog
             #pragma multi_compile_instancing
+            #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/Shaders/LitInput.hlsl"
 
             struct appdata
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
-                float3 positionWS               : TEXCOORD1;
+                
                 float3 normalOS     : NORMAL;
                 float4 tangentOS    : TANGENT;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
@@ -54,10 +56,14 @@ Shader "Unlit/BookVertexMovement"
             struct v2f
             {
                 float2 uv : TEXCOORD0;
-                float3 positionWS               : TEXCOORD1;
+               
                 float4 vertex : SV_POSITION;
-                float3 normalWS                 : TEXCOORD2;
-                float3 lightTS                  : TEXCOORD3;
+                float3 normalWS                 : TEXCOORD3;
+                half3 tangentWS                 : TEXCOORD4;
+                half3 bitangentWS               : TEXCOORD5;
+                half3 positionsWS               : TEXCOORD1;
+                float4 positionWSAndFogFactor   : TEXCOORD2; // xyz: positionWS, w: vertex fog factor
+               
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -86,6 +92,8 @@ Shader "Unlit/BookVertexMovement"
                 UNITY_TRANSFER_INSTANCE_ID(v, o);
                 float waveSpeed = UNITY_ACCESS_INSTANCED_PROP(Props, _WaveSpeed);
                 float strideSpeed = UNITY_ACCESS_INSTANCED_PROP(Props, _StrideSpeed);
+
+
                 half sinUse = sin(-_Time.y * waveSpeed * _WaveDensity);			
                 float normalizedPos = (v.vertex.x - _Yoffset) * 2.0 - 1.0;
                 float distanceFromCenter = abs(normalizedPos);
@@ -93,35 +101,40 @@ Shader "Unlit/BookVertexMovement"
 				v.vertex.y = v.vertex.y + sinUse * _WaveHeight * yDirScaling;
 				v.vertex.y = v.vertex.y + sin(-_Time.y * strideSpeed ) * _StrideStrength;
 
-
-				o.vertex = TransformObjectToHClip(v.vertex);
-				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                o.positionWS = v.positionWS;
+                VertexPositionInputs vertexInput = GetVertexPositionInputs(v.vertex.xyz);
                 VertexNormalInputs vertexNormalInput = GetVertexNormalInputs(v.normalOS, v.tangentOS);
-                Light mainLight = GetMainLight();
-                float3x3 tangentMat = float3x3(vertexNormalInput.tangentWS, vertexNormalInput.bitangentWS, vertexNormalInput.normalWS);
-                o.lightTS = mul(tangentMat, mainLight.direction);
-                
+                // Computes fog factor per-vertex.
+                float fogFactor = ComputeFogFactor(vertexInput.positionCS.z);
+
+				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                o.positionWSAndFogFactor = float4(vertexInput.positionWS, fogFactor);
+                o.normalWS = vertexNormalInput.normalWS;
+                o.tangentWS = vertexNormalInput.tangentWS;
+                o.bitangentWS = vertexNormalInput.bitangentWS;
+                o.vertex =  vertexInput.positionCS;
+                o.positionsWS = vertexInput.positionWS;
                 return o;
             }
-
+            float3 Lambert(float3 lightColor, float3 lightDir, float3 normal)
+            {
+                float NdotL = saturate(dot(normal, lightDir));
+                return lightColor * NdotL;
+            }
             half4 frag (v2f i) : SV_Target
             {
                 UNITY_SETUP_INSTANCE_ID(i);
+
                 // sample the texture
                 half4 col = tex2D(_MainTex, i.uv);
-                // float3 normal = UnpackNormal(tex2D(_NormalMap, i.uv));
-                // float diff = saturate(dot(i.lightTS, normal));
-                // col += diff;
-                // int pixelLightCount = GetAdditionalLightsCount();
-                // for (int j = 0; j < pixelLightCount; ++j)
-                // {
-                //     Light light = GetAdditionalLight(j, i.positionWS);
-                //     half NdotL = saturate(dot(i.normalWS, light.direction));
-                //     half3 radiance = light.color * ((light.distanceAttenuation * light.shadowAttenuation) * NdotL);
-                //     col += half4(radiance,1.);
-                // }
                
+                float3 lightCol = _GlossyEnvironmentColor.xyz;
+                uint lightsCount = GetAdditionalLightsCount();
+                for (int j = 0; j < lightsCount; j++)
+                {
+                    Light light = GetAdditionalLight(j, i.positionsWS);
+                    lightCol += Lambert(light.color * (light.distanceAttenuation * light.shadowAttenuation), light.direction, i.normalWS);
+                }
+                col.rgb *= lightCol;
                 return col;
             }
             ENDHLSL
