@@ -9,13 +9,13 @@ public class Projectile : MonoBehaviour
     private float lifeDuration = 5f;
 
     public float damageAmount = 10f; // Amount of damage of the projectile 
-
+    private float damage;
 
     void Start()
     {
         Destroy(this.gameObject, lifeDuration);
-       
-
+        damage = damageAmount * DifficultyManager.Instance.damageMultiplier;
+        Debug.Log("Enemy Damage:" + damage);
     }
 
     void Update()
