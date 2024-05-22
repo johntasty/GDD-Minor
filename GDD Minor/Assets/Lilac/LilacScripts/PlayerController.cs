@@ -1,7 +1,7 @@
 using System;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Cinemachine;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(AudioSource))]
@@ -26,29 +26,49 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     [Header("Input Settings")]
     private bool isSprinting = false;
 
+    [Header("Field Of View")]
+    public float walkFOV = 83f;
+    public float sprintFOV = 60f;
+    public float FOVChangeTime = 2f; 
+    public bool dynamicFOV = true;
+    [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera;
+
     [Header("Ground Check")]
     [SerializeField] private LayerMask groundLayer;
-    private bool isGrounded;
-    
+    public bool isGrounded;
+
     [Header("Slope Handling")]
     public float maxSlopeAngle;
     private RaycastHit slopeHit;
     private bool exitingSlope;
 
+    [Header("Grappling Hook Settings")]
+    [SerializeField] Transform grapplingCamTransform;
+    [SerializeField] Transform GrappleGunTip;
+    [SerializeField] LineRenderer lineRenderer;
+    [SerializeField] LayerMask whatIsGrappleable;
+    [SerializeField] float maxGrappleDistance = 100f;
+    [SerializeField] float grappleDelayTime = 0.1f;
+    [SerializeField] float overshootYAxis = 5f;
+    [SerializeField] float grappleCoolDown = 2f;
+    private Vector3 grapplePoint;
+    private float grapplingCooldownTimer;
+    private bool grappling;
+    private Transform targetTransform;
+
     [Header("Misc")]
     [SerializeField] private Camera playerCamera;
 
-    private Rigidbody rb;
+    public Rigidbody rb;
     private Vector2 movementInput;
     private AudioSource audioSource;
-    
     private float lastTimeGrounded;
 
     private float horizontalInput;
     private float verticalInput;
     private Vector3 moveDirection;
     private bool gravityEnabled = true;
-    
+
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -58,6 +78,109 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
         rb.useGravity = false;
         this.enabled = true;
+        cinemachineVirtualCamera.m_Lens.FieldOfView = walkFOV;
+    }
+
+    private void Update()
+    {
+        CheckGrounded();
+        SpeedControl();
+        StateHandler();
+        AdjustGroundDrag();
+        DynamicFOV();
+
+        if (Input.GetKeyDown(KeyCode.Mouse1) && !grappling) {
+            StartGrapple();
+        }
+
+        if (grapplingCooldownTimer > 0)
+            grapplingCooldownTimer -= Time.deltaTime;
+
+        if (grappling) {
+            UpdateLineRenderer();
+        }
+
+        UpdateLineRenderer();
+    }
+    
+    private void UpdateLineRenderer()
+    {
+        if (lineRenderer && grappling) {
+            lineRenderer.SetPosition(0, GrappleGunTip.position);
+            if (targetTransform != null) {
+                lineRenderer.SetPosition(1, targetTransform.position);
+            } else {
+                lineRenderer.SetPosition(1, grapplePoint);
+            }
+        }
+    }
+
+    private void ExecuteGrapple()
+    {
+
+    }
+
+    private void JumpToPosition(Vector3 position, float height)
+    {
+        Vector3 jumpDirection = (position - transform.position).normalized;
+        float distance = Vector3.Distance(transform.position, position);
+        float velocity = Mathf.Sqrt(distance * (gravityStrength) / Mathf.Sin(2 * 45 * Mathf.Deg2Rad));
+
+        rb.velocity = new Vector3(jumpDirection.x * velocity, height * 1.4f, jumpDirection.z * velocity);
+    }
+
+    public void OnGrapple(InputValue value)
+    {
+        if (value.isPressed)
+        {
+            StartGrapple();
+        }
+        else
+        {
+            StopGrapple();
+        }
+    }
+
+    private void StartGrapple()
+    {
+        if (grappling || grapplingCooldownTimer > 0) return;
+
+        RaycastHit hit;
+        if (Physics.Raycast(grapplingCamTransform.position, grapplingCamTransform.forward, out hit, maxGrappleDistance, whatIsGrappleable))
+        {
+            SetupGrapple(hit);
+        }
+        else
+        {
+            grapplePoint = grapplingCamTransform.position + grapplingCamTransform.forward * maxGrappleDistance;
+        }
+    }
+
+    private void SetupGrapple(RaycastHit hit)
+    {
+        grapplePoint = hit.point;
+        targetTransform = hit.transform;
+        lineRenderer.enabled = true;
+        lineRenderer.SetPosition(0, GrappleGunTip.position);
+        lineRenderer.SetPosition(1, grapplePoint);
+        grappling = true;
+        grapplingCooldownTimer = grappleCoolDown;
+        
+        Vector3 lowestPoint = new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z);
+        float grapplePointRelativeYPos = grapplePoint.y - lowestPoint.y;
+        float highestPointOnArc = grapplePointRelativeYPos + overshootYAxis;
+        if (grapplePointRelativeYPos < 0) highestPointOnArc = overshootYAxis;
+
+        JumpToPosition(grapplePoint, highestPointOnArc);
+
+        Invoke(nameof(StopGrapple), 1.5f);
+    }
+
+    public void StopGrapple()
+    {
+        grappling = false;
+        targetTransform = null;
+        if (lineRenderer) lineRenderer.enabled = false;
     }
 
     private void OnDrawGizmos() {
@@ -72,15 +195,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         ApplyCustomGravity();
     }
 
-    private void Update()
-    {
-        CheckGrounded();
-        SpeedControl();
-        StateHandler();
-        AdjustGroundDrag();
-    }
-    
-    
     public void LoadData(GameData data)
     {
         transform.position = data.playerPosition;
@@ -92,12 +206,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         data.playerPosition = this.transform.position;
     }
     
-    public void JumpBuffer() {
-        if (Time.time - LastJumpPressTime <= jumpBufferDuration) {
-            tryToJump();
-        }
-    }
-
     public void OnJump(InputValue value)
     {
         if (value.isPressed) {
@@ -106,6 +214,13 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         }
 
     }
+    
+    public void JumpBuffer() {
+        if (Time.time - LastJumpPressTime <= jumpBufferDuration) {
+            tryToJump();
+        }
+    }
+
 
     private void tryToJump() {
         if (readyToJump)
@@ -133,6 +248,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     public void OnSprint(InputValue value)
     {
         isSprinting = value.isPressed;
+        Debug.Log($"Sprinting: {isSprinting}");
+        DynamicFOV();
     }
     
     public void OnMove(InputValue value)
@@ -244,5 +361,17 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     private Vector3 GetSlopeMoveDirection()
     {
         return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
+    }
+
+    private void DynamicFOV()
+    {
+        if (dynamicFOV)
+        {
+            float targetFOV = isSprinting ? sprintFOV : walkFOV;
+            cinemachineVirtualCamera.m_Lens.FieldOfView = Mathf.Lerp(cinemachineVirtualCamera.m_Lens.FieldOfView, targetFOV, FOVChangeTime * Time.deltaTime);
+
+            // Debug log to verify the current FOV value
+            Debug.Log($"Current FOV: {cinemachineVirtualCamera.m_Lens.FieldOfView}, Target FOV: {targetFOV}");
+        }
     }
 }
