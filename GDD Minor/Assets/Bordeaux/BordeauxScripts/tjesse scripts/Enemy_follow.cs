@@ -7,6 +7,9 @@ public class Enemy_follow : MonoBehaviour
 {
     public Transform player;
     public NavMeshAgent agent;
+    public float baseHealth = 100;
+    private float health;
+    public float baseSpeed = 1.0f;
     public float detectionRange = 15f;
     public float tooCloseRange = 2f;
     public float stoppingDistance = 3f;
@@ -32,6 +35,11 @@ public class Enemy_follow : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         agent.stoppingDistance = stoppingDistance;
         startPosition = transform.position;
+        health = baseHealth * DifficultyManager.Instance.healthMultiplier;
+        agent.speed = baseSpeed * DifficultyManager.Instance.speedMultiplier;
+        
+        Debug.Log("Enemy Health: "+ health);
+        Debug.Log("Enemy speed: "+ agent.speed);
     }
 
     private void Update()
