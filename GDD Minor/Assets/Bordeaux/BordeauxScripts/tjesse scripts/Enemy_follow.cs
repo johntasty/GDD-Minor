@@ -7,6 +7,9 @@ public class Enemy_follow : MonoBehaviour
 {
     public Transform player;
     public NavMeshAgent agent;
+    public float baseHealth = 100;
+    private float health;
+    public float baseSpeed = 1.0f;
     public float detectionRange = 15f;
     public float tooCloseRange = 2f;
     public float stoppingDistance = 3f;
@@ -24,18 +27,33 @@ public class Enemy_follow : MonoBehaviour
     private Vector3 lastKnownPlayerPosition;
     private float searchTimer = 0;
 
+    [SerializeField] Animator animator;
+    
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         agent = GetComponent<NavMeshAgent>();
         agent.stoppingDistance = stoppingDistance;
         startPosition = transform.position;
+        health = baseHealth * DifficultyManager.Instance.healthMultiplier;
+        agent.speed = baseSpeed * DifficultyManager.Instance.speedMultiplier;
+        
+        Debug.Log("Enemy Health: "+ health);
+        Debug.Log("Enemy speed: "+ agent.speed);
     }
 
     private void Update()
     {
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
+        if (agent.velocity.sqrMagnitude > 0.1f)
+        {
+            animator.SetBool("walk", true);
+        }
+        else
+        {
+            animator.SetBool("walk", false);
+        }
         if (distanceToPlayer <= detectionRange)
         {
             lastKnownPlayerPosition = player.position;
@@ -95,13 +113,15 @@ public class Enemy_follow : MonoBehaviour
     {
         if (Vector3.Distance(transform.position, player.position) <= shootingRange && Time.time - lastShootTime >= shootCooldown)
         {
-            Shoot();
+            animator.SetTrigger("attack");
+            StartCoroutine(Shoot());
             lastShootTime = Time.time;
         }
     }
 
-    void Shoot()
+    private IEnumerator Shoot()
     {
+        yield return new WaitForSeconds(0.3f);
         Instantiate(Projectile, firePoint.position, Quaternion.LookRotation(player.position - firePoint.position));
     }
 
