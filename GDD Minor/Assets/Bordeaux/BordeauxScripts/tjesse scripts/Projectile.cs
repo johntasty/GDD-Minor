@@ -15,7 +15,7 @@ public class Projectile : MonoBehaviour
     {
         Destroy(this.gameObject, lifeDuration);
         damage = damageAmount * DifficultyManager.Instance.damageMultiplier;
-        Debug.Log("Enemy Damage:" + damage);
+       
     }
 
     void Update()

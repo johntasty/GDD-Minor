@@ -248,7 +248,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     public void OnSprint(InputValue value)
     {
         isSprinting = value.isPressed;
-        Debug.Log($"Sprinting: {isSprinting}");
+        
         DynamicFOV();
     }
     
@@ -370,8 +370,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             float targetFOV = isSprinting ? sprintFOV : walkFOV;
             cinemachineVirtualCamera.m_Lens.FieldOfView = Mathf.Lerp(cinemachineVirtualCamera.m_Lens.FieldOfView, targetFOV, FOVChangeTime * Time.deltaTime);
 
-            // Debug log to verify the current FOV value
-            Debug.Log($"Current FOV: {cinemachineVirtualCamera.m_Lens.FieldOfView}, Target FOV: {targetFOV}");
+            
         }
     }
 }
