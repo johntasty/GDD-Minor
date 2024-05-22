@@ -45,6 +45,7 @@ Shader "Unlit/BookVertexMovement"
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
+                float3 positionWS               : TEXCOORD1;
                 float3 normalOS     : NORMAL;
                 float4 tangentOS    : TANGENT;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
@@ -53,7 +54,7 @@ Shader "Unlit/BookVertexMovement"
             struct v2f
             {
                 float2 uv : TEXCOORD0;
-                
+                float3 positionWS               : TEXCOORD1;
                 float4 vertex : SV_POSITION;
                 float3 normalWS                 : TEXCOORD2;
                 float3 lightTS                  : TEXCOORD3;
@@ -95,7 +96,7 @@ Shader "Unlit/BookVertexMovement"
 
 				o.vertex = TransformObjectToHClip(v.vertex);
 				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                
+                o.positionWS = v.positionWS;
                 VertexNormalInputs vertexNormalInput = GetVertexNormalInputs(v.normalOS, v.tangentOS);
                 Light mainLight = GetMainLight();
                 float3x3 tangentMat = float3x3(vertexNormalInput.tangentWS, vertexNormalInput.bitangentWS, vertexNormalInput.normalWS);
@@ -109,11 +110,18 @@ Shader "Unlit/BookVertexMovement"
                 UNITY_SETUP_INSTANCE_ID(i);
                 // sample the texture
                 half4 col = tex2D(_MainTex, i.uv);
-                float3 normal = UnpackNormal(tex2D(_NormalMap, i.uv));
-                float diff = saturate(dot(i.lightTS, normal));
-                col *= diff;
-                // apply fog
-                //UNITY_APPLY_FOG(i.fogCoord, col);
+                // float3 normal = UnpackNormal(tex2D(_NormalMap, i.uv));
+                // float diff = saturate(dot(i.lightTS, normal));
+                // col += diff;
+                // int pixelLightCount = GetAdditionalLightsCount();
+                // for (int j = 0; j < pixelLightCount; ++j)
+                // {
+                //     Light light = GetAdditionalLight(j, i.positionWS);
+                //     half NdotL = saturate(dot(i.normalWS, light.direction));
+                //     half3 radiance = light.color * ((light.distanceAttenuation * light.shadowAttenuation) * NdotL);
+                //     col += half4(radiance,1.);
+                // }
+               
                 return col;
             }
             ENDHLSL
