@@ -67,6 +67,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Grapple",
+                    "type": "Value",
+                    "id": "20f195b4-9c9b-4ea4-8f15-149ad8e44adc",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -342,6 +351,17 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Sprint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "581be9aa-fc1c-4c51-8bbe-bbfb4dab2739",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Grapple",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
