@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class Floor_Checkpoint : MonoBehaviour
 {
-    [SerializeField] ObjectSetRuntime runtime;
+    [SerializeField] 
+    ObjectSetRuntime runtime;
     [SerializeField]
     ColliderEventObject floorUnlocked;
+    [SerializeField] Color colorMesh;
     // Start is called before the first frame update
     public void UnlockFloor(int floorNumber)
     {
@@ -16,7 +18,7 @@ public class Floor_Checkpoint : MonoBehaviour
     }
     public void CheckpointColor(MeshRenderer mesh)
     {
-        mesh.material.color = new Color(255, 255, 255);
+        mesh.material.color = colorMesh;
     }
 
 }
