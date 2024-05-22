@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Cinemachine;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(AudioSource))]
@@ -24,6 +25,13 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
     [Header("Input Settings")]
     private bool isSprinting = false;
+
+    [Header("Field Of View")]
+    public float walkFOV = 83f;
+    public float sprintFOV = 60f;
+    public float FOVChangeTime = 2f; 
+    public bool dynamicFOV = true;
+    [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera;
 
     [Header("Ground Check")]
     [SerializeField] private LayerMask groundLayer;
@@ -70,6 +78,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
         rb.useGravity = false;
         this.enabled = true;
+        cinemachineVirtualCamera.m_Lens.FieldOfView = walkFOV;
     }
 
     private void Update()
@@ -78,6 +87,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         SpeedControl();
         StateHandler();
         AdjustGroundDrag();
+        DynamicFOV();
 
         if (Input.GetKeyDown(KeyCode.Mouse1) && !grappling) {
             StartGrapple();
@@ -238,6 +248,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     public void OnSprint(InputValue value)
     {
         isSprinting = value.isPressed;
+        Debug.Log($"Sprinting: {isSprinting}");
+        DynamicFOV();
     }
     
     public void OnMove(InputValue value)
@@ -349,5 +361,17 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     private Vector3 GetSlopeMoveDirection()
     {
         return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
+    }
+
+    private void DynamicFOV()
+    {
+        if (dynamicFOV)
+        {
+            float targetFOV = isSprinting ? sprintFOV : walkFOV;
+            cinemachineVirtualCamera.m_Lens.FieldOfView = Mathf.Lerp(cinemachineVirtualCamera.m_Lens.FieldOfView, targetFOV, FOVChangeTime * Time.deltaTime);
+
+            // Debug log to verify the current FOV value
+            Debug.Log($"Current FOV: {cinemachineVirtualCamera.m_Lens.FieldOfView}, Target FOV: {targetFOV}");
+        }
     }
 }
