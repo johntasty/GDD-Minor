@@ -38,8 +38,6 @@ public class Enemy_follow : MonoBehaviour
         health = baseHealth * DifficultyManager.Instance.healthMultiplier;
         agent.speed = baseSpeed * DifficultyManager.Instance.speedMultiplier;
         
-        Debug.Log("Enemy Health: "+ health);
-        Debug.Log("Enemy speed: "+ agent.speed);
     }
 
     private void Update()

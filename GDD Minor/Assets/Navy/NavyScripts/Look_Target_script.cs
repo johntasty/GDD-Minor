@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-[RequireComponent(typeof(SphereCollider))]
+
 public class Look_Target_script : MonoBehaviour
 {
     [Header("Camera Setup")]

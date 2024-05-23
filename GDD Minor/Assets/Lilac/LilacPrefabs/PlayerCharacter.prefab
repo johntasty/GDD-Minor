@@ -260,6 +260,14 @@ MonoBehaviour:
   cooldownFire: 0.5
   Automatic: 1
   shooting: 0
+  infiniteAmmo: 0
+  callReload: 0
+  reloading: 0
+  currentAmmo: 0
+  magSize: 0
+  startAmmoCount: 0
+  totalAmmo: 0
+  cooldownReload: 0
 --- !u!114 &6815349077845272893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -501,10 +509,12 @@ GameObject:
   - component: {fileID: 6815349078350190670}
   - component: {fileID: 6815349078350190671}
   - component: {fileID: 6815349078350190668}
-  - component: {fileID: 6815349078350190669}
   - component: {fileID: 6815349078350190666}
   - component: {fileID: 6815349078350190667}
   - component: {fileID: 4121557359906897303}
+  - component: {fileID: 4132755068581393767}
+  - component: {fileID: 1740235903973352668}
+  - component: {fileID: 5471894378054271206}
   m_Layer: 10
   m_Name: PlayerCharacter
   m_TagString: Player
@@ -639,6 +649,11 @@ MonoBehaviour:
   jumpCooldown: 0.35
   cayoteTime: 0.15
   jumpBufferDuration: 0.15
+  walkFOV: 83
+  sprintFOV: 60
+  FOVChangeTime: 2
+  dynamicFOV: 1
+  cinemachineVirtualCamera: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -656,22 +671,6 @@ MonoBehaviour:
   grappleCoolDown: 1
   playerCamera: {fileID: 6815349078422685103}
   rb: {fileID: 0}
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6815349078350190665}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ac5ea0f314bce04a9619a84e8818459, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxInteractionDistance: 3
-  interactableLayers:
-    serializedVersion: 2
-    m_Bits: 72
-  playerCamera: {fileID: 0}
 --- !u!114 &6815349078350190666
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -835,6 +834,64 @@ MonoBehaviour:
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
   m_DefaultVelocity: {x: 0, y: -1, z: 0}
+--- !u!114 &4132755068581393767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6815349078350190665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ac5ea0f314bce04a9619a84e8818459, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxInteractionDistance: 3
+  interactableLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  playerCamera: {fileID: 0}
+--- !u!114 &1740235903973352668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6815349078350190665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cbfb39d9543bca4bb4864b6432cb22b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  obj: {fileID: 0}
+--- !u!114 &5471894378054271206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6815349078350190665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80cf476a24762114f94604ed2db3ee51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Events: {fileID: 11400000, guid: 24bb2ac44181cd343bed241b1e22a02f, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1740235903973352668}
+        m_TargetAssemblyTypeName: On_Off, Assembly-CSharp
+        m_MethodName: OnOff
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6815349078422685096
 GameObject:
   m_ObjectHideFlags: 0
