@@ -23,6 +23,7 @@ public class Health : MonoBehaviour
 
     public void DecreaseHealth(float amount)
     {
+        
         if (isInvincible) return;
         isInvincible = true;
         currentHealth -= amount;
