@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,10 +24,10 @@ public class Health : MonoBehaviour
 
     public void DecreaseHealth(float amount)
     {
-        
         if (isInvincible) return;
         isInvincible = true;
         currentHealth -= amount;
+        Debug.Log(currentHealth);
         if (currentHealth <= 0)
         {
             Die();

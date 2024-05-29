@@ -20,7 +20,7 @@ namespace Bordeaux.BordeauxScripts
 
         private void Update()
         {
-            text.text = currentTokens.ToString();
+            // text.text = currentTokens.ToString();
         }
 
         public bool RequestToken()
@@ -46,7 +46,7 @@ namespace Bordeaux.BordeauxScripts
         {
             currentTokens++;
             currentTokens = Mathf.Clamp(currentTokens, 0, totalTokens);
-            Debug.Log(currentTokens);
+            // Debug.Log(currentTokens);
         }
     
     }

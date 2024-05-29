@@ -15,7 +15,7 @@ public class ProcedurallyAnimatableObject : MonoBehaviour
     [Tooltip("The amount of time it will take for the door to animate")]
     [Min(0)]
     [SerializeField]
-    private float durationSeconds = 1.0f;
+    public float durationSeconds = 1.0f;
 
     //[SerializeField]
     [HideInInspector]
@@ -36,24 +36,31 @@ public class ProcedurallyAnimatableObject : MonoBehaviour
 
     [HideInInspector]
     [Tooltip("The rotation the object will end up in after the animation is done.")]
-    public Vector3 targetRotation;
-
+    public float targetRotation;
+    private Quaternion targetRot;
     [HideInInspector]
     [Tooltip("This curve controls the speed of the animation throughout.")]
     public AnimationCurve rotationCurve = AnimationCurve.Linear(0, 0, 1, 1);
 
     private bool _isMoving = false;
     private Vector3 _originalPosition;
-    private Vector3 _originalRotation;
+    private Quaternion _originalRotation;
     private Coroutine _animationRoutine;
-
+    private enum AnimationUpdate
+    {
+        physicsUpdate = 1,
+        regularUpdate = 2
+    }
+    [SerializeField] private AnimationUpdate animationUpdate = AnimationUpdate.regularUpdate;
+    
     private void Start()
     {
         if (pivotObject == null)
             pivotObject = transform;
 
         _originalPosition = pivotObject.position;
-        _originalRotation = pivotObject.rotation.eulerAngles;
+        _originalRotation = pivotObject.localRotation;
+        targetRot = Quaternion.AngleAxis(targetRotation, Vector3.up);
     }
 
     public void StartAnimation()
@@ -68,6 +75,8 @@ public class ProcedurallyAnimatableObject : MonoBehaviour
         _isMoving = true;
 
         float elapsedTime = 0f;
+
+        var updateAnimation = animationUpdate == AnimationUpdate.regularUpdate ? null : new WaitForEndOfFrame();
         
         while (elapsedTime < durationSeconds)
         {
@@ -76,26 +85,25 @@ public class ProcedurallyAnimatableObject : MonoBehaviour
             if (AnimatePosition)
             {
                 float t = positionCurve.Evaluate(percentDone);
-                Vector3 slerpedPosition = Vector3.Slerp(_originalPosition, targetPosition, t);
+                Vector3 slerpedPosition = Vector3.Lerp(_originalPosition, targetPosition, t);
                 pivotObject.position = slerpedPosition;
             }
 
             if (AnimateRotation)
             {
-                float t = rotationCurve.Evaluate(percentDone);
-                Vector3 slerpedRotation = Vector3.Slerp(_originalRotation, targetRotation, t);
-                Quaternion newRotation = Quaternion.Euler(slerpedRotation);
-                pivotObject.rotation = newRotation;
+                float t = rotationCurve.Evaluate(percentDone);                
+                Quaternion newRotation = Quaternion.Slerp(_originalRotation, targetRot, t);
+                pivotObject.localRotation = newRotation;
             }
-            
+
             elapsedTime += Time.deltaTime;
-            yield return null;
+            yield return updateAnimation;
         }
 
         if (AnimateRotation)
         {
-            pivotObject.rotation = Quaternion.Euler(targetRotation);
-            (_originalRotation, targetRotation) = (targetRotation, _originalRotation);
+            pivotObject.localRotation = targetRot;
+            (_originalRotation, targetRot) = (targetRot, _originalRotation);
         }
 
         if (AnimatePosition)
@@ -134,7 +142,7 @@ public class ProcedurallyAnimatableObjectEditor : Editor
         script.AnimateRotation = GUILayout.Toggle(script.AnimateRotation, "Animate Rotation");
         if (script.AnimateRotation)
         {
-            script.targetRotation = EditorGUILayout.Vector3Field("Target Rotation: ", script.targetRotation);
+            script.targetRotation = EditorGUILayout.FloatField("Target Rotation: ", script.targetRotation);
             GUILayout.Label("Rotation Curve:");
             script.rotationCurve = EditorGUILayout.CurveField(script.rotationCurve);
         }
