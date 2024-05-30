@@ -386,7 +386,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &105232071
 Transform:
   m_ObjectHideFlags: 0
@@ -433,7 +433,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &121328649
 Transform:
   m_ObjectHideFlags: 0
@@ -2432,7 +2432,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4459864850019384750, guid: 6bacecc4f3df9584198879c73a6b6c36, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4459864850190357395, guid: 6bacecc4f3df9584198879c73a6b6c36, type: 3}
       propertyPath: m_Sprite
@@ -2555,7 +2555,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1328330897
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3886,6 +3886,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1108472134}
     m_Modifications:
+    - target: {fileID: 1429803018171958838, guid: 6fb686169a1bb7048bf312fb514cb048, type: 3}
+      propertyPath: magSize
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1429803018171958838, guid: 6fb686169a1bb7048bf312fb514cb048, type: 3}
+      propertyPath: infiniteAmmo
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1429803018171958838, guid: 6fb686169a1bb7048bf312fb514cb048, type: 3}
+      propertyPath: cooldownReload
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1429803018171958838, guid: 6fb686169a1bb7048bf312fb514cb048, type: 3}
+      propertyPath: startAmmoCount
+      value: 240
+      objectReference: {fileID: 0}
     - target: {fileID: 2363288728034120277, guid: 6fb686169a1bb7048bf312fb514cb048, type: 3}
       propertyPath: m_RootOrder
       value: 1

@@ -8,10 +8,10 @@ public class Obj : MonoBehaviour
 
     private void OnEnable()
     {
-        runtime.Add(this);
+        runtime.Add(1);
     }
     private void OnDisable()
     {
-        runtime.Remove(this);
+        runtime.Remove(1);
     }
 }

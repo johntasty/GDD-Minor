@@ -1,7 +1,5 @@
-using Cinemachine;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class Input_Interaction : MonoBehaviour
@@ -22,6 +20,7 @@ public class Input_Interaction : MonoBehaviour
         if (interactable == null) return;
 
         interactable.Interact();
+        
     }
     void Awake()
     {
@@ -29,7 +28,7 @@ public class Input_Interaction : MonoBehaviour
         _interactionRaycast = new(playerCamera, maxInteractionDistance, interactableLayers);
     }
     private void FixedUpdate()
-    {
+    {        
         interactable = _interactionRaycast.Cast();
         if (interactable == null) return;
 
