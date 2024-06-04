@@ -1,4 +1,3 @@
-// Upgrade NOTE: replaced 'UNITY_INSTANCE_ID' with 'UNITY_VERTEX_INPUT_INSTANCE_ID'
 
 Shader "Unlit/WindowCut"
 {
@@ -7,6 +6,7 @@ Shader "Unlit/WindowCut"
         _MainTex ("Texture", 2D) = "white" {}
         _Cull("__cull", Float) = 2.0
         _Ref("__Ref", Float) = 2.0
+        
     }
     SubShader
     {
@@ -30,6 +30,8 @@ Shader "Unlit/WindowCut"
             #pragma fragment frag
             // make fog work
             #pragma multi_compile_fog
+            #pragma shader_feature _Ref_ON
+            
             //--------------------------------------
             // GPU Instancing
             #pragma multi_compile_instancing
