@@ -6,6 +6,7 @@ public class WindowStruct : MonoBehaviour
 {
 
     [SerializeField] Renderer render;
+    [SerializeField] Material windowMat;
     [SerializeField] float wall_ref_number;
     [SerializeField] int wall_que;
     [SerializeField] bool glass;
@@ -16,7 +17,7 @@ public class WindowStruct : MonoBehaviour
     {
         render.material.SetFloat("_Ref", wall_ref_number);
         render.material.renderQueue = wall_que;
-
+        render.material = windowMat;
     }
    
 }
