@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class On_Off : MonoBehaviour
-{
+{   
     public void OnOff(MonoBehaviour obj)
     {
         obj.enabled = !obj.isActiveAndEnabled;
@@ -13,9 +14,14 @@ public class On_Off : MonoBehaviour
         bool active = go.activeInHierarchy;
         go.SetActive(!active);
     }
-    public void CursorOn_Off()
+    public void CursorOn_Off(GameObject go)
     {
-        Cursor.lockState = Cursor.visible ? CursorLockMode.None : CursorLockMode.Locked;
-        Cursor.visible = !Cursor.visible;
+        bool cursorVisible = go.activeInHierarchy;       
+        Cursor.lockState = cursorVisible ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = cursorVisible;
+    }
+    public void ChangeScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
     }
 }
