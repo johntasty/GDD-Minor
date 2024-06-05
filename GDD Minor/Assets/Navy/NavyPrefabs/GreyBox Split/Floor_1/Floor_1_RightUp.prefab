@@ -62,11 +62,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 4202116481146972669}
   - {fileID: 6979357671450015150}
   - {fileID: 3526796422030075061}
   - {fileID: 2230008996843308383}
   - {fileID: 2622970010294660528}
-  - {fileID: 2890077088998247716}
   m_Father: {fileID: 8200456495813725621}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -217,68 +217,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &338675759424865686
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 3601507579229107446}
-    m_Modifications:
-    - target: {fileID: 3218008867270183090, guid: 2ee3709383a9c6c4a969d85cf8640ccc, type: 3}
-      propertyPath: m_RootOrder
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 3218008867270183090, guid: 2ee3709383a9c6c4a969d85cf8640ccc, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 11.876
-      objectReference: {fileID: 0}
-    - target: {fileID: 3218008867270183090, guid: 2ee3709383a9c6c4a969d85cf8640ccc, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.94739914
-      objectReference: {fileID: 0}
-    - target: {fileID: 3218008867270183090, guid: 2ee3709383a9c6c4a969d85cf8640ccc, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 15.068
-      objectReference: {fileID: 0}
-    - target: {fileID: 3218008867270183090, guid: 2ee3709383a9c6c4a969d85cf8640ccc, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7010574
-      objectReference: {fileID: 0}
-    - target: {fileID: 3218008867270183090, guid: 2ee3709383a9c6c4a969d85cf8640ccc, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.70105743
-      objectReference: {fileID: 0}
-    - target: {fileID: 3218008867270183090, guid: 2ee3709383a9c6c4a969d85cf8640ccc, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.09229606
-      objectReference: {fileID: 0}
-    - target: {fileID: 3218008867270183090, guid: 2ee3709383a9c6c4a969d85cf8640ccc, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0.092296034
-      objectReference: {fileID: 0}
-    - target: {fileID: 3218008867270183090, guid: 2ee3709383a9c6c4a969d85cf8640ccc, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 3218008867270183090, guid: 2ee3709383a9c6c4a969d85cf8640ccc, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3218008867270183090, guid: 2ee3709383a9c6c4a969d85cf8640ccc, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: -15
-      objectReference: {fileID: 0}
-    - target: {fileID: 8246540497010837829, guid: 2ee3709383a9c6c4a969d85cf8640ccc, type: 3}
-      propertyPath: m_Name
-      value: Book #1 Interactable 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 2ee3709383a9c6c4a969d85cf8640ccc, type: 3}
---- !u!4 &2890077088998247716 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3218008867270183090, guid: 2ee3709383a9c6c4a969d85cf8640ccc, type: 3}
-  m_PrefabInstance: {fileID: 338675759424865686}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &469052853401493838
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -354,7 +292,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3229601468314264382, guid: e04b6593d524c954ca10cab063c46899, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3229601468314264382, guid: e04b6593d524c954ca10cab063c46899, type: 3}
       propertyPath: m_LocalPosition.x
@@ -650,6 +588,171 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 8678347978694153189, guid: ba072fb7cb5122d40824230465f64825, type: 3}
   m_PrefabInstance: {fileID: 1068206939944560856}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1655143982787076431
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 3601507579229107446}
+    m_Modifications:
+    - target: {fileID: 3218008867270183090, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3218008867270183090, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 13.127
+      objectReference: {fileID: 0}
+    - target: {fileID: 3218008867270183090, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.95000017
+      objectReference: {fileID: 0}
+    - target: {fileID: 3218008867270183090, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 14.81316
+      objectReference: {fileID: 0}
+    - target: {fileID: 3218008867270183090, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9739958
+      objectReference: {fileID: 0}
+    - target: {fileID: 3218008867270183090, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3218008867270183090, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.2265663
+      objectReference: {fileID: 0}
+    - target: {fileID: 3218008867270183090, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3218008867270183090, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3218008867270183090, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 26.19
+      objectReference: {fileID: 0}
+    - target: {fileID: 3218008867270183090, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7568504781357047245, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
+      propertyPath: pages.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7568504781357047245, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
+      propertyPath: pages.Array.data[0]
+      value: 'In the dimly lit study of Lord Abernathy, a distinguished gentleman
+        of Victorian England, a conversation ensued between himself and his faithful
+        valet, Mr. Jenkins.
+
+        Do you believe you have had sufficient rest
+        this past week, my lord?" inquired Mr. Jenkins, his voice soft yet carrying
+        an air of concern.
+
+        Lord Abernathy, seated in his plush armchair
+        by the crackling fire, pondered the question. His weary eyes met those of
+        his loyal servant as he replied, "Alas, I fear not, Jenkins. The demands
+        of estate affairs and societal obligations have left me little time for repose."
+
+
+        As
+        Lord Abernathy spoke, his gaze wandered absently to the flickering flames,
+        his mind drifting like a ship adrift on a sea of thought.
+
+'
+      objectReference: {fileID: 0}
+    - target: {fileID: 7568504781357047245, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
+      propertyPath: pages.Array.data[1]
+      value: "The flickering flames cast shadows across the room as Mr. Jenkins gently
+        prodded further, \"Can you remember the last time you woke up naturally,
+        feeling rejuvenated without the need for caffeine?\"\n\nLord Abernathy furrowed
+        his brow, delving into the depths of his memory. After a moment's reflection,
+        a faint smile graced his lips. \"Indeed, there was a time, Jenkins, a distant
+        morning when the sun's gentle rays kissed my eyelids awake, and I rose with
+        vigor coursing through my veins. No elixir of caffeine could rival the vitality
+        that surged within me that day.\"\r"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7568504781357047245, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
+      propertyPath: pages.Array.data[2]
+      value: 'Mr. Jenkins nodded solemnly, a silent understanding passing between
+        master and servant. "It seems, my lord, that such moments of natural rejuvenation
+        have become scarce amidst the bustle of our modern lives," he remarked.
+
+
+        "Indeed,
+        Jenkins," Lord Abernathy agreed with a sigh. "But perhaps it is a reminder
+        that amidst the whirlwind of responsibilities, we must endeavor to cherish
+        those precious moments of rest and restoration."'
+      objectReference: {fileID: 0}
+    - target: {fileID: 7568504781357047245, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
+      propertyPath: pages.Array.data[3]
+      value: "And so, in the quietude of Lord Abernathy's study, amidst the whispers
+        of flickering flames and the rustle of aged parchment, master and servant
+        resolved to seek solace in the simple pleasures of a restful slumber, unfettered
+        by the demands of the bustling world outside. Yet, even as they spoke, Lord
+        Abernathy's mind wandered once more, lost in the labyrinth of his thoughts,
+        yearning for the elusive tranquility of undisturbed sleep.\u201D"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7568504781357047245, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
+      propertyPath: pages.Array.data[4]
+      value: "And so, in the quietude of Lord Abernathy's study, amidst the whispers
+        of flickering flames and the rustle of aged parchment, master and servant
+        resolved to seek solace in the simple pleasures of a restful slumber, unfettered
+        by the demands of the bustling world outside. Yet, even as they spoke, Lord
+        Abernathy's mind wandered once more, lost in the labyrinth of his thoughts,
+        yearning for the elusive tranquility of undisturbed sleep.\u201D"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7568504781357047245, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
+      propertyPath: pages.Array.data[5]
+      value: "And so, in the quietude of Lord Abernathy's study, amidst the whispers
+        of flickering flames and the rustle of aged parchment, master and servant
+        resolved to seek solace in the simple pleasures of a restful slumber, unfettered
+        by the demands of the bustling world outside. Yet, even as they spoke, Lord
+        Abernathy's mind wandered once more, lost in the labyrinth of his thoughts,
+        yearning for the elusive tranquility of undisturbed sleep.\u201D"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7568504781357047245, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
+      propertyPath: pages.Array.data[6]
+      value: "And so, in the quietude of Lord Abernathy's study, amidst the whispers
+        of flickering flames and the rustle of aged parchment, master and servant
+        resolved to seek solace in the simple pleasures of a restful slumber, unfettered
+        by the demands of the bustling world outside. Yet, even as they spoke, Lord
+        Abernathy's mind wandered once more, lost in the labyrinth of his thoughts,
+        yearning for the elusive tranquility of undisturbed sleep.\u201D"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7568504781357047245, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
+      propertyPath: pages.Array.data[7]
+      value: "And so, in the quietude of Lord Abernathy's study, amidst the whispers
+        of flickering flames and the rustle of aged parchment, master and servant
+        resolved to seek solace in the simple pleasures of a restful slumber, unfettered
+        by the demands of the bustling world outside. Yet, even as they spoke, Lord
+        Abernathy's mind wandered once more, lost in the labyrinth of his thoughts,
+        yearning for the elusive tranquility of undisturbed sleep.\u201D"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7568504781357047245, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
+      propertyPath: pages.Array.data[8]
+      value: "And so, in the quietude of Lord Abernathy's study, amidst the whispers
+        of flickering flames and the rustle of aged parchment, master and servant
+        resolved to seek solace in the simple pleasures of a restful slumber, unfettered
+        by the demands of the bustling world outside. Yet, even as they spoke, Lord
+        Abernathy's mind wandered once more, lost in the labyrinth of his thoughts,
+        yearning for the elusive tranquility of undisturbed sleep.\u201D"
+      objectReference: {fileID: 0}
+    - target: {fileID: 8246540497010837829, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
+      propertyPath: m_Name
+      value: LoreBookInteractable
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
+--- !u!4 &4202116481146972669 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3218008867270183090, guid: 846a2b75a2a75d5469243e0df9b87ccb, type: 3}
+  m_PrefabInstance: {fileID: 1655143982787076431}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1887360545948634836
 PrefabInstance:
@@ -1249,7 +1352,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3229601468314264382, guid: e04b6593d524c954ca10cab063c46899, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3229601468314264382, guid: e04b6593d524c954ca10cab063c46899, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1433,7 +1536,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5014621835369061784, guid: 7f5f616d10a09dd42ac77d2d1b88990d, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5014621835369061784, guid: 7f5f616d10a09dd42ac77d2d1b88990d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1813,7 +1916,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5014621835369061784, guid: 7f5f616d10a09dd42ac77d2d1b88990d, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5014621835369061784, guid: 7f5f616d10a09dd42ac77d2d1b88990d, type: 3}
       propertyPath: m_LocalPosition.x
