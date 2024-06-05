@@ -24,4 +24,8 @@ public class On_Off : MonoBehaviour
     {
         SceneManager.LoadScene(sceneName);
     }
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 }

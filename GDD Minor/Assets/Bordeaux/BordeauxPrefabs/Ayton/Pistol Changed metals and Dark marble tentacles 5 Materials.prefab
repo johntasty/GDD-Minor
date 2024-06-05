@@ -842,6 +842,14 @@ MonoBehaviour:
   cooldownFire: 0.2
   Automatic: 1
   shooting: 0
+  infiniteAmmo: 1
+  callReload: 0
+  reloading: 0
+  currentAmmo: 0
+  magSize: 12
+  startAmmoCount: 240
+  totalAmmo: 0
+  cooldownReload: 2
 --- !u!114 &6558567165808750276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -861,7 +869,7 @@ MonoBehaviour:
   IsHitscan: 0
   bulletPrefab: {fileID: 4060619419401689138, guid: 76c924cf9b8a9994c99a6a5b6945107e, type: 3}
   targetPoint: {x: 0, y: 0, z: 0}
-  attackPoint: {fileID: 2179194032199385771}
+  attackPoint: {fileID: 0}
 --- !u!1 &3277089867798712493
 GameObject:
   m_ObjectHideFlags: 0

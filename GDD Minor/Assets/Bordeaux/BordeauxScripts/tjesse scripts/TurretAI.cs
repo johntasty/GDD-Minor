@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class TurretAI : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class TurretAI : MonoBehaviour
     public float shootingRange = 10f; // shooting range
     public float aimingRange = 20f; // aiming range
     private float shootCooldown;
+    [SerializeField] UnityEvent shootEvent;
 
     private void Start()
     {
@@ -47,8 +49,9 @@ public class TurretAI : MonoBehaviour
     {
         if (Projectile && shootingPoint)
         {
+            shootEvent.Invoke();
             // Instantiate the projectile at the shooting point 
-            Instantiate(Projectile, shootingPoint.position, transform.rotation); // Use turret's current rotation
+            //Instantiate(Projectile, shootingPoint.position, transform.rotation); // Use turret's current rotation
         }
     }
 }

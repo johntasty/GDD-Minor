@@ -74,7 +74,8 @@ GameObject:
   - component: {fileID: 2244410824926682195}
   - component: {fileID: 1778647790622627280}
   - component: {fileID: 919132149028194766}
-  - component: {fileID: 919132149028194767}
+  - component: {fileID: 2897877864369776292}
+  - component: {fileID: 6455379584970136943}
   m_Layer: 0
   m_Name: Bell Enemy (18.0) Attack State
   m_TagString: Enemy
@@ -94,6 +95,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6079031112863918445}
   - {fileID: 7175758756773366989}
   - {fileID: 8841148928570325673}
   - {fileID: 553318682352719830}
@@ -119,6 +121,21 @@ MonoBehaviour:
   shootingInterval: 1
   shootingRange: 20
   aimingRange: 30
+  shootEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6079031112863918443}
+        m_TargetAssemblyTypeName: UnityEngine.ParticleSystem, UnityEngine
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!65 &919132149028194766
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -132,7 +149,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.4103756, y: 2.3974895, z: 2.614285}
   m_Center: {x: -0.019059181, y: -0.013403475, z: 0.807143}
---- !u!114 &919132149028194767
+--- !u!114 &2897877864369776292
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -141,15 +158,63 @@ MonoBehaviour:
   m_GameObject: {fileID: 1472236639580030697}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48a21d3a65dff98448f53f7320521762, type: 3}
+  m_Script: {fileID: 11500000, guid: 7100976e1ec84ba4c9fa467f5d4d858b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 2
-  invincibilityTime: 0.1
-  onDamage:
+  TagFilterArray:
+  - Bullet
+  EnterTrigger: 1
+  onTriggerEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6455379584970136943}
+        m_TargetAssemblyTypeName: HealthSystem, Assembly-CSharp
+        m_MethodName: Onhit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  StayTrigger: 0
+  onTriggerStay:
     m_PersistentCalls:
       m_Calls: []
-  onDeath:
+  ExitTrigger: 0
+  onTriggerExit:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &6455379584970136943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1472236639580030697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6503e877708f8d4b933aec93b7e5d42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EventObject:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6455379584970136943}
+        m_TargetAssemblyTypeName: HealthSystem, Assembly-CSharp
+        m_MethodName: TakeDamage
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  DeathEvent:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1472236639580030697}
@@ -164,6 +229,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  StartHealth:
+    UseConstant: 1
+    ConstantValue: 50
+    Variable: {fileID: 0}
+  Health: {fileID: 0}
+  dmgTotake: 10
 --- !u!1 &1778647789989074165
 GameObject:
   m_ObjectHideFlags: 0
@@ -193,7 +264,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2244410824926682195}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1785828317285242703
 GameObject:
@@ -384,7 +455,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2244410824926682195}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!137 &8310420787648373862
 SkinnedMeshRenderer:
@@ -670,7 +741,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2244410824926682195}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!137 &576456175484289110
 SkinnedMeshRenderer:
@@ -1083,7 +1154,7 @@ Transform:
   - {fileID: 1930605026428172366}
   - {fileID: 7224999339860883261}
   m_Father: {fileID: 2244410824926682195}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9004800043386377848
 GameObject:
@@ -1147,3 +1218,70 @@ Transform:
   m_Father: {fileID: 9050807632932921875}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &5630838477034712210
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 2244410824926682195}
+    m_Modifications:
+    - target: {fileID: 1907783877515822588, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: m_Name
+      value: ParticleEmmiter
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822591, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822591, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.033
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822591, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.14
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822591, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.185
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822591, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.99965733
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822591, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822591, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.026176924
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822591, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822591, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822591, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822591, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+--- !u!198 &6079031112863918443 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 1907783877515822585, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+  m_PrefabInstance: {fileID: 5630838477034712210}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6079031112863918445 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1907783877515822591, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+  m_PrefabInstance: {fileID: 5630838477034712210}
+  m_PrefabAsset: {fileID: 0}

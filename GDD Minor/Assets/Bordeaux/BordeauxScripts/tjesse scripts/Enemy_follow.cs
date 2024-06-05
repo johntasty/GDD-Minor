@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.AI; // Required for the NavMeshAgent
+using UnityEngine.AI;
+using UnityEngine.Events; // Required for the NavMeshAgent
 // GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>();
 
 public class Enemy_follow : MonoBehaviour
@@ -28,6 +29,7 @@ public class Enemy_follow : MonoBehaviour
     private float searchTimer = 0;
 
     [SerializeField] Animator animator;
+    [SerializeField] UnityEvent shootEvent;
     
     private void Start()
     {
@@ -119,8 +121,9 @@ public class Enemy_follow : MonoBehaviour
 
     private IEnumerator Shoot()
     {
+        shootEvent.Invoke();
         yield return new WaitForSeconds(0.3f);
-        Instantiate(Projectile, firePoint.position, Quaternion.LookRotation(player.position - firePoint.position));
+        //Instantiate(Projectile, firePoint.position, Quaternion.LookRotation(player.position - firePoint.position));
     }
 
     void SearchLastKnownPosition()

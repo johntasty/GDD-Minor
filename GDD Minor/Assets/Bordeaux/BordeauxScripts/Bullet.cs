@@ -70,17 +70,19 @@ public class Bullet : MonoBehaviour
             Explode();
 		}
 		else {
-            if (collider.GetComponent<Health>() != null) {
-                collider.GetComponent<Health>().DecreaseHealth(explosionDamage);
-            }
-            else if (collider.GetComponent<Entity>() != null) {
-                collider.GetComponent<Entity>().TakeDamage(explosionDamage);
-            }
-            else {
-			    explosionRange = 0.1f;
-                Explode();
-            }
-		}
+            explosionRange = 0.1f;
+            Explode();
+            //if (collider.GetComponent<Health>() != null) {
+            //    collider.GetComponent<Health>().DecreaseHealth(explosionDamage);
+            //}
+            //else if (collider.GetComponent<Entity>() != null) {
+            //    collider.GetComponent<Entity>().TakeDamage(explosionDamage);
+            //}
+            //     else {
+            //explosionRange = 0.1f;
+            //         Explode();
+            //     }
+        }
 
 		
 

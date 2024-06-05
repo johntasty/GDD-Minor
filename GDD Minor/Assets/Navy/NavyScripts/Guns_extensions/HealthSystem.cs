@@ -6,9 +6,10 @@ using UnityEngine.Events;
 public class HealthSystem : MonoBehaviour
 {
     [SerializeField] UnityEvent EventObject;
+    [SerializeField] UnityEvent DeathEvent;
     [SerializeField] ReferenceFloat StartHealth;
     [SerializeField] FloatValue Health;
-
+    [SerializeField] int dmgTotake;
     float currentHealth;
     private void OnEnable()
     {
@@ -20,16 +21,25 @@ public class HealthSystem : MonoBehaviour
         EventObject.Invoke();
     }
     public void TakeDamage()
-    {
+    {        
         if (StartHealth.UseConstant) {MinionHit(); } else { PlayerHit(); }
 
     }
     void MinionHit()
-    {
-        currentHealth -= 10;
+    {        
+        currentHealth -= dmgTotake;
+        if (currentHealth <= 0)
+        {
+            DeathEvent.Invoke();
+        }
     }
     void PlayerHit()
     {
-        Health.Change(-5);
+        Health.Change(-dmgTotake);
+        if (Health.FloatVariable <= 0)
+        {
+            DeathEvent.Invoke();
+        }
+        
     }
 }

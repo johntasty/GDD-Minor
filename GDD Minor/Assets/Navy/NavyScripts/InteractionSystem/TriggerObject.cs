@@ -47,7 +47,7 @@ public class TriggerObject : MonoBehaviour
         if (!EnterTrigger) return;
         if(!TagCheck(other.gameObject.tag))return;
         onTriggerEnter.Invoke(other);
-                
+      
     }
 
     private void OnTriggerStay(Collider other)

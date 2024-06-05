@@ -285,32 +285,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3168416448462683745, guid: df8c54bb26c935c499c44ebcbfb250ba, type: 3}
   m_PrefabInstance: {fileID: 1545553213853170827}
   m_PrefabAsset: {fileID: 0}
---- !u!23 &6788805223920064640 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 5423536904991417355, guid: df8c54bb26c935c499c44ebcbfb250ba, type: 3}
-  m_PrefabInstance: {fileID: 1545553213853170827}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &8988296796391350061 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7624084158442005414, guid: df8c54bb26c935c499c44ebcbfb250ba, type: 3}
-  m_PrefabInstance: {fileID: 1545553213853170827}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1003840444307245816
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8988296796391350061}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8365145bdb66a39469426d0478b80ea8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  render: {fileID: 6788805223920064640}
-  wall_ref_number: 2
-  wall_que: 1998
-  glass: 0
 --- !u!1001 &1763390629772619832
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1404,32 +1378,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: df8c54bb26c935c499c44ebcbfb250ba, type: 3}
---- !u!1 &1780650407512214049 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7624084158442005414, guid: df8c54bb26c935c499c44ebcbfb250ba, type: 3}
-  m_PrefabInstance: {fileID: 8176307360171944327}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2563774665709257687
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1780650407512214049}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8365145bdb66a39469426d0478b80ea8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  render: {fileID: 4196319306453732748}
-  wall_ref_number: 1
-  wall_que: 2000
-  glass: 0
---- !u!23 &4196319306453732748 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 5423536904991417355, guid: df8c54bb26c935c499c44ebcbfb250ba, type: 3}
-  m_PrefabInstance: {fileID: 8176307360171944327}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6521332933686106086 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3168416448462683745, guid: df8c54bb26c935c499c44ebcbfb250ba, type: 3}
