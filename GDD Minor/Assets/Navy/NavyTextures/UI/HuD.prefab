@@ -1439,7 +1439,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 942552781374387631}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8528271414499028693}
+        m_TargetAssemblyTypeName: On_Off, Assembly-CSharp
+        m_MethodName: ChangeScene
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: MainMenuScene
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &942552781537082298
 GameObject:
   m_ObjectHideFlags: 0
@@ -7532,6 +7544,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1948241644687061315}
     m_Modifications:
+    - target: {fileID: 8706382578386522456, guid: 51d512fe874bf2542bfccddaeb6f1d49, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8706382578386522456, guid: 51d512fe874bf2542bfccddaeb6f1d49, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8706382578386522456, guid: 51d512fe874bf2542bfccddaeb6f1d49, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8528271414499028693}
+    - target: {fileID: 8706382578386522456, guid: 51d512fe874bf2542bfccddaeb6f1d49, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ChangeScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 8706382578386522456, guid: 51d512fe874bf2542bfccddaeb6f1d49, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: On_Off, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8706382578386522456, guid: 51d512fe874bf2542bfccddaeb6f1d49, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: MainMenuScene
+      objectReference: {fileID: 0}
     - target: {fileID: 8706382578386522458, guid: 51d512fe874bf2542bfccddaeb6f1d49, type: 3}
       propertyPath: m_Name
       value: MainMenu (1)
