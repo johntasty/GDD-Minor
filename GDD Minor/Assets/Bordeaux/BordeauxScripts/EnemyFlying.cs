@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
 namespace Bordeaux.BordeauxScripts
@@ -23,6 +24,8 @@ namespace Bordeaux.BordeauxScripts
         
         public GameObject projectilePrefab;
         public Transform shootingPoint;
+
+        [SerializeField] UnityEvent shoot;
     
         void Start()
         {
@@ -77,7 +80,7 @@ namespace Bordeaux.BordeauxScripts
         void Attack()
         {
             canAttack = false;
-            Instantiate(ball, transform.position, Quaternion.identity);
+            //Instantiate(ball, transform.position, Quaternion.identity);
             Shoot();
             StartCoroutine(EndAttack());
         }
@@ -86,12 +89,13 @@ namespace Bordeaux.BordeauxScripts
         {
             if(projectilePrefab && shootingPoint)
             {
-                // Calculate the rotation to look at player
-                Vector3 direction = (player.position - shootingPoint.position).normalized;
-                Quaternion rotation = Quaternion.LookRotation(direction);
+                shoot.Invoke();
+                //// Calculate the rotation to look at player
+                //Vector3 direction = (player.position - shootingPoint.position).normalized;
+                //Quaternion rotation = Quaternion.LookRotation(direction);
 
-                // instantiate or create bullet with turret's rotation
-                Instantiate(projectilePrefab, shootingPoint.position, rotation);
+                //// instantiate or create bullet with turret's rotation
+                //Instantiate(projectilePrefab, shootingPoint.position, rotation);
             }
         }
         private IEnumerator EndAttack()
