@@ -8,7 +8,7 @@ public class Input_Interaction : MonoBehaviour
     float maxInteractionDistance = 3f;
     [SerializeField]
     LayerMask interactableLayers;
-
+    [SerializeField]UnityEvent interactionEvent;
     private InteractionRaycast _interactionRaycast;
     private IObjectInteractable interactable = null;
     public Camera playerCamera;
@@ -20,7 +20,7 @@ public class Input_Interaction : MonoBehaviour
         if (interactable == null) return;
 
         interactable.Interact();
-        
+        interactionEvent.Invoke();
     }
     void Awake()
     {

@@ -9,6 +9,7 @@ public class SoundEffects : MonoBehaviour
     [SerializeField]AudioSource SFXAudioSource;
     [SerializeField]AudioSource MusicAudioSource;
     [SerializeField]UnityEvent startUpEvent;
+    bool canPlay = true;
     private void Start()
     {
         startUpEvent.Invoke();
@@ -16,6 +17,7 @@ public class SoundEffects : MonoBehaviour
 
     public void PlaySound(AudioClip audioData)
     {
+        if (!canPlay) { return; }
         SFXAudioSource.clip = audioData;
         SFXAudioSource.Play();
     }
@@ -23,5 +25,9 @@ public class SoundEffects : MonoBehaviour
     {
         MusicAudioSource.clip = audioData;
         MusicAudioSource.Play();
+    }
+    public void CanPlaySound()
+    {
+        canPlay = !canPlay;
     }
 }

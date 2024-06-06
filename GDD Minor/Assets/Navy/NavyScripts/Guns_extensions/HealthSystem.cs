@@ -10,11 +10,12 @@ public class HealthSystem : MonoBehaviour
     [SerializeField] ReferenceFloat StartHealth;
     [SerializeField] FloatValue Health;
     [SerializeField] int dmgTotake;
+    [SerializeField] bool player = false;
     float currentHealth;
     private void OnEnable()
     {
-        if (!StartHealth.UseConstant) return;
-        currentHealth = StartHealth.Value;
+        if (player) { Health.Set(StartHealth); return; }
+        currentHealth = StartHealth;
     }
     public void Onhit()
     {
@@ -22,7 +23,7 @@ public class HealthSystem : MonoBehaviour
     }
     public void TakeDamage()
     {        
-        if (StartHealth.UseConstant) {MinionHit(); } else { PlayerHit(); }
+        if (player) { PlayerHit(); } else { MinionHit(); }
 
     }
     void MinionHit()

@@ -233,6 +233,7 @@ GameObject:
   - component: {fileID: 3931435824420572582}
   - component: {fileID: 1890760544360065297}
   - component: {fileID: 1490549369914491297}
+  - component: {fileID: 1492353835048361551}
   m_Layer: 10
   m_Name: PlayerCharacter
   m_TagString: Player
@@ -249,7 +250,7 @@ Transform:
   m_GameObject: {fileID: 6815349078350190665}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.1295853, y: 0.39999986, z: 3.0874891}
-  m_LocalScale: {x: 0.5, y: 1, z: 0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6815349078424350650}
@@ -268,7 +269,7 @@ CapsuleCollider:
   m_Material: {fileID: 13400000, guid: 18abb92390a82bf409aca16966a034c9, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.6
+  m_Radius: 0.3
   m_Height: 1.9
   m_Direction: 1
   m_Center: {x: 0, y: 1.05, z: 0}
@@ -282,7 +283,7 @@ CapsuleCollider:
   m_Material: {fileID: 13400000, guid: 2169279f260e4d64799bad2f5d5bdb3c, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.4
+  m_Radius: 0.2
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
@@ -296,7 +297,7 @@ CapsuleCollider:
   m_Material: {fileID: 13400000, guid: eb6f69760153ee5458e4ab9a0140d0df, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.55
+  m_Radius: 0.27
   m_Height: 1.999
   m_Direction: 1
   m_Center: {x: 0, y: 1.001, z: 0}
@@ -568,6 +569,33 @@ MonoBehaviour:
   interactableLayers:
     serializedVersion: 2
     m_Bits: 64
+  interactionEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 4ab5df02e15b21441abe9e8ea1405f98, type: 2}
+        m_TargetAssemblyTypeName: EventObject, Assembly-CSharp
+        m_MethodName: RaiseEvent
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1890760544360065297}
+        m_TargetAssemblyTypeName: SoundEffects, Assembly-CSharp
+        m_MethodName: CanPlaySound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   playerCamera: {fileID: 0}
 --- !u!114 &1740235903973352668
 MonoBehaviour:
@@ -616,6 +644,18 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 6815349078532295150}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1890760544360065297}
+        m_TargetAssemblyTypeName: SoundEffects, Assembly-CSharp
+        m_MethodName: CanPlaySound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 6815349078532295150}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -741,6 +781,7 @@ MonoBehaviour:
     Variable: {fileID: 11400000, guid: c1bc10cf21cef414cb5355649fc1f3cf, type: 2}
   Health: {fileID: 11400000, guid: 941a1044807f41c4798528b40787b356, type: 2}
   dmgTotake: 10
+  player: 0
 --- !u!114 &3931435824420572582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -821,6 +862,34 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 8300000, guid: 68ca1762348bbc249b96d3c40a821b62, type: 3}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1492353835048361551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6815349078350190665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80cf476a24762114f94604ed2db3ee51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Events: {fileID: 11400000, guid: 24bb2ac44181cd343bed241b1e22a02f, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1740235903973352668}
+        m_TargetAssemblyTypeName: On_Off, Assembly-CSharp
+        m_MethodName: OnOff
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 6815349078350190668}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.MonoBehaviour, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1008,7 +1077,7 @@ Transform:
   m_GameObject: {fileID: 6815349078424350651}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 1, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6815349078350190664}
@@ -1655,6 +1724,14 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 4138522512501460271, guid: 6fb686169a1bb7048bf312fb514cb048, type: 3}
+      propertyPath: Events
+      value: 
+      objectReference: {fileID: 11400000, guid: 24bb2ac44181cd343bed241b1e22a02f, type: 2}
+    - target: {fileID: 4138522512501460271, guid: 6fb686169a1bb7048bf312fb514cb048, type: 3}
+      propertyPath: Response.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1541732548947122370}
     - target: {fileID: 4430147104997794216, guid: 6fb686169a1bb7048bf312fb514cb048, type: 3}
       propertyPath: m_Layer
       value: 10
@@ -1733,6 +1810,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6fb686169a1bb7048bf312fb514cb048, type: 3}
+--- !u!114 &1541732548947122370 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1541732549963822632, guid: 6fb686169a1bb7048bf312fb514cb048, type: 3}
+  m_PrefabInstance: {fileID: 1172745962}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cbfb39d9543bca4bb4864b6432cb22b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1578549503238061286 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1578549502237282828, guid: 6fb686169a1bb7048bf312fb514cb048, type: 3}
