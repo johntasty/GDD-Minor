@@ -31,6 +31,8 @@ public class Bullet : MonoBehaviour
     public bool damageOnTouch = true;
     public bool damageOnce = true;
 
+    public float knockbackForce = 10f; // Force applied for knockback
+
     int collisions = 0;
     PhysicMaterial physicMaterial;
 
@@ -72,6 +74,8 @@ public class Bullet : MonoBehaviour
 		else {
             if (collider != null) {
                 collider.GetComponent<Health>().DecreaseHealth(explosionDamage);
+                ApplyKnockback(collider);
+                Debug.Log("explosionDamage has been done: " + explosionDamage);
             }
             else {
 			    explosionRange = 0.1f;
@@ -91,7 +95,8 @@ public class Bullet : MonoBehaviour
 			    Debug.Log(enemies[i]);
 			    if (i == 0 || enemies[i] != enemies[i - 1]) {
 				    enemies[i].GetComponent<Health>().DecreaseHealth(explosionDamage);
-			    }
+                    ApplyKnockback(enemies[i]);
+                }
 		    }
         }
 	}
@@ -135,4 +140,13 @@ public class Bullet : MonoBehaviour
         trail.GetComponent<TrailRenderer>().autodestruct = true;
         trail.transform.parent = null;
 	}
+    private void ApplyKnockback(Collider enemy)
+    {
+        Rigidbody enemyRb = enemy.GetComponent<Rigidbody>();
+        if (enemyRb != null)
+        {
+            Vector3 knockbackDirection = (enemy.transform.position - transform.position).normalized;
+            enemyRb.AddForce(knockbackDirection * knockbackForce, ForceMode.Impulse);
+        }
+    }
 }

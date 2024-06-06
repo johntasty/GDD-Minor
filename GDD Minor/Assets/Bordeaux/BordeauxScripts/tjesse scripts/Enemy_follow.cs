@@ -20,6 +20,7 @@ public class Enemy_follow : MonoBehaviour
     public float patrolRadius = 10f;
     public float patrolDuration = 5f;
     public float searchDuration = 10f;
+    public float knockbackForce = 5f; // Adjust this value as needed
 
     private float lastShootTime = -Mathf.Infinity;
     private Vector3 startPosition;
@@ -28,16 +29,17 @@ public class Enemy_follow : MonoBehaviour
     private float searchTimer = 0;
 
     [SerializeField] Animator animator;
-    
+    private Rigidbody rb;
+
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         agent = GetComponent<NavMeshAgent>();
+        rb = GetComponent<Rigidbody>();
         agent.stoppingDistance = stoppingDistance;
         startPosition = transform.position;
         health = baseHealth * DifficultyManager.Instance.healthMultiplier;
         agent.speed = baseSpeed * DifficultyManager.Instance.speedMultiplier;
-        
     }
 
     private void Update()
@@ -85,16 +87,16 @@ public class Enemy_follow : MonoBehaviour
     void RetreatFromPlayer()
     {
         Vector3 directionAwayFromPlayer = transform.position - player.position;
-    // Increase the multiplier to ensure a more significant distance
-    Vector3 retreatPosition = transform.position + directionAwayFromPlayer.normalized * (tooCloseRange + 1f); // Add extra distance
-    if (NavMesh.SamplePosition(retreatPosition, out NavMeshHit hit, 5f, NavMesh.AllAreas))
-    {
-        agent.SetDestination(hit.position);
-    }
-    else
-    {
-        Debug.Log("No valid retreat found");
-    }
+        // Increase the multiplier to ensure a more significant distance
+        Vector3 retreatPosition = transform.position + directionAwayFromPlayer.normalized * (tooCloseRange + 1f); // Add extra distance
+        if (NavMesh.SamplePosition(retreatPosition, out NavMeshHit hit, 5f, NavMesh.AllAreas))
+        {
+            agent.SetDestination(hit.position);
+        }
+        else
+        {
+            Debug.Log("No valid retreat found");
+        }
     }
 
     void AimTowardsPlayer()
@@ -132,7 +134,7 @@ public class Enemy_follow : MonoBehaviour
         }
         if (agent.remainingDistance < 1.0f)
         {
-            // Rotate the enemy to look around when it reaches the last known position can be removed if its too goofy
+            // Rotate the enemy to look around when it reaches the last known position can be removed if it's too goofy
             transform.Rotate(0, 360 * Time.deltaTime / searchDuration, 0);
         }
     }
@@ -167,5 +169,22 @@ public class Enemy_follow : MonoBehaviour
             finalPosition = hit.position;
         }
         return finalPosition;
+    }
+
+    // Knockback method
+    public void ApplyKnockback(Vector3 direction, float force)
+    {
+        StartCoroutine(KnockbackRoutine(direction, force));
+    }
+
+    private IEnumerator KnockbackRoutine(Vector3 direction, float force)
+    {
+        agent.enabled = false; // Temporarily disable the NavMeshAgent to apply the force
+        rb.AddForce(direction * force, ForceMode.Impulse);
+        
+        yield return new WaitForSeconds(0.5f); // Adjust the delay as needed
+
+        rb.velocity = Vector3.zero; // Stop any residual movement
+        agent.enabled = true; // Re-enable the NavMeshAgent
     }
 }
