@@ -23,9 +23,10 @@ public class Elevator : MonoBehaviour
     {
         int temp = (int)caller;
         int durationExtra = temp != 0 ? temp - 1 : temp;
-        
+
+        if (elevator.IsMoving) { return; }
         elevator.durationSeconds = duration + (durationExtra * duration);
-        elevator.targetPosition = startPosition + new Vector3(0, 7 * temp, 0);
+        elevator.targetPosition = startPosition + new Vector3(0, 7 * temp, 0);        
         elevator.StartAnimation();
         
     }

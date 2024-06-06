@@ -52,7 +52,9 @@ public class ProcedurallyAnimatableObject : MonoBehaviour
         regularUpdate = 2
     }
     [SerializeField] private AnimationUpdate animationUpdate = AnimationUpdate.regularUpdate;
-    
+
+    public bool IsMoving { get => _isMoving; set => _isMoving = value; }
+
     private void Start()
     {
         if (pivotObject == null)

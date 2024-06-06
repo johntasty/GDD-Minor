@@ -16,7 +16,8 @@ public class On_Off : MonoBehaviour
     }
     public void CursorOn_Off(GameObject go)
     {
-        bool cursorVisible = go.activeInHierarchy;       
+        bool cursorVisible = go.activeInHierarchy;
+        Time.timeScale = cursorVisible ? 0f : 1f;
         Cursor.lockState = cursorVisible ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = cursorVisible;
     }
