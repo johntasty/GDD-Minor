@@ -15,7 +15,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2935227999048699069
 Transform:
   m_ObjectHideFlags: 0
@@ -29,7 +29,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 851160965957286500}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -12.305, y: -10.012, z: -7.912}
 --- !u!1 &2935227999693803783
 GameObject:
@@ -43,7 +43,8 @@ GameObject:
   - component: {fileID: 2935227999693803784}
   - component: {fileID: 2935227999693803788}
   - component: {fileID: 2935227999693803789}
-  - component: {fileID: 5203421361595256590}
+  - component: {fileID: 6656401280859525948}
+  - component: {fileID: 2890591032523716914}
   m_Layer: 0
   m_Name: Enemyfollow
   m_TagString: Enemy
@@ -95,6 +96,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   agent: {fileID: 0}
+  baseHealth: 100
+  baseSpeed: 1
   detectionRange: 15
   tooCloseRange: 2
   stoppingDistance: 3
@@ -106,6 +109,21 @@ MonoBehaviour:
   patrolDuration: 5
   searchDuration: 10
   animator: {fileID: 64997009197259217}
+  shootEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6515065860049911727}
+        m_TargetAssemblyTypeName: UnityEngine.ParticleSystem, UnityEngine
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!195 &2935227999693803789
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -128,7 +146,7 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &5203421361595256590
+--- !u!114 &6656401280859525948
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -137,15 +155,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 2935227999693803783}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48a21d3a65dff98448f53f7320521762, type: 3}
+  m_Script: {fileID: 11500000, guid: d6503e877708f8d4b933aec93b7e5d42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 3
-  invincibilityTime: 0.1
-  onDamage:
+  EventObject:
     m_PersistentCalls:
-      m_Calls: []
-  onDeath:
+      m_Calls:
+      - m_Target: {fileID: 6656401280859525948}
+        m_TargetAssemblyTypeName: HealthSystem, Assembly-CSharp
+        m_MethodName: TakeDamage
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  DeathEvent:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2935227999693803783}
@@ -160,6 +188,50 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  StartHealth:
+    UseConstant: 1
+    ConstantValue: 100
+    Variable: {fileID: 0}
+  Health: {fileID: 0}
+  dmgTotake: 50
+--- !u!114 &2890591032523716914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2935227999693803783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7100976e1ec84ba4c9fa467f5d4d858b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TagFilterArray:
+  - Bullet
+  EnterTrigger: 1
+  onTriggerEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6656401280859525948}
+        m_TargetAssemblyTypeName: HealthSystem, Assembly-CSharp
+        m_MethodName: Onhit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  StayTrigger: 0
+  onTriggerStay:
+    m_PersistentCalls:
+      m_Calls: []
+  ExitTrigger: 0
+  onTriggerExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &125132378406375459
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -265,3 +337,77 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1001 &4617287710246238806
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 851160965957286500}
+    m_Modifications:
+    - target: {fileID: 1907783877515822585, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822588, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: m_Name
+      value: ParticleEmmiter
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822590, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+    - target: {fileID: 1907783877515822590, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5a26de236ce89e94b963be8fa2b7ade6, type: 2}
+    - target: {fileID: 1907783877515822591, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822591, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.0045
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822591, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.0343
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822591, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.0869
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822591, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822591, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822591, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822591, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822591, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822591, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822591, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+--- !u!198 &6515065860049911727 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 1907783877515822585, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+  m_PrefabInstance: {fileID: 4617287710246238806}
+  m_PrefabAsset: {fileID: 0}
