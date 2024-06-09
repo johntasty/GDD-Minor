@@ -283,12 +283,14 @@ public class PlayerController : MonoBehaviour, IDataPersistence
                 rb.AddForce(Vector3.down * 80f, ForceMode.Force);
         }
         else if (isGrounded)
-        {
+        {  
             if (moveDirection.x != 0 && canPlaySound) {
                 if (isSprinting) {
-                    PlaySoundCooldown(sprintClip);
+                    audioSource.PlayOneShot(sprintClip, 0.3f);
+                    StartCoroutine(SoundCooldown(0.3f));
                 } else {
-                    PlaySoundCooldown(walkClip);
+                    audioSource.PlayOneShot(walkClip, 0.3f);
+                    StartCoroutine(SoundCooldown(0.5f));
                 }
             }
             rb.AddForce(moveDirection.normalized * currentSpeed * 10f, ForceMode.Force);
@@ -320,16 +322,10 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         }
     }
 
-    private void PlaySoundCooldown(AudioClip clip)
-    {
-        audioSource.PlayOneShot(clip);
-        StartCoroutine(SoundCooldown());
-    }
-
-    private IEnumerator SoundCooldown()
+    private IEnumerator SoundCooldown(float cd)
     {
         canPlaySound = false;
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(cd);
         canPlaySound = true;
     }
 
