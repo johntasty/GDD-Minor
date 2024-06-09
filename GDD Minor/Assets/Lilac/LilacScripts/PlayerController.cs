@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Cinemachine;
+using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(AudioSource))]
@@ -68,6 +69,11 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     private float verticalInput;
     private Vector3 moveDirection;
     private bool gravityEnabled = true;
+    private bool canPlaySound = true;
+    public AudioClip walkClip;
+    public AudioClip sprintClip;
+    public AudioClip jumpClip;
+    public AudioClip airJumpClip;
 
     void Awake()
     {
@@ -230,7 +236,10 @@ public class PlayerController : MonoBehaviour, IDataPersistence
                 Jump();
                 if (!CheckCayoteJump() && canDoubleJump)
                 {
+                    audioSource.PlayOneShot(airJumpClip);
                     canDoubleJump = false; // Prevent further jumps
+                } else {
+                    audioSource.PlayOneShot(jumpClip);
                 }
             }
         }
@@ -275,6 +284,13 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         }
         else if (isGrounded)
         {
+            if (moveDirection.x != 0 && canPlaySound) {
+                if (isSprinting) {
+                    PlaySoundCooldown(sprintClip);
+                } else {
+                    PlaySoundCooldown(walkClip);
+                }
+            }
             rb.AddForce(moveDirection.normalized * currentSpeed * 10f, ForceMode.Force);
         }
         else
@@ -302,6 +318,19 @@ public class PlayerController : MonoBehaviour, IDataPersistence
                 rb.velocity = new Vector3(flatVel.normalized.x * limitSpeed, rb.velocity.y, flatVel.normalized.z * limitSpeed);
             }
         }
+    }
+
+    private void PlaySoundCooldown(AudioClip clip)
+    {
+        audioSource.PlayOneShot(clip);
+        StartCoroutine(SoundCooldown());
+    }
+
+    private IEnumerator SoundCooldown()
+    {
+        canPlaySound = false;
+        yield return new WaitForSeconds(0.3f);
+        canPlaySound = true;
     }
 
     private void StateHandler()
