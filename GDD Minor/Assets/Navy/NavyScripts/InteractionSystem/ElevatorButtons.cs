@@ -6,6 +6,7 @@ public class ElevatorButtons : MonoBehaviour
 {
 
     [SerializeField] ColliderEventObject eventObject;
+    [SerializeField] Animation ButtonAnimation;
     bool activeCur = false;
     public void ElevatorCall(int floor)
     {
@@ -18,5 +19,10 @@ public class ElevatorButtons : MonoBehaviour
         Cursor.lockState = activeCur ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = activeCur;
 
+    }
+
+    public void AnimateButton()
+    {
+        ButtonAnimation.Play();
     }
 }
