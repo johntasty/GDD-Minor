@@ -756,10 +756,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2363288728034120277}
-  - component: {fileID: 1429803018171958838}
   - component: {fileID: 6558567165808750276}
   - component: {fileID: 4138522512501460271}
   - component: {fileID: 1541732549963822632}
+  - component: {fileID: 5111042526724642444}
   m_Layer: 0
   m_Name: Pistol Changed metals and Dark marble tentacles 5 Materials
   m_TagString: Untagged
@@ -912,6 +912,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cbfb39d9543bca4bb4864b6432cb22b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cooldownFire: 0.2
+  Automatic: 1
+  shooting: 0
+  infiniteAmmo: 1
+  callReload: 0
+  reloading: 0
+  currentAmmo: 0
+  magSize: 12
+  startAmmoCount: 500
+  totalAmmo: 1000
+  cooldownReload: 2
 --- !u!1 &3277089867798712493
 GameObject:
   m_ObjectHideFlags: 0
