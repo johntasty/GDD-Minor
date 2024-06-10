@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 public class RopeAsset 
 {
     [MenuItem("Rope/Rope Maker", false, 10)]
@@ -32,3 +33,4 @@ public class RopeAsset
         Selection.activeObject = go;
     }
 }
+#endif

@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
@@ -224,3 +225,4 @@ public class SplineGui : Editor
         return point;
     }
 }
+#endif

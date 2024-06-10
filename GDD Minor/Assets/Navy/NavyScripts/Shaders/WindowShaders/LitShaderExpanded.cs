@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-
+#if UNITY_EDITOR
 namespace UnityEditor.Rendering.Universal.ShaderGUI
 {
     internal class LitShaderExpanded : BaseShaderGUI
@@ -145,3 +145,4 @@ namespace UnityEditor.Rendering.Universal.ShaderGUI
         }
     }
 }
+#endif

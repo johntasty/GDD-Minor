@@ -120,7 +120,7 @@ public class ProcedurallyAnimatableObject : MonoBehaviour
 
 
 
-
+#if UNITY_EDITOR
 [CustomEditor(typeof(ProcedurallyAnimatableObject))]
 public class ProcedurallyAnimatableObjectEditor : Editor
 {
@@ -150,3 +150,4 @@ public class ProcedurallyAnimatableObjectEditor : Editor
         }
     }
 }
+#endif

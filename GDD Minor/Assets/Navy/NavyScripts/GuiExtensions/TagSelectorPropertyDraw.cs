@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+#if UNITY_EDITOR
 [CustomPropertyDrawer(typeof(TagSelectorAttribute))]
 public class TagSelectorPropertyDraw : PropertyDrawer
 {
@@ -71,3 +72,4 @@ public class TagSelectorPropertyDraw : PropertyDrawer
         }
     }
 }
+#endif

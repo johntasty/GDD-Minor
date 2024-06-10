@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEditor;
-using UnityEditor.PackageManager.UI;
 
 [RequireComponent(typeof(Collider))]
 public class TriggerObject : MonoBehaviour

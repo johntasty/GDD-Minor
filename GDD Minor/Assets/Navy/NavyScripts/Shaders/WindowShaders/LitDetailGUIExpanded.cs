@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.Rendering;
-
+#if UNITY_EDITOR
 namespace UnityEditor.Rendering.Universal.ShaderGUI
 {
     internal class LitDetailGUIExpanded
@@ -69,3 +69,4 @@ namespace UnityEditor.Rendering.Universal.ShaderGUI
         }
     }
 }
+#endif

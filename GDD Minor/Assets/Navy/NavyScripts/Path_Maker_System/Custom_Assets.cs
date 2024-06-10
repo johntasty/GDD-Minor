@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-
+#if UNITY_EDITOR
 public class Custom_Assets 
 {
     [MenuItem("Splines/Path Maker", false, 10)]
@@ -31,3 +31,4 @@ public class Custom_Assets
         Selection.activeObject = go;
     }
 }
+#endif

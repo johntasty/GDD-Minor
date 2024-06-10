@@ -2,9 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-using static Unity.Burst.Intrinsics.X86.Avx;
-using static Unity.VisualScripting.Member;
-using static UnityEditor.ShaderData;
 
 public class OutlineFeature : ScriptableRendererFeature
 {
