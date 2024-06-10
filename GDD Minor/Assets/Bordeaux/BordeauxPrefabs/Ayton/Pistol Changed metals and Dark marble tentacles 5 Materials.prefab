@@ -756,8 +756,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2363288728034120277}
-  - component: {fileID: 1429803018171958838}
   - component: {fileID: 6558567165808750276}
+  - component: {fileID: 5111042526724642444}
   m_Layer: 0
   m_Name: Pistol Changed metals and Dark marble tentacles 5 Materials
   m_TagString: Untagged
@@ -812,36 +812,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1429803018171958838
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3136693640086735087}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 117ede4a8b9a8b1449949c2671366155, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnGunShoot:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6558567165808750276}
-        m_TargetAssemblyTypeName: DamageGunManager, Assembly-CSharp
-        m_MethodName: Shoot
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  cooldownFire: 0.2
-  Automatic: 1
-  shooting: 0
 --- !u!114 &6558567165808750276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -862,6 +832,44 @@ MonoBehaviour:
   bulletPrefab: {fileID: 4060619419401689138, guid: 76c924cf9b8a9994c99a6a5b6945107e, type: 3}
   targetPoint: {x: 0, y: 0, z: 0}
   attackPoint: {fileID: 2179194032199385771}
+--- !u!114 &5111042526724642444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3136693640086735087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b8b3fc88c83a6148aa70d84f75ada7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnGunShoot:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6558567165808750276}
+        m_TargetAssemblyTypeName: DamageGunManager, Assembly-CSharp
+        m_MethodName: Shoot
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  cooldownFire: 0.2
+  Automatic: 1
+  shooting: 0
+  infiniteAmmo: 1
+  callReload: 0
+  reloading: 0
+  currentAmmo: 0
+  magSize: 12
+  startAmmoCount: 500
+  totalAmmo: 1000
+  cooldownReload: 2
 --- !u!1 &3277089867798712493
 GameObject:
   m_ObjectHideFlags: 0

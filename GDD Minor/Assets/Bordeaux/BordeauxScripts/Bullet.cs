@@ -70,21 +70,21 @@ public class Bullet : MonoBehaviour
             Explode();
 		}
 		else {
-            if (collider.GetComponent<Health>() != null) {
-                collider.GetComponent<Health>().DecreaseHealth(explosionDamage);
+            if (collider.TryGetComponent<Entity>(out Entity entity)) {
+                entity.TakeDamage(explosionDamage);
             }
-            else if (collider.GetComponent<Entity>() != null) {
-                collider.GetComponent<Entity>().TakeDamage(explosionDamage);
+            else if (collider.TryGetComponent<Health>(out Health health)) {
+                health.DecreaseHealth(explosionDamage);
             }
             else {
-			    explosionRange = 0.1f;
+			    explosionRange = 0.2f;
                 Explode();
             }
 		}
 
 		
 
-		Invoke("Delay", 0.05f);
+		Invoke("Delay", 0.02f);
     }
 
     public void Explode() {
