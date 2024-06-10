@@ -86,7 +86,7 @@ public class Bullet : MonoBehaviour
 
 		
 
-		Invoke("Delay", 0.05f);
+		Invoke("Delay", 0.02f);
     }
 
     public void Explode() {
