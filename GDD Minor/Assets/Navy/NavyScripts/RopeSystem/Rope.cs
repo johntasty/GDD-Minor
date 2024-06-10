@@ -140,16 +140,16 @@ public struct RopeNodes
         Vector3 direction = Vector3.zero;
         Quaternion desiredRotation = Quaternion.identity;
 
-        direction = Positions[0] - Positions[1];
+        direction = Vector3.up  -Vector3.down;
         desiredRotation = Quaternion.LookRotation(direction.normalized, Vector3.right);
-        desiredRotation *= Quaternion.Euler(0, 0, 90);
+        //desiredRotation *= Quaternion.Euler(0, 0, 90);
 
         Matrices[0].SetTRS(Positions[0], desiredRotation, Vector3.one * ropeWidth);
        
         for (int i = index; i > 0; i--)
         {
             direction = Positions[i - 1] - Positions[i + 1];
-            desiredRotation = Quaternion.LookRotation(direction.normalized, Vector3.right);
+            //desiredRotation *= Quaternion.LookRotation(direction.normalized, Vector3.right);
             if (i % 2 == 0)
             {
                 desiredRotation *= Quaternion.Euler(0, 0, 90);
@@ -158,8 +158,8 @@ public struct RopeNodes
         }
 
         direction = Positions[Positions.Length - 1] - Positions[Positions.Length - 2];
-        desiredRotation = Quaternion.LookRotation(direction.normalized, Vector3.right);
-        desiredRotation *= Quaternion.Euler(0, 0, 90);
+        //desiredRotation = Quaternion.LookRotation(direction.normalized, Vector3.right);
+        //desiredRotation *= Quaternion.Euler(0, 90, 0);
 
         Matrices[Positions.Length - 1].SetTRS(Positions[Positions.Length - 1], desiredRotation, Vector3.one * ropeWidth);
     }

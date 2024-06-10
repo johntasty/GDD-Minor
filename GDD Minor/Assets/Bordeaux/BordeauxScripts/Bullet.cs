@@ -92,10 +92,13 @@ public class Bullet : MonoBehaviour
     public void Explode() {
 		Collider[] enemies = Physics.OverlapSphere(transform.position, explosionRange, enemyMask);
         if (enemies.Length > 0) {
-		    for (int i = 0; i < enemies.Length; i++) {
-			    Debug.Log(enemies[i]);
+		    for (int i = 0; i < enemies.Length; i++) {			    
 			    if (i == 0 || enemies[i] != enemies[i - 1]) {
-				    enemies[i].GetComponent<Health>().DecreaseHealth(explosionDamage);
+                    bool damagable = enemies[i].TryGetComponent<Health>(out Health health);
+                    if(damagable)
+                    {
+                        health.DecreaseHealth(explosionDamage);
+                    }                 
 			    }
 		    }
         }

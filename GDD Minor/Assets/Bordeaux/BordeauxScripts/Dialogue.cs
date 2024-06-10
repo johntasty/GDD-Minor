@@ -21,7 +21,7 @@ public class Dialogue : MonoBehaviour
     [SerializeField] private GameObject librarianName;
     [SerializeField] private GameObject youName;
 
-    [SerializeField] private GameObject deadMenu;
+    //[SerializeField] private GameObject deadMenu;
     
     private int currentDialogue = 0;
 
@@ -31,7 +31,7 @@ public class Dialogue : MonoBehaviour
     {
         GoNextDialogue();
         buttons.SetActive(false);
-        deadMenu.SetActive(false);
+        //deadMenu.SetActive(false);
     }
 
     // Update is called once per frame
@@ -54,6 +54,7 @@ public class Dialogue : MonoBehaviour
         if (currentDialogue == _dialogueItems.Length)
         {
             LoadNextScene();
+            return;
         }
 
         if (_dialogueItems[currentDialogue].isChoice)
@@ -113,7 +114,7 @@ public class Dialogue : MonoBehaviour
 
     public void PickOption1()
     {
-        deadMenu.SetActive(true);
+        //deadMenu.SetActive(true);
     }
 
     public void PickOption2()
