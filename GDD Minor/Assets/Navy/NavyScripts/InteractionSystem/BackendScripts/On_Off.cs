@@ -21,6 +21,10 @@ public class On_Off : MonoBehaviour
         Cursor.lockState = cursorVisible ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = cursorVisible;
     }
+    public void Reset_Time()
+    {
+        Time.timeScale = 1f;
+    }
     public void ChangeScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);

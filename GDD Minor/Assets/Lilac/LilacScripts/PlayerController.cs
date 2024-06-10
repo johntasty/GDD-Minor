@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Cinemachine;
 using System.Collections;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(AudioSource))]
@@ -70,11 +71,10 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     private Vector3 moveDirection;
     private bool gravityEnabled = true;
     private bool canPlaySound = true;
-    public AudioClip walkClip;
-    public AudioClip sprintClip;
-    public AudioClip jumpClip;
-    public AudioClip airJumpClip;
 
+    [SerializeField] UnityEvent onWalk;
+    [SerializeField] UnityEvent onSprint;
+    [SerializeField] UnityEvent onDoubleJump;
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -83,10 +83,10 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         Cursor.visible = false;
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
         rb.useGravity = false;
-        this.enabled = true;
+        enabled = true;
         cinemachineVirtualCamera.m_Lens.FieldOfView = walkFOV;
     }
-
+    
     private void Update()
     {
         CheckGrounded();
@@ -209,7 +209,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     
     public void SaveData(ref GameData data)
     {
-        data.playerPosition = this.transform.position;
+        //data.playerPosition = this.transform.position;
     }
     
     public void OnJump(InputValue value)
@@ -236,11 +236,9 @@ public class PlayerController : MonoBehaviour, IDataPersistence
                 Jump();
                 if (!CheckCayoteJump() && canDoubleJump)
                 {
-                    audioSource.PlayOneShot(airJumpClip);
+                    onDoubleJump.Invoke();                    
                     canDoubleJump = false; // Prevent further jumps
-                } else {
-                    audioSource.PlayOneShot(jumpClip);
-                }
+                } 
             }
         }
     }
@@ -286,10 +284,10 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         {  
             if (moveDirection.x != 0 && canPlaySound) {
                 if (isSprinting) {
-                    audioSource.PlayOneShot(sprintClip, 0.3f);
+                    onWalk.Invoke();                   
                     StartCoroutine(SoundCooldown(0.3f));
                 } else {
-                    audioSource.PlayOneShot(walkClip, 0.3f);
+                    onSprint.Invoke();                    
                     StartCoroutine(SoundCooldown(0.5f));
                 }
             }

@@ -18,8 +18,8 @@ public class SoundEffects : MonoBehaviour
     public void PlaySound(AudioClip audioData)
     {
         if (!canPlay) { return; }
-        SFXAudioSource.clip = audioData;
-        SFXAudioSource.Play();
+        SFXAudioSource.clip = audioData;        
+        SFXAudioSource.PlayOneShot(audioData);
     }
     public void PlayMusic(AudioClip audioData)
     {

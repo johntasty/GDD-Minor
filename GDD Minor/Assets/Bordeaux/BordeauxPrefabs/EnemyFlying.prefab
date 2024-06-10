@@ -193,6 +193,7 @@ MonoBehaviour:
     Variable: {fileID: 0}
   Health: {fileID: 0}
   dmgTotake: 1
+  player: 0
 --- !u!114 &8343544519975913474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,6 +242,10 @@ PrefabInstance:
     - target: {fileID: 1907783877515822585, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
       propertyPath: InitialModule.startSize.scalar
       value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822585, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 1907783877515822588, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
       propertyPath: m_Name

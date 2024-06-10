@@ -8,6 +8,9 @@ public class PlayerEvents : MonoBehaviour
     [SerializeField] UnityEvent onFire;    
     [SerializeField] UnityEvent onPause;    
     [SerializeField] UnityEvent onInteract;    
+    [SerializeField] UnityEvent onJump;    
+    [SerializeField] UnityEvent onSprint;    
+    [SerializeField] UnityEvent onMove;    
 
     void OnFire()
     {
@@ -21,5 +24,18 @@ public class PlayerEvents : MonoBehaviour
     void OnInteract()
     {
         onInteract.Invoke();
+    }
+    void OnJump(InputValue value)
+    {
+        if (value.isPressed) { onJump.Invoke(); }
+        
+    }
+    void OnSprint()
+    {
+        onSprint.Invoke();
+    }
+    void OnMove(InputValue value)
+    {      
+        onMove.Invoke();
     }
 }

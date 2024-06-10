@@ -759,7 +759,7 @@ GameObject:
   - component: {fileID: 6558567165808750276}
   - component: {fileID: 4138522512501460271}
   - component: {fileID: 1541732549963822632}
-  - component: {fileID: 5111042526724642444}
+  - component: {fileID: 1429803018171958838}
   m_Layer: 0
   m_Name: Pistol Changed metals and Dark marble tentacles 5 Materials
   m_TagString: Untagged
@@ -814,44 +814,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1429803018171958838
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3136693640086735087}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 117ede4a8b9a8b1449949c2671366155, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnGunShoot:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6558567165808750276}
-        m_TargetAssemblyTypeName: DamageGunManager, Assembly-CSharp
-        m_MethodName: Shoot
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  cooldownFire: 0.2
-  Automatic: 1
-  shooting: 0
-  infiniteAmmo: 1
-  callReload: 0
-  reloading: 0
-  currentAmmo: 0
-  magSize: 12
-  startAmmoCount: 240
-  totalAmmo: 0
-  cooldownReload: 2
 --- !u!114 &6558567165808750276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -912,17 +874,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cbfb39d9543bca4bb4864b6432cb22b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldownFire: 0.2
-  Automatic: 1
-  shooting: 0
-  infiniteAmmo: 1
-  callReload: 0
-  reloading: 0
-  currentAmmo: 0
-  magSize: 12
-  startAmmoCount: 500
-  totalAmmo: 1000
-  cooldownReload: 2
+--- !u!114 &1429803018171958838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3136693640086735087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 117ede4a8b9a8b1449949c2671366155, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletSpawnPoint: {fileID: 2179194032199385771}
+  bulletPrefab: {fileID: 0}
+  bulletSpeed: -100
 --- !u!1 &3277089867798712493
 GameObject:
   m_ObjectHideFlags: 0

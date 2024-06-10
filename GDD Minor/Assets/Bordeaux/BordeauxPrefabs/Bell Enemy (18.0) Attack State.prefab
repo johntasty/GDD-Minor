@@ -235,6 +235,7 @@ MonoBehaviour:
     Variable: {fileID: 0}
   Health: {fileID: 0}
   dmgTotake: 10
+  player: 0
 --- !u!1 &1778647789989074165
 GameObject:
   m_ObjectHideFlags: 0
@@ -1225,6 +1226,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2244410824926682195}
     m_Modifications:
+    - target: {fileID: 1907783877515822585, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 1907783877515822588, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
       propertyPath: m_Name
       value: ParticleEmmiter
