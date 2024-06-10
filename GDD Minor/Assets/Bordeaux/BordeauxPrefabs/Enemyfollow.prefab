@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 2935227999693803789}
   - component: {fileID: 6656401280859525948}
   - component: {fileID: 2890591032523716914}
+  - component: {fileID: 8647938171827374423}
   m_Layer: 0
   m_Name: Enemyfollow
   m_TagString: Enemy
@@ -194,6 +195,7 @@ MonoBehaviour:
     Variable: {fileID: 0}
   Health: {fileID: 0}
   dmgTotake: 50
+  player: 0
 --- !u!114 &2890591032523716914
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,6 +226,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 8647938171827374423}
+        m_TargetAssemblyTypeName: Knockback, Assembly-CSharp
+        m_MethodName: KnockBack
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   StayTrigger: 0
   onTriggerStay:
     m_PersistentCalls:
@@ -232,6 +246,18 @@ MonoBehaviour:
   onTriggerExit:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8647938171827374423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2935227999693803783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3aed527da70fab246b5cb4c72d25356d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &125132378406375459
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -345,8 +371,28 @@ PrefabInstance:
     m_TransformParent: {fileID: 851160965957286500}
     m_Modifications:
     - target: {fileID: 1907783877515822585, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: SubModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822585, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
       propertyPath: InitialModule.startSize.scalar
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822585, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822585, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: SubModule.subEmitters.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822585, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: SubModule.subEmitters.Array.data[0].type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907783877515822585, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
+      propertyPath: SubModule.subEmitters.Array.data[0].properties
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1907783877515822588, guid: 013c878256b69bf4193e0fcc81ec3d6f, type: 3}
       propertyPath: m_Name

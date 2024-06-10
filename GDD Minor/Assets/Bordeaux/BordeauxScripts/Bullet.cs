@@ -140,4 +140,18 @@ public class Bullet : MonoBehaviour
         trail.GetComponent<TrailRenderer>().autodestruct = true;
         trail.transform.parent = null;
 	}
+    void OnTriggerEnter(Collider other)
+    {
+        // Check if the bullet hit an enemy
+        // if (other.CompareTag("Enemy"))
+        //{
+            // Apply knockback to the enemy
+            Knockback enemyKnockback = other.GetComponent<Knockback>();
+            Debug.Log("Knockback called");
+            Vector3 knockbackDirection = other.transform.position - transform.position;
+            enemyKnockback.ApplyKnockback(knockbackDirection);
+                
+
+        //}
+    }
 }
