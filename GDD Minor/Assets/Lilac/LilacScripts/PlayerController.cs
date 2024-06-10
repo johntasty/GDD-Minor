@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     private float LastJumpPressTime = 0;
     private bool readyToJump = true;
     private bool canDoubleJump = false;
+    private bool doubleJumpUnlocked = false;
 
     [Header("Input Settings")]
     private bool isSprinting = false;
@@ -227,14 +228,21 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         }
     }
 
+    public void UnlockDoubleJump()
+    {
+        doubleJumpUnlocked = true;
+        canDoubleJump = true; // Allow the player to double jump immediately
+    }
 
-    private void tryToJump() {
+
+    private void tryToJump()
+    {
         if (readyToJump)
         {
-            if (CheckCayoteJump() || canDoubleJump)
+            if (CheckCayoteJump() || (canDoubleJump && doubleJumpUnlocked))
             {
                 Jump();
-                if (!CheckCayoteJump() && canDoubleJump)
+                if (!CheckCayoteJump() && canDoubleJump && doubleJumpUnlocked)
                 {
                     audioSource.PlayOneShot(airJumpClip);
                     canDoubleJump = false; // Prevent further jumps
@@ -244,7 +252,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             }
         }
     }
-    
+
+
     private bool CheckCayoteJump() {
         return Time.time - lastTimeGrounded <= cayoteTime;
     }
@@ -333,7 +342,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     {
         if (isGrounded)
         {
-            canDoubleJump = true; // Reset double jump capability when grounded
+            canDoubleJump = doubleJumpUnlocked; // Reset double jump capability when grounded
         }
     }
 
